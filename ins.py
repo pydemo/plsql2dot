@@ -32,10 +32,10 @@ class Condition(str):
 	# Matches a condition such as 'a > b'
 	grammar = name(), re.compile(r'\s*[><=!]=?\s*'), word
 
-
+from include import insert 
 class LineExpression(List):
 	# Defines the different expressions that can be on a single line
-	grammar = maybe_some([LineFilter, BooleanLiteral, StringLiteral, Comment, Assignment, CommitLiteral])
+	grammar = maybe_some([LineFilter, BooleanLiteral, StringLiteral, Comment, Assignment, CommitLiteral, insert.InsertStatement])
 	
 class IfStatement(List):
 	# Defines the structure of an if statement
@@ -116,6 +116,8 @@ begin
 	if test > 0 then
 		--test
 		--test2
+		insert into ppc_qlik_reports_log (log_date, report_name, module_name, status)
+		values (getdate(), 'MANIFEST_SEARCH_REPORT', 'Summarizing Manifest Search', v_status);
 		v_status:='BEGIN pkgs search summary';
 		commit;
 	end if;
@@ -163,6 +165,11 @@ for c in parsed:
 						print('\t\tASSIGN:', le)
 					elif str(type(le)).endswith(".CommitLiteral'>"):
 						print('\t\tCOMMIT:', le)
+					elif str(type(le)).endswith(".InsertStatement'>"):
+						print('\t\tINSERT:', le)
+						print(f"\t\t\tTAB: {le.table}")
+						print("\t\t\tCOLS:", [str(column) for column in le.columns])
+						print("\t\t\tVALS:", [str(value) for value in le.values])
 					else:
 						print(le, type(le))
 			else:
