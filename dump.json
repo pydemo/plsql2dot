@@ -1,0 +1,550 @@
+{
+    "0": {
+        "name": "FunctionOrProcedure",
+        "attr": {
+            "name": "sp_rs_refresh_pkgs_search",
+            "params": [
+                [],
+                []
+            ],
+            "position_in_text": [
+                2,
+                1
+            ]
+        },
+        "obj": {},
+        "level": 0,
+        "id": 1
+    },
+    "1": {
+        "name": "Declarations",
+        "attr": {
+            "position_in_text": [
+                4,
+                150
+            ]
+        },
+        "obj": {
+            "0": {
+                "name": "VariableDeclaration",
+                "attr": {
+                    "name": "v_cnt_search_pkgs",
+                    "datatype": "integer"
+                },
+                "obj": {},
+                "level": 1,
+                "id": 3
+            },
+            "1": {
+                "name": "VariableDeclaration",
+                "attr": {
+                    "name": "v_status",
+                    "datatype": "varchar(50)"
+                },
+                "obj": {},
+                "level": 1,
+                "id": 4
+            },
+            "2": {
+                "name": "VariableDeclaration",
+                "attr": {
+                    "name": "v_location_name",
+                    "datatype": "varchar(100)",
+                    "default": "'sp_rs_refresh_pkgs_search'"
+                },
+                "obj": {},
+                "level": 1,
+                "id": 5
+            }
+        },
+        "level": 0,
+        "id": 2
+    },
+    "2": {
+        "name": "Block",
+        "attr": {
+            "ex": [],
+            "position_in_text": [
+                9,
+                277
+            ]
+        },
+        "obj": {
+            "0": {
+                "name": "Assignment",
+                "attr": {
+                    "name": "v_location_name"
+                },
+                "obj": {
+                    "0": {
+                        "name": "str",
+                        "attr": {
+                            "type": "<class 'str'>",
+                            "value": "'Get count of unprocessed search pkgs'"
+                        },
+                        "obj": {},
+                        "level": 2,
+                        "id": 8,
+                        "type": "<class 'str'>"
+                    }
+                },
+                "level": 1,
+                "id": 7
+            },
+            "1": {
+                "name": "Select",
+                "attr": {},
+                "obj": {
+                    "0": {
+                        "name": "str",
+                        "attr": {
+                            "type": "<class 'str'>",
+                            "value": "count(*) INTO v_cnt_search_pkgs from stage_pkgs_outbound WHERE pkgs_search_processed = 'N' AND ready_to_process = 'Y' AND payment_rec_arrived = 'Y' \n\tAND dtc > p_cutoff_date"
+                        },
+                        "obj": {},
+                        "level": 2,
+                        "id": 48,
+                        "type": "<class 'str'>"
+                    }
+                },
+                "level": 1,
+                "id": 47
+            },
+            "2": {
+                "name": "IfStatement",
+                "attr": {},
+                "obj": {
+                    "0": {
+                        "name": "Condition",
+                        "attr": {
+                            "name": "v_cnt_search_pkgs"
+                        },
+                        "obj": {
+                            "0": {
+                                "name": "str",
+                                "attr": {
+                                    "type": "<class 'str'>",
+                                    "value": "["
+                                },
+                                "obj": {},
+                                "level": 3,
+                                "id": 224,
+                                "type": "<class 'str'>"
+                            },
+                            "1": {
+                                "name": "str",
+                                "attr": {
+                                    "type": "<class 'str'>",
+                                    "value": "'"
+                                },
+                                "obj": {},
+                                "level": 3,
+                                "id": 225,
+                                "type": "<class 'str'>"
+                            },
+                            "2": {
+                                "name": "str",
+                                "attr": {
+                                    "type": "<class 'str'>",
+                                    "value": ">"
+                                },
+                                "obj": {},
+                                "level": 3,
+                                "id": 226,
+                                "type": "<class 'str'>"
+                            },
+                            "3": {
+                                "name": "str",
+                                "attr": {
+                                    "type": "<class 'str'>",
+                                    "value": " "
+                                },
+                                "obj": {},
+                                "level": 3,
+                                "id": 227,
+                                "type": "<class 'str'>"
+                            },
+                            "4": {
+                                "name": "str",
+                                "attr": {
+                                    "type": "<class 'str'>",
+                                    "value": "'"
+                                },
+                                "obj": {},
+                                "level": 3,
+                                "id": 228,
+                                "type": "<class 'str'>"
+                            },
+                            "5": {
+                                "name": "str",
+                                "attr": {
+                                    "type": "<class 'str'>",
+                                    "value": ","
+                                },
+                                "obj": {},
+                                "level": 3,
+                                "id": 229,
+                                "type": "<class 'str'>"
+                            },
+                            "6": {
+                                "name": "str",
+                                "attr": {
+                                    "type": "<class 'str'>",
+                                    "value": " "
+                                },
+                                "obj": {},
+                                "level": 3,
+                                "id": 230,
+                                "type": "<class 'str'>"
+                            },
+                            "7": {
+                                "name": "str",
+                                "attr": {
+                                    "type": "<class 'str'>",
+                                    "value": "'"
+                                },
+                                "obj": {},
+                                "level": 3,
+                                "id": 231,
+                                "type": "<class 'str'>"
+                            },
+                            "8": {
+                                "name": "str",
+                                "attr": {
+                                    "type": "<class 'str'>",
+                                    "value": "0"
+                                },
+                                "obj": {},
+                                "level": 3,
+                                "id": 232,
+                                "type": "<class 'str'>"
+                            },
+                            "9": {
+                                "name": "str",
+                                "attr": {
+                                    "type": "<class 'str'>",
+                                    "value": "'"
+                                },
+                                "obj": {},
+                                "level": 3,
+                                "id": 233,
+                                "type": "<class 'str'>"
+                            },
+                            "10": {
+                                "name": "str",
+                                "attr": {
+                                    "type": "<class 'str'>",
+                                    "value": "]"
+                                },
+                                "obj": {},
+                                "level": 3,
+                                "id": 234,
+                                "type": "<class 'str'>"
+                            }
+                        },
+                        "level": 2,
+                        "id": 223,
+                        "type": "<class '__main__.Condition'>"
+                    },
+                    "1": {
+                        "name": "LineExpression",
+                        "attr": {},
+                        "obj": {
+                            "0": {
+                                "name": "Comment",
+                                "attr": {},
+                                "obj": {},
+                                "level": 3,
+                                "id": 236,
+                                "type": "<class '__main__.Comment'>"
+                            },
+                            "1": {
+                                "name": "Assignment",
+                                "attr": {},
+                                "obj": {},
+                                "level": 3,
+                                "id": 237,
+                                "type": "<class '__main__.Assignment'>"
+                            },
+                            "2": {
+                                "name": "InsertStatement",
+                                "attr": {
+                                    "table": "ppc_qlik_reports_log",
+                                    "columns": "ColumnList(['log_date', 'report_name', 'module_name', 'status'])",
+                                    "values": "ValueList(['getdate()', \"'MANIFEST_SEARCH_REPORT'\", \"'Summarizing Manifest Search'\", 'v_status'])"
+                                },
+                                "obj": {},
+                                "level": 3,
+                                "id": 238,
+                                "type": "<class 'include.insert.InsertStatement'>"
+                            },
+                            "3": {
+                                "name": "DropTableStatement",
+                                "attr": {
+                                    "table": "package_search_temp"
+                                },
+                                "obj": {},
+                                "level": 3,
+                                "id": 239,
+                                "type": "<class 'include.drop.DropTableStatement'>"
+                            },
+                            "4": {
+                                "name": "CreateTableStatement",
+                                "attr": {
+                                    "table": "package_search_temp",
+                                    "like_clause": "LikeClause([])"
+                                },
+                                "obj": {},
+                                "level": 3,
+                                "id": 240,
+                                "type": "<class 'include.create_temp_table.CreateTableStatement'>"
+                            },
+                            "5": {
+                                "name": "Assignment",
+                                "attr": {
+                                    "name": "v_location_name"
+                                },
+                                "obj": {},
+                                "level": 3,
+                                "id": 241,
+                                "type": "<class 'include.statement.Assignment'>"
+                            },
+                            "6": {
+                                "name": "InsertSelectStatement",
+                                "attr": {
+                                    "table": "package_search_temp",
+                                    "columns": "ColumnList(['mid', 'manifest_date', 'file_name', 'pic', 'efn', 'entry_zip', 'destination_zip', 'zone', 'mail_class', 'manifest_weight', 'permit_number', 'pkgs_account_number', 'usps_recalculated_postage', 'eps_transaction_id', 'month', 'year', 'source_reports', 'search_type', 'manifest_package_id', 'epg_grp_id', 'dtc', 'dtu', 'rate_ind'])",
+                                    "select": "SelectStatement(['SELECT', 'FROM'])"
+                                },
+                                "obj": {},
+                                "level": 3,
+                                "id": 242,
+                                "type": "<class 'include.insert_as_select.InsertSelectStatement'>"
+                            },
+                            "7": {
+                                "name": "CommitLiteral",
+                                "attr": {},
+                                "obj": {},
+                                "level": 3,
+                                "id": 243,
+                                "type": "<class '__main__.CommitLiteral'>"
+                            },
+                            "8": {
+                                "name": "InsertSelectStatement",
+                                "attr": {
+                                    "table": "package_search_temp",
+                                    "columns": "ColumnList(['mid', 'crid', 'manifest_date', 'file_name', 'pic', 'efn', 'entry_zip', 'destination_zip', 'zone', 'mail_class', 'manifest_weight', 'permit_number', 'eps_account_number', 'usps_recalculated_postage', 'eps_transaction_id', 'month', 'year', 'source_reports', 'search_type', 'manifest_package_id', 'pkg_grp_id', 'dtc', 'dtu', 'rate_ind'])",
+                                    "select": "SelectStatement(['SELECT', 'FROM'])"
+                                },
+                                "obj": {},
+                                "level": 3,
+                                "id": 244,
+                                "type": "<class 'include.insert_as_select.InsertSelectStatement'>"
+                            },
+                            "9": {
+                                "name": "CommitLiteral",
+                                "attr": {},
+                                "obj": {},
+                                "level": 3,
+                                "id": 245,
+                                "type": "<class '__main__.CommitLiteral'>"
+                            },
+                            "10": {
+                                "name": "Comment",
+                                "attr": {},
+                                "obj": {},
+                                "level": 3,
+                                "id": 246,
+                                "type": "<class '__main__.Comment'>"
+                            },
+                            "11": {
+                                "name": "Assignment",
+                                "attr": {},
+                                "obj": {},
+                                "level": 3,
+                                "id": 247,
+                                "type": "<class '__main__.Assignment'>"
+                            },
+                            "12": {
+                                "name": "UpdateStatement",
+                                "attr": {},
+                                "obj": {},
+                                "level": 3,
+                                "id": 248,
+                                "type": "<class 'include.update.UpdateStatement'>"
+                            },
+                            "13": {
+                                "name": "CommitLiteral",
+                                "attr": {},
+                                "obj": {},
+                                "level": 3,
+                                "id": 249,
+                                "type": "<class '__main__.CommitLiteral'>"
+                            },
+                            "14": {
+                                "name": "Comment",
+                                "attr": {},
+                                "obj": {},
+                                "level": 3,
+                                "id": 250,
+                                "type": "<class '__main__.Comment'>"
+                            },
+                            "15": {
+                                "name": "UpdateStatement",
+                                "attr": {},
+                                "obj": {},
+                                "level": 3,
+                                "id": 251,
+                                "type": "<class 'include.update.UpdateStatement'>"
+                            },
+                            "16": {
+                                "name": "CommitLiteral",
+                                "attr": {},
+                                "obj": {},
+                                "level": 3,
+                                "id": 252,
+                                "type": "<class '__main__.CommitLiteral'>"
+                            },
+                            "17": {
+                                "name": "Comment",
+                                "attr": {},
+                                "obj": {},
+                                "level": 3,
+                                "id": 253,
+                                "type": "<class '__main__.Comment'>"
+                            },
+                            "18": {
+                                "name": "Assignment",
+                                "attr": {},
+                                "obj": {},
+                                "level": 3,
+                                "id": 254,
+                                "type": "<class '__main__.Assignment'>"
+                            },
+                            "19": {
+                                "name": "InsertSelectStatement",
+                                "attr": {
+                                    "table": "package_search_by_pic",
+                                    "columns": "ColumnList(['mid', 'crid', 'manifest_date', 'file_name', 'pic', 'efn', 'entry_zip', 'destination_zip', 'zone', 'mail_class', 'manifest_weight', 'permit_number', 'eps_account_number', 'usps_recalculated_postage', 'eps_transaction_id', 'month', 'year', 'source_reports', 'search_type', 'manifest_package_id', 'pkg_grp_id', 'dtc', 'dtu', 'rate_ind'])",
+                                    "select": "SelectStatement(['SELECT', 'FROM'])"
+                                },
+                                "obj": {},
+                                "level": 3,
+                                "id": 255,
+                                "type": "<class 'include.insert_as_select.InsertSelectStatement'>"
+                            },
+                            "20": {
+                                "name": "CommitLiteral",
+                                "attr": {},
+                                "obj": {},
+                                "level": 3,
+                                "id": 256,
+                                "type": "<class '__main__.CommitLiteral'>"
+                            },
+                            "21": {
+                                "name": "Assignment",
+                                "attr": {},
+                                "obj": {},
+                                "level": 3,
+                                "id": 257,
+                                "type": "<class '__main__.Assignment'>"
+                            },
+                            "22": {
+                                "name": "InsertSelectStatement",
+                                "attr": {
+                                    "table": "package_search_by_efn",
+                                    "columns": "ColumnList(['mid', 'crid', 'manifest_date', 'file_name', 'pic', 'efn', 'entry_zip', 'destination_zip', 'zone', 'mail_class', 'manifest_weight', 'permit_number', 'eps_account_number', 'usps_recalculated_postage', 'eps_transaction_id', 'month', 'year', 'source_reports', 'search_type', 'manifest_package_id', 'pkg_grp_id', 'dtc', 'dtu', 'rate_ind'])",
+                                    "select": "SelectStatement(['SELECT', 'FROM'])"
+                                },
+                                "obj": {},
+                                "level": 3,
+                                "id": 258,
+                                "type": "<class 'include.insert_as_select.InsertSelectStatement'>"
+                            },
+                            "23": {
+                                "name": "CommitLiteral",
+                                "attr": {},
+                                "obj": {},
+                                "level": 3,
+                                "id": 259,
+                                "type": "<class '__main__.CommitLiteral'>"
+                            },
+                            "24": {
+                                "name": "Assignment",
+                                "attr": {},
+                                "obj": {},
+                                "level": 3,
+                                "id": 260,
+                                "type": "<class '__main__.Assignment'>"
+                            },
+                            "25": {
+                                "name": "InsertStatement",
+                                "attr": {
+                                    "table": "ppc_qlik_reports_log",
+                                    "columns": "ColumnList(['log_date', 'report_name', 'module_name', 'status'])",
+                                    "values": "ValueList(['getdate()', \"'MANIFEST_SEARCH_REPORT'\", \"'pic, efn tables loaded'\", 'v_status'])"
+                                },
+                                "obj": {},
+                                "level": 3,
+                                "id": 261,
+                                "type": "<class 'include.insert.InsertStatement'>"
+                            },
+                            "26": {
+                                "name": "CommitLiteral",
+                                "attr": {},
+                                "obj": {},
+                                "level": 3,
+                                "id": 262,
+                                "type": "<class '__main__.CommitLiteral'>"
+                            }
+                        },
+                        "level": 2,
+                        "id": 235,
+                        "type": "<class '__main__.LineExpression'>"
+                    },
+                    "2": {
+                        "name": "LineExpression",
+                        "attr": {},
+                        "obj": {
+                            "0": {
+                                "name": "Assignment",
+                                "attr": {},
+                                "obj": {},
+                                "level": 3,
+                                "id": 264,
+                                "type": "<class '__main__.Assignment'>"
+                            },
+                            "1": {
+                                "name": "InsertStatement",
+                                "attr": {
+                                    "table": "ppc_qlik_reports_log",
+                                    "columns": "ColumnList(['log_date', 'report_name', 'module_name', 'status'])",
+                                    "values": "ValueList(['getdate()', \"'MANIFEST_SEARCH_REPORT'\", \"'Exiting Summarization'\", 'v_status'])"
+                                },
+                                "obj": {},
+                                "level": 3,
+                                "id": 265,
+                                "type": "<class 'include.insert.InsertStatement'>"
+                            },
+                            "2": {
+                                "name": "CommitLiteral",
+                                "attr": {},
+                                "obj": {},
+                                "level": 3,
+                                "id": 266,
+                                "type": "<class '__main__.CommitLiteral'>"
+                            }
+                        },
+                        "level": 2,
+                        "id": 263,
+                        "type": "<class '__main__.LineExpression'>"
+                    }
+                },
+                "level": 1,
+                "id": 222
+            }
+        },
+        "level": 1,
+        "id": 6
+    }
+}

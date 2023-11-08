@@ -1,0 +1,1 @@
+python .\final.py; ..\graphviz_diagram\gw\bin\dot -Tpng dotout.dot -o plsql.png; .\plsql.png

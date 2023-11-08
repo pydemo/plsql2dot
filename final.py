@@ -1,3 +1,4 @@
+import os, sys
 from pypeg2 import *
 from include import select
 from include import statement
@@ -5,7 +6,13 @@ from include import insert_as_select as ias
 from include import update 
 from include import ex 
 
+e=  sys.exit
 
+class Base(object):
+	def get_type(self):
+		return self.__class__.__name__
+	
+	
 class BooleanLiteral(Keyword):
 	# Adjusting the regex to handle boolean literals
 	K.regex = re.compile(r'"*\w+"*')
@@ -28,12 +35,19 @@ class Comment(str):
 	rest_of_line = re.compile(r'.*?(?=\n|$)')
 	grammar = '--', rest_of_line
 
-class Assignment(str):
+class Assignment(str, Base):
 	# Matches an assignment operation
 	identifier_pattern = re.compile(r'\b[a-zA-Z_]\w*\b')
 	rest_of_line = re.compile(r'.*?(?=\n|$)')
 	grammar = identifier_pattern, ':=', rest_of_line
 
+
+class Assignment2(str, Base):
+	# Matches an assignment operation
+	identifier_pattern = re.compile(r'\b[a-zA-Z_]\w*\b')
+	rest_of_line = re.compile(r'.*?(?=\n|$)')
+	grammar = identifier_pattern, ':=', rest_of_line
+	
 class Condition(str):
 	# Matches a condition such as 'a > b'
 	grammar = name(), re.compile(r'\s*[><=!]=?\s*'), word
@@ -46,17 +60,17 @@ class LineExpression(List):
 	grammar = maybe_some([LineFilter, BooleanLiteral, StringLiteral, Comment, Assignment, CommitLiteral, insert.InsertStatement, drop.DropTableStatement,\
 	ctt.CreateTableStatement,  statement.Assignment,ias.InsertSelectStatement, update.UpdateStatement])
 	
-class IfStatement(List):
+class IfStatement(List, Base):
 	# Defines the structure of an if statement
 	grammar = 'if',  Condition, 'then', \
 			  LineExpression, optional('else'),  optional(LineExpression),\
 			  'end if', ';'
 
-class StatementExpression(List):
+class StatementExpression(List, Base):
 	# Defines the different expressions that can be on a single line
-	grammar = maybe_some([IfStatement, select.Select, statement.Assignment,  statement.Comment, ])
+	grammar = maybe_some([IfStatement, select.Select, statement.Assignment,  statement.Comment ])
 	
-class Block(List):
+class Block(List, Base):
 	# Defines the structure of an if statement
 	grammar = 'begin', StatementExpression, \
 			  attr('ex',ex.ExceptionBlock),'end', ';',Literal('$$')
@@ -72,16 +86,16 @@ class DefaultValue(str):
     grammar = ':=', re.compile(r"'.*?'|\w+")
 
 # Define the grammar for a single variable declaration
-class VariableDeclaration(List):
+class VariableDeclaration(List, Base):
     grammar = attr('name', Identifier), attr('datatype', Datatype), optional(attr('default', DefaultValue)), ';'
 
 
 #class VariableDeclaration_nodefault(List):
 #	grammar = word,  data_type_pattern, ";"
-class DeclarationExpression(List):
+class DeclarationExpression(List,Base):
 	# Defines the different expressions that can be on a single line
 	grammar = maybe_some([VariableDeclaration])
-class Declarations(List):
+class Declarations(List, Base):
 	grammar = 'as', Literal('$$'),"declare", DeclarationExpression
 identifier = re.compile(r"[a-zA-Z_][a-zA-Z0-9_$]*")
 # Parameter definition within the procedure
@@ -90,18 +104,17 @@ class Type(Keyword):
 	
 class Parameter(List):
 	grammar = attr("direction", optional("in")), attr("name", identifier), attr("data_type", Type)
-class Language(str):
+class Language(str, Base):
 	grammar = 'language', name()
-class Security(str):
+class Security(str, Base):
 	grammar = 'security', 'definer'
 # A list of parameters separated by commas
 class Parameters(List):
 	grammar = optional(csl(Parameter))
 class ProcOrFuncName(str):
 	grammar = word
-class FunctionOrProcedure(List):
+class FunctionOrProcedure(List, Base):
 	grammar = "create or replace",["function", "procedure"],attr("name", ProcOrFuncName)  , "(", attr("params", Parameters), ")",Language, Security
-	
 	
 	
 class Code(List):
@@ -286,7 +299,8 @@ for c in parsed:
 	
 	#print( str(type(c)))
 	if isinstance(c,FunctionOrProcedure):
-		print('NAME:',c.name)
+		print('NAME:',c.name, c.get_type())
+		#e()
 	elif isinstance(c,Declarations):
 		
 		print('DECLARATIONS:')
@@ -347,16 +361,165 @@ for c in parsed:
 from pprint import pprint as pp
 from collections import OrderedDict
 out={}
+level=0
+cnt=0
 for aid,a in enumerate(parsed):
 	#pp(a.__dict__)
-	
-	aname=a.__class__.__name__
+	cnt +=1
+	aname=str(a.__class__.__name__)
 	akey=f'{aname}_{aid}'
 	aobj={}
-	out[aid]=dict(name=aname, attr=a.__dict__, obj=aobj)
+	out[aid]=dict(name=aname, attr=a.__dict__, obj=aobj, level=level, id=cnt, type=a.get_type())
+	
 	for bid,b in enumerate(a[0]):
-		bname=b.__class__.__name__
+		level =1
+		cnt +=1
+		bname=str(b.__class__.__name__)
 		bkey=f'{bname}_{bid}'
-		aobj[bid]=dict( name=bname,attr=b.__dict__)
+		bobj={}
+		attr =  b.__dict__
+		attr.pop('position_in_text', None)
+		aobj[bid]=dict( name=bname,attr=b.__dict__, obj=bobj, level=level, id=cnt)
+		for cid,c in enumerate(b):
+			level =2
+			cnt +=1
+			cname=str(c.__class__.__name__)
+			ckey=f'{cname}_{cid}'
+			cobj={}
+			print(type(c)==str)
+			if type(c) is str:
+				attr=dict(type=type(c), value=str(c))
+			else:
+				attr =  c.__dict__
+				attr.pop('position_in_text', None)
+			for k,v in attr.items():
+				attr[k]=str(v)
+						
+			bobj[cid]=dict( name=cname,attr=attr, obj=cobj, level=level, id=cnt, type= str(type(c)))
+			for did,d in enumerate(c):
+				level =3
+				cnt +=1
+				dname=str(d.__class__.__name__)
+				dkey=f'{dname}_{did}'
+				dobj={}
+				
+				if type(d) is str:
+					attr=dict(type=type(d), value=str(d))
+				else:
+					attr =  d.__dict__
+					attr.pop('position_in_text', None)
+				for k,v in attr.items():
+					attr[k]=str(v)
+				if not (type(c) is str):
+					cobj[did]=dict( name=dname,attr=attr, obj=dobj, level=level, id=cnt, type= str(type(d)))
 print()
 pp(out)
+if 0:
+	import json
+	jfn='dump.json'
+	with open(jfn, 'w') as f:
+		# Serialize dict to a JSON formatted string and write it to a file
+		json.dump(out, f, indent=4) 
+
+
+header='''
+digraph G {
+    rankdir=TB;
+    //node [shape=box, style=rounded];
+	node [color=black];
+start [label="Start", shape=tripleoctagon];
+
+'''
+
+footer=f'''
+
+}}
+'''
+def get_name(p,c, id=0):
+	name=f'{c.get_type()}_{p.index(c)}_{id}'
+	print(name)
+	return name
+hdot=[]
+
+if 0:
+	for cid,c in enumerate(parsed):
+		print(cid,parsed.index(c))
+	e()
+		
+if 0:
+	
+	for k,v in out.items():
+		hdot.append(f'{v["name"]} [label="{v["name"]}", shape=diamond ];')
+else:
+
+	hdot.append('//level 1')
+	for cid,c in enumerate(parsed):
+		name = get_name(parsed,c, cid)
+		hdot.append(f'{name} [label="{name}", shape=box ];')
+		
+		for ccid,cc in enumerate(c):
+			name = get_name(c,cc, ccid)
+			hdot.append(f'\t{name} [label="{name}", shape=box ];')
+			for cccid, ccc in enumerate(cc):
+				try:
+					name = get_name(cc,ccc,cccid)
+					hdot.append(f'\t{name} [label="{name}", shape=box ];')
+				except Exception as ex:
+					print(c.get_type())
+					print(cc.get_type())
+					print(ccc)
+					e(str(ex))
+if 0:
+	hdot.append('//level 2')
+	for c in parsed:
+		for cc in c:
+			hdot.append(f'{cc.get_type()} [label="{cc.get_type()}", shape=box ];')
+		
+pp(hdot)
+
+fdot=[]
+if 0:
+	
+	for k,v in out.items():
+		fdot.append(f'{v["name"]} [label="{v["name"]}", shape=diamond ];')
+else:
+
+	
+	for cid, c in enumerate(parsed):
+		if not cid:
+			dfrom = 'start'
+		else:
+			dfrom = get_name(parsed,parsed[cid-1], cid-1) 
+			
+
+		dto = get_name(parsed,c, cid)
+		fdot.append(f'{dfrom} -> {dto}[label="" ];')
+		
+		for ccid, cc in enumerate(c):
+			ddto=get_name(c,cc, ccid) 
+			
+			fdot.append(f'{dto} -> {ddto}[label="" ];')
+			for cccid,ccc in enumerate(cc):
+				#dddto= ccc.get_type()
+				dddto=get_name(cc,ccc, cccid)
+				fdot.append(f'{ddto} -> {dddto}[label="" ];')
+		
+pp(fdot)
+parsed[0]
+
+#e(0)
+dot=f'''
+{header}
+{os.linesep.join(hdot)}
+
+// LINKS
+
+{os.linesep.join(fdot)}
+{footer}
+'''
+#//..\graphviz_diagram\gw\bin\dot -Tpng dotout.dot -o plsql.png; .\plsql.png
+if 1:
+	dotfn = 'dotout.dot'
+	with open(dotfn, 'w') as fh:
+		# Serialize dict to a JSON formatted string and write it to a file
+		fh.write(dot) 
