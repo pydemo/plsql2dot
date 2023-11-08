@@ -6,7 +6,7 @@ except:
 	import  case
 try:
 
-	from include import  where
+	from include import  where as where
 except:
 	import  where
 # Keyword definition helper for case-insensitive matching
@@ -142,7 +142,8 @@ test_string = '''
 			INNER JOIN facts_pricing pr ON pkgs.quote_id = pr.quote_id
 		WHERE pkgs.pkgs_search_processed = 'N' AND pkgs.info_fcn_or_crid_of_mail_owner = fcn.crid
 			AND pkgs.current_month_flag = 'Y' AND payment_rec_arrived = 'Y' AND pkgs.dtc > p_cutoff_date
-			AND COALESCE(pkgs.dum_unmanifested_or_postagedue, 'N') = 'Y';
+			AND COALESCE(pkgs.dum_unmanifested_or_postagedue, 'N') = 'Y'
+			;
 	
 '''
 

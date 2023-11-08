@@ -49,10 +49,13 @@ if 1:
 		boolean_operator = re.compile(r"AND", re.IGNORECASE)  # Boolean operator AND	
 		grammar = identifier, comparison_operator, [identifier, string_literal]
 
-
+class IsNullCondition(str):
+	identifier = re.compile(r"[a-zA-Z_][a-zA-Z0-9_\.]*")
+	null_condition = re.compile(r"IS NULL", re.IGNORECASE)  # NULL condition
+	grammar = identifier, null_condition
 
 class Condition(str):
-	grammar = [Comparison,FuncCondition]
+	grammar = [Comparison,FuncCondition, IsNullCondition]
 
 class WhereClause(List):
 	grammar = WHERE, csl(Condition, separator=AND)
@@ -82,11 +85,19 @@ FROM table1 pkgs
 			AND COALESCE(pkgs.dum_unmanifested_or_postagedue, 'N') = 'Y'
 
 '''
-test_string2 = '''
+test_string = '''
 select col1, col2 
 FROM table1 pkgs
-	WHERE  COALESCE(pkgs.dum_unmanifested_or_postagedue, 'N') = 'Y'
+	WHERE  pkgs.pkgs_search_processed = 'N' AND pkgs.info_fcn_or_crid_of_mail_owner = fcn.crid
+			AND pkgs.current_month_flag = 'Y' AND payment_rec_arrived = 'Y' AND pkgs.dtc > p_cutoff_date
+			AND COALESCE(pkgs.dum_unmanifested_or_postagedue, 'N') = 'Y'
+			AND pkgs.pkgs_search_processed = 'N' 
+			AND pkgs.dtc > p_cutoff_date
+			 AND COALESCE(pkgs.dup_unmanifested_or_postage_due, 'N') = 'Y'
+			  AND ps.pkg_grp_id IS NULL
+			  
 '''
+#pkgs.pkgs_search_processed = 'N' AND pkgs.dtc > p_cutoff_date AND COALESCE(pkgs.dup_unmanifested_or_postage_due, 'N') = 'Y' AND ps.pkg_grp_id IS NULL;
 if __name__ == '__main__':
 	# Parse the string using the defined grammar
 	parsed_select = parse(test_string, SQLStatement)

@@ -2,6 +2,7 @@ from pypeg2 import *
 from include import select
 from include import statement
 from include import insert_as_select as ias
+from include import update 
 
 class BooleanLiteral(Keyword):
 	# Adjusting the regex to handle boolean literals
@@ -41,12 +42,12 @@ from include import create_temp_table as ctt
 class LineExpression(List):
 	# Defines the different expressions that can be on a single line
 	grammar = maybe_some([LineFilter, BooleanLiteral, StringLiteral, Comment, Assignment, CommitLiteral, insert.InsertStatement, drop.DropTableStatement,\
-	ctt.CreateTableStatement,  statement.Assignment,ias.InsertSelectStatement])
+	ctt.CreateTableStatement,  statement.Assignment,ias.InsertSelectStatement, update.UpdateStatement])
 	
 class IfStatement(List):
 	# Defines the structure of an if statement
 	grammar = 'if',  Condition, 'then', \
-			  LineExpression, \
+			  LineExpression, optional('else'),  optional(LineExpression),\
 			  'end if', ';'
 
 class StatementExpression(List):
@@ -185,6 +186,90 @@ begin
 			
 		COMMIT;
 		
+		INSERT INTO package_search_temp(mid, crid, manifest_date, file_name, pic, efn, entry_zip, destination_zip, zone, mail_class, manifest_weight, permit_number, eps_account_number, usps_recalculated_postage, eps_transaction_id, month, year, source_reports, search_type, manifest_package_id, pkg_grp_id, dtc, dtu, rate_ind)
+		SELECT pr.mid
+			  ,pr.crid
+			  ,CASE
+				  WHEN pr.dts_first IS NOT NULL
+				  THEN to_date(to_char(pr.dts_first, 'YYYY-MON-DD'), 'YYYY-MON-DD') 
+				  ELSE to_date(to_char(pr.dts_first, 'YYYY-MON-DD'), 'YYYY-MON-DD')
+			   END AS manifest_date
+			  ,pr.file_name
+			  ,pr.pic
+			  ,pr.electronic_file_num AS efn
+			  ,COALESCE(pr.assd_zc_origin, pr.zc_origin) AS entry_zip
+			  ,COALESCE(pr.assd_zc_dest, pr.zc_dest) AS destination_zip
+			  ,pr.assd_zone AS zone
+			  ,pr.assd_mc_code AS mail_class
+			  ,pr.weight AS manifest_weight
+			  ,pr.permit_no AS permit_number
+			  ,cast(pr.eps_acc_num as varchar) AS eps_account_number
+			  ,pr.postage_delta AS usps_recalculated_postage
+			  ,NULL AS eps_transaction_id
+			  ,date_part('month', manifest_date) AS month
+			  ,date_part('year', manifest_date) AS year
+			  ,CASE 
+				  WHEN UPPER(nvl(pr.rootcauses, 'X')) LIKE '%UNMANIFESTED%' THEN 'Unmanifested'
+				  WHEN UPPER(nvl(pr.rootcauses, 'X')) LIKE '%DUPLICATE%' THEN 'Duplicate'
+				  ELSE 'NA' 
+			   END AS source_reports
+			  ,CASE 
+				  WHEN source_reports != 'NA' THEN 'UNIVERSAL' 
+				  ELSE 'NA' 
+			   END AS search_type
+			  ,pr.manifest_package_id
+			  ,pr.pkg_grp_id
+			  ,p.processing_time AS dtc
+			  ,p.processing_time AS dtu
+			  ,pr.rate_ind
+		FROM stage_pkgs_outbound pkgs
+		INNER JOIN facts_pricing pr ON pkgs.quote_id = pr.quote_id
+		LEFT OUTER JOIN package_search_by_pic ps ON pr.pkg_grp_id = ps.pkg_grp_id AND ps.search_type = 'UNIVERSAL'
+		WHERE pkgs.pkgs_search_processed = 'N' AND pkgs.dtc > p_cutoff_date AND COALESCE(pkgs.dup_unmanifested_or_postage_due, 'N') = 'Y' AND ps.pkg_grp_id IS NULL;
+		commit;
+		
+		v_location_name := 'Update stage_pkgs_outbound for pkgs_search_processed';
+		
+		UPDATE stage_pkgs_outbound
+		SET pkgs_search_processed = 'Y', dtu = getdate()
+		WHERE pkgs_search_processed = 'N' AND ready_to_process = 'Y' AND payment_rec_arrived = 'Y' AND COALESCE(dup_unmanifested_or_postagedue, 'N') != 'Y';
+		commit;
+		
+		
+		-- Updating search processed status for packages with certain conditions
+		UPDATE stage_pkgs_outbound
+		SET pkgs_search_processed = 'Y', dtu = getdate()
+		WHERE pkgs_search_processed = 'N' AND COALESCE(dup_unmanifested_or_postagedue, 'N') = 'Y';
+		commit;
+		
+
+
+		-- Inserting data into package_search_by_pic after processing
+		v_location_name := 'Loading pkgs into package_search_by_pic';
+		INSERT INTO package_search_by_pic(mid, crid, manifest_date, file_name, pic, efn, entry_zip, destination_zip, zone, mail_class, manifest_weight, permit_number, eps_account_number, usps_recalculated_postage, eps_transaction_id, month, year, source_reports, search_type, manifest_package_id, pkg_grp_id, dtc, dtu, rate_ind)
+		SELECT mid, crid, manifest_date, file_name, pic, efn, entry_zip, destination_zip, zone, mail_class, manifest_weight, permit_number, eps_account_number, usps_recalculated_postage, eps_transaction_id, month, year, source_reports, search_type, manifest_package_id, pkg_grp_id, dtc, dtu, rate_ind 
+		FROM package_search_temp;
+		commit;
+		
+		--//
+		v_location_name := 'Loading pkgs into package_search_by_efn';
+		INSERT INTO package_search_by_efn(mid, crid, manifest_date, file_name, pic, efn, entry_zip, destination_zip, zone, mail_class, manifest_weight, permit_number, eps_account_number, usps_recalculated_postage, eps_transaction_id, month, year, source_reports, search_type, manifest_package_id, pkg_grp_id, dtc, dtu, rate_ind)
+		SELECT mid, crid, manifest_date, file_name, pic, efn, entry_zip, destination_zip, zone, mail_class, manifest_weight, permit_number, eps_account_number, usps_recalculated_postage, eps_transaction_id, month, year, source_reports, search_type, manifest_package_id, pkg_grp_id, dtc, dtu, rate_ind 
+		FROM package_search_temp;
+		commit;
+		
+
+		v_status := 'Loaded pic, efn tables with pkgs';
+		insert into ppc_qlik_reports_log (log_date, report_name, module_name, status)
+		values (getdate(), 'MANIFEST_SEARCH_REPORT', 'pic, efn tables loaded', v_status);
+		commit;
+else
+		v_status := 'Manifested search pkgs not found';
+		insert into ppc_qlik_reports_log (log_date, report_name, module_name, status)
+		values (getdate(), 'MANIFEST_SEARCH_REPORT', 'Exiting Summarization', v_status);
+		commit;
+
+
 	end if;
 end;
 '''
