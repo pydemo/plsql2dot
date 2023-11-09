@@ -1,6 +1,11 @@
 from pypeg2 import *
 import re
 
+
+class Base2(object):
+	def get_type(self):
+		return f'{__name__}.{self.__class__.__name__}'.replace('.','_')
+from include.base import  Base
 # Class to represent an identifier, such as table names
 class Identifier(str):
 	grammar = re.compile(r'[a-zA-Z_]\w*')
@@ -11,7 +16,7 @@ class LikeClause(List):
 	grammar = 'LIKE', attr('like_table', Identifier)
 
 # CREATE TABLE statement
-class CreateTableStatement(List):
+class CreateTableStatement(List, Base):
 	grammar = 'CREATE', 'TEMP TABLE', attr('table', Identifier), \
 			  '(', attr('like_clause', LikeClause), ')', ';'
 

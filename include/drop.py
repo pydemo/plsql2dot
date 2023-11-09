@@ -1,12 +1,19 @@
 from pypeg2 import *
 import re
 
+
+class Base2(object):
+	def get_type(self):
+		return f'{__name__}.{self.__class__.__name__}'.replace('.','_')
+
+from include.base import  Base
+
 # Class to represent an identifier, such as table names
 class Identifier(str):
 	grammar = re.compile(r'[a-zA-Z_]\w*')
 
 # DROP TABLE statement
-class DropTableStatement(List):
+class DropTableStatement(List, Base):
 	grammar = 'DROP TABLE', 'IF EXISTS', attr('table', Identifier), ';'
 
 

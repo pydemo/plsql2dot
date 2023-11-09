@@ -9,6 +9,11 @@ identifier = re.compile(r"[a-zA-Z_][a-zA-Z0-9_\.]*")  # Identifiers can include 
 string_literal = re.compile(r"'[^']*'")  # String literals
 function_call = re.compile(r"[a-zA-Z_][a-zA-Z0-9_]*\(\)")  # Function call, like getdate()
 
+class Base2(object):
+	def get_type(self):
+		return f'{__name__}.{self.__class__.__name__}'.replace('.','_')
+from include.base import  Base
+		
 # Define the structure for a simple assignment (e.g., column = 'value')
 class Assignment(str):
 	grammar = identifier, "=", [string_literal, function_call]
@@ -18,9 +23,10 @@ class SetClause(List):
 	grammar = 'SET', csl(Assignment)
 
 # Define the structure for the UPDATE statement
-class UpdateStatement(List):
+class UpdateStatement(List, Base):
 	grammar = 'UPDATE', identifier, SetClause, where.WhereClause, optional(";")
-
+	def get_dot(self):
+		return f'{self.name} [shape="box", style=bold, color="lightpink", label="{self.tname}" ];'
 # Your SQL update statement
 update_statement = '''
 	UPDATE stage_pkgs_outbound

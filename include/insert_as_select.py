@@ -17,7 +17,11 @@ def ci_keyword(kword):
 identifier_pattern = re.compile(r'[a-zA-Z_]\w*')
 string_literal_pattern = re.compile(r"'(?:[^'\\]|\\.)*'")  # Handles escaped quotes within strings
 function_call_pattern = re.compile(r'\w+\(\)')
-
+from include.base import  Base
+class Base2(object):
+	def get_type(self):
+		return f'{__name__}.{self.__class__.__name__}'.replace('.','_')
+		
 # Class for table name, column names, and function calls (like getdate())
 class Identifier(str):
 	grammar = identifier_pattern
@@ -83,7 +87,7 @@ class SelectStatement(List):
 	optional(attr('join',maybe_some(JoinClause))), optional(attr('where',maybe_some(where.WhereClause)))
 
 # Class for the full insert-select statement
-class InsertSelectStatement(List):
+class InsertSelectStatement(List, Base):
 	grammar = InsertKword, attr('table', Identifier), attr('columns', ColumnList), \
 			  attr('select', SelectStatement),';'
 

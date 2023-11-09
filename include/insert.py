@@ -6,6 +6,8 @@ identifier_pattern = re.compile(r'[a-zA-Z_]\w*')
 string_literal_pattern = re.compile(r"'(?:[^'\\]|\\.)*'")  # Handles escaped quotes within strings
 function_call_pattern = re.compile(r'\w+\(\)')
 
+from include.base import  Base
+		
 # Class for table name, column names, and function calls (like getdate())
 class Identifier(str):
     grammar = identifier_pattern
@@ -30,7 +32,7 @@ class ColumnList(List):
     grammar = '(', csl(Identifier), ')'
 
 # Class for the insert statement itself
-class InsertStatement(List):
+class InsertStatement(List, Base):
     grammar = 'insert into', attr('table', Identifier), attr('columns', ColumnList), \
               'values', attr('values', ValueList), ';'
 

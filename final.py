@@ -1,4 +1,4 @@
-import os, sys
+import re, os, sys
 from pypeg2 import *
 from include import select
 from include import statement
@@ -6,22 +6,45 @@ from include import insert_as_select as ias
 from include import update 
 from include import ex 
 
+from include import insert 
+from include import drop 
+from include import create_temp_table as ctt 
+from include.base import get_name, Base
+
+
 e=  sys.exit
 
-class Base(object):
-	def get_type(self):
-		return self.__class__.__name__
-	
-	
+
+
+from collections import defaultdict
+
+# Create a defaultdict with default value 0
+d = defaultdict(int)
+
+class counter(object):
+	def __init__(self):
+		self.cnt=defaultdict(int)
+	def inc(self, obj):
+		tname=obj.__class__.__name__
+		self.cnt[tname] +=1
+	def get(self, obj):
+		tname=obj.__class__.__name__
+		return self.cnt[tname]
+
+
+
 class BooleanLiteral(Keyword):
 	# Adjusting the regex to handle boolean literals
 	K.regex = re.compile(r'"*\w+"*')
 	grammar = Enum(K('true'), K('false'), K(r'"true"'), K(r'"false"'))
 
-class CommitLiteral(str):
+class CommitLiteral(str, Base):
 	# Handles the 'commit' keyword
 	grammar = re.compile(r'commit', re.IGNORECASE), ';'
 
+	def get_dot(self):
+		return f'{self.name} [shape="septagon", style=bold, color="blue", label="Commit {cntr.get(self)}" ];'
+	
 class LineFilter(Namespace):
 	grammar = flag('inverted', "-"), name(), ":", attr('value', word)
 
@@ -30,7 +53,7 @@ class StringLiteral(str):
 	quoted_string = re.compile(r'"[^"]*"')
 	grammar = quoted_string
 
-class Comment(str):
+class Comment(str, Base):
 	# Matches the rest of the line after a comment
 	rest_of_line = re.compile(r'.*?(?=\n|$)')
 	grammar = '--', rest_of_line
@@ -48,14 +71,12 @@ class Assignment2(str, Base):
 	rest_of_line = re.compile(r'.*?(?=\n|$)')
 	grammar = identifier_pattern, ':=', rest_of_line
 	
-class Condition(str):
+class Condition(str, Base):
 	# Matches a condition such as 'a > b'
 	grammar = name(), re.compile(r'\s*[><=!]=?\s*'), word
 
-from include import insert 
-from include import drop 
-from include import create_temp_table as ctt 
-class LineExpression(List):
+
+class LineExpression(List, Base):
 	# Defines the different expressions that can be on a single line
 	grammar = maybe_some([LineFilter, BooleanLiteral, StringLiteral, Comment, Assignment, CommitLiteral, insert.InsertStatement, drop.DropTableStatement,\
 	ctt.CreateTableStatement,  statement.Assignment,ias.InsertSelectStatement, update.UpdateStatement])
@@ -287,7 +308,7 @@ end;
 $$
 
 '''
-
+cntr=counter()
 parsed = parse(test_string, Code)
 
 print('Input:')
@@ -413,7 +434,7 @@ for aid,a in enumerate(parsed):
 				if not (type(c) is str):
 					cobj[did]=dict( name=dname,attr=attr, obj=dobj, level=level, id=cnt, type= str(type(d)))
 print()
-pp(out)
+#pp(out)
 if 0:
 	import json
 	jfn='dump.json'
@@ -435,10 +456,24 @@ footer=f'''
 
 }}
 '''
-def get_name(p,c, id=0):
-	name=f'{c.get_type()}_{p.index(c)}_{id}'
-	print(name)
-	return name
+
+import re
+
+# Input string
+input_string = "Hello, World! It's a beautiful day :) #123"
+
+# Regular expression pattern for non-alphanumeric characters
+pattern = '[^\w\s]'  # \w matches any alphanumeric character and underscore. \s matches any whitespace character.
+
+# Replace non-alphanumeric characters with an empty string
+cleaned_string = re.sub(pattern, '', input_string)
+
+
+
+
+
+	
+		
 hdot=[]
 
 if 0:
@@ -454,28 +489,71 @@ else:
 
 	hdot.append('//level 1')
 	for cid,c in enumerate(parsed):
-		name = get_name(parsed,c, cid)
-		hdot.append(f'{name} [label="{name}", shape=box ];')
-		
+		name, label = get_name(parsed,c, cid)
+		hdot.append(f'{name} [label="{label}", shape=box ];')
+		cntr.inc(c)
 		for ccid,cc in enumerate(c):
-			name = get_name(c,cc, ccid)
-			hdot.append(f'\t{name} [label="{name}", shape=box ];')
+			name, label = get_name(c,cc, ccid)
+			hdot.append(f'\t{name} [label="{label}", shape=box ];')
+			cntr.inc(cc)
 			for cccid, ccc in enumerate(cc):
 				try:
-					name = get_name(cc,ccc,cccid)
-					hdot.append(f'\t{name} [label="{name}", shape=box ];')
+					name, label = get_name(cc,ccc,cccid)
+					hdot.append(f'\t\t{name} [label="{label}", shape=box ];')
+					cntr.inc(ccc)
 				except Exception as ex:
 					print(c.get_type())
 					print(cc.get_type())
 					print(ccc)
-					e(str(ex))
+					raise
+				if type(ccc) not in []:
+					for ccccid, cccc in enumerate(ccc):
+						try:
+							name, label = get_name(ccc,cccc,ccccid)
+							hdot.append(f'\t\t\t{name} [label="{label}", shape=box ];')
+							cntr.inc(cccc)
+						except Exception as ex:
+							print(c.get_type())
+							print(cc.get_type())
+							print(ccc.get_type())
+							print(cccc)
+							raise
+						
+
+						if type(cccc) not in [str, Comment]:
+							for cccccid, ccccc in enumerate(cccc):
+								
+								if type(ccccc) not in [str, Comment]:
+									#print(111, type(ccccc))
+									if type(ccccc) in [CommitLiteral]:
+										#print(type(ccccc))
+										ccccc.init(cccc,ccccc,cccccid)
+										#print(ccccc.get_dot())
+										#e()
+										hdot.append(f'\t\t\t\t{ccccc.get_dot()}')
+										cntr.inc(ccccc)
+									else:
+										try:
+											ccccc.init(cccc,ccccc,cccccid)
+											hdot.append(f'\t\t\t\t{ccccc.get_dot()}')
+											cntr.inc(cccc)
+										except Exception as ex:
+											print(c.get_type())
+											print(cc.get_type())
+											print(ccc.get_type())
+											print(cccc.get_type())
+											print(ccccc)
+											raise
+							
+						#e(str(ex))
+					
 if 0:
 	hdot.append('//level 2')
 	for c in parsed:
 		for cc in c:
 			hdot.append(f'{cc.get_type()} [label="{cc.get_type()}", shape=box ];')
 		
-pp(hdot)
+#pp(hdot)
 
 fdot=[]
 if 0:
@@ -489,24 +567,44 @@ else:
 		if not cid:
 			dfrom = 'start'
 		else:
-			dfrom = get_name(parsed,parsed[cid-1], cid-1) 
+			dfrom, label = get_name(parsed,parsed[cid-1], cid-1) 
 			
 
-		dto = get_name(parsed,c, cid)
+		dto, label = get_name(parsed,c, cid)
 		fdot.append(f'{dfrom} -> {dto}[label="" ];')
 		
 		for ccid, cc in enumerate(c):
-			ddto=get_name(c,cc, ccid) 
+			ddto, label=get_name(c,cc, ccid) 
 			
 			fdot.append(f'{dto} -> {ddto}[label="" ];')
 			for cccid,ccc in enumerate(cc):
 				#dddto= ccc.get_type()
-				dddto=get_name(cc,ccc, cccid)
+				dddto, label=get_name(cc,ccc, cccid)
 				fdot.append(f'{ddto} -> {dddto}[label="" ];')
+				if type(ccc) not in []:
+					for ccccid,cccc in enumerate(ccc):
+						#dddto= ccc.get_type()
+						ddddto, label=get_name(ccc,cccc, ccccid)
+						fdot.append(f'{dddto} -> {ddddto}[label="" ];')
+						if type(cccc) not in [str, Comment]:
+							first=0
+							for cccccid, ccccc in enumerate(cccc):
+								#dddto= ccc.get_type()
+								if type(ccccc) not in [str, Comment]:
+									
+									dddddto, label=get_name(cccc,ccccc, cccccid)
+									if not first:
+										fdot.append(f'{ddddto} -> {dddddto}[label="" ];')
+										dddddfrom = dddddto
+										first +=1
+									else:
+										dddddto, label=get_name(cccc,ccccc, cccccid)
+										fdot.append(f'{dddddfrom} -> {dddddto}[label="{label}" ];')
+										dddddfrom = dddddto
 		
-pp(fdot)
-parsed[0]
-
+#pp(fdot)
+#parsed[0]
+pp(cntr.cnt)
 #e(0)
 dot=f'''
 {header}

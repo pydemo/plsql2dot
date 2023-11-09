@@ -7,10 +7,10 @@ string_literal = re.compile(r"'(?:[^'\\]|\\.)*'")
 
 rest_of_line = re.compile(r'.*$', re.MULTILINE)
 
-class Base(object):
+class Base2(object):
 	def get_type(self):
 		return f'{__name__}.{self.__class__.__name__}'.replace('.','_')
-	
+from include.base import  Base
 
 class Assignment(List, Base):
 	grammar = name(), '=', string_literal, ';'	
