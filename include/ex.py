@@ -1,6 +1,11 @@
 from pypeg2 import *
 import re
+import include.config.init_config as init_config  
+from include.base import  Base
+apc = init_config.apc
 
+
+e=sys.exit
 # Define rest_of_line as a regex that matches any characters until the end of the line
 rest_of_line = re.compile(r'.*?(?=\n|$)')
 
@@ -20,7 +25,7 @@ class CodeBlock(List):
 	grammar = csl(re.compile(r'[^,;]*'))
 
 # Define a class for the exception block
-class ExceptionBlock(List):
+class ExceptionBlock(List, Base):
 	
 	grammar = exception_keyword, when_keyword, others_keyword, then_keyword, raise_keyword, info_keyword,attr("code", CodeBlock),';'
 

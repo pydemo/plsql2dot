@@ -1,6 +1,11 @@
 from pypeg2 import *
 import re
 
+import include.config.init_config as init_config  
+apc = init_config.apc
+
+
+e=sys.exit
 
 class Base2(object):
 	def get_type(self):
@@ -19,7 +24,8 @@ class LikeClause(List):
 class CreateTableStatement(List, Base):
 	grammar = 'CREATE', 'TEMP TABLE', attr('table', Identifier), \
 			  '(', attr('like_clause', LikeClause), ')', ';'
-
+	def get_dot(self):
+		return f'{self.name} [shape="box",  color="orange", label="{self.tname} {apc.cntr.get(self)}" ];'
 # Statement which can be either DROP TABLE or CREATE TABLE
 class Statement(List):
 	grammar = [ CreateTableStatement]

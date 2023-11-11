@@ -1,7 +1,11 @@
 from pypeg2 import *
 import re
 
+import include.config.init_config as init_config  
+apc = init_config.apc
 
+
+e=sys.exit
 class Base2(object):
 	def get_type(self):
 		return f'{__name__}.{self.__class__.__name__}'.replace('.','_')
@@ -16,7 +20,9 @@ class Identifier(str):
 class DropTableStatement(List, Base):
 	grammar = 'DROP TABLE', 'IF EXISTS', attr('table', Identifier), ';'
 
-
+	def get_dot(self):
+		
+		return f'{self.name} [shape="box",  color="red", label="{self.label} {apc.cntr.get(self)}" ];'
 
 # Statement which can be either DROP TABLE or CREATE TABLE
 class Statement(List):

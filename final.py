@@ -1,5 +1,12 @@
 import re, os, sys
 from pypeg2 import *
+from pprint import pprint as pp
+import include.config.init_config as init_config  
+
+init_config.init(**{})
+apc = init_config.apc
+
+
 from include import select
 from include import statement
 from include import insert_as_select as ias
@@ -9,28 +16,9 @@ from include import ex
 from include import insert 
 from include import drop 
 from include import create_temp_table as ctt 
-from include.base import get_name, Base
-
-
+from include.base import  Base
+from include.base import  String
 e=  sys.exit
-
-
-
-from collections import defaultdict
-
-# Create a defaultdict with default value 0
-d = defaultdict(int)
-
-class counter(object):
-	def __init__(self):
-		self.cnt=defaultdict(int)
-	def inc(self, obj):
-		tname=obj.__class__.__name__
-		self.cnt[tname] +=1
-	def get(self, obj):
-		tname=obj.__class__.__name__
-		return self.cnt[tname]
-
 
 
 class BooleanLiteral(Keyword):
@@ -43,7 +31,8 @@ class CommitLiteral(str, Base):
 	grammar = re.compile(r'commit', re.IGNORECASE), ';'
 
 	def get_dot(self):
-		return f'{self.name} [shape="septagon", style=bold, color="blue", label="Commit {cntr.get(self)}" ];'
+		print('CommitLiteral', apc.cntr.get(self))
+		return f'{self.name} [shape="septagon", style=bold, color="blue", label="Commit {apc.cntr.get(self)}" ];'
 	
 class LineFilter(Namespace):
 	grammar = flag('inverted', "-"), name(), ":", attr('value', word)
@@ -62,8 +51,9 @@ class Assignment(str, Base):
 	# Matches an assignment operation
 	identifier_pattern = re.compile(r'\b[a-zA-Z_]\w*\b')
 	rest_of_line = re.compile(r'.*?(?=\n|$)')
-	grammar = identifier_pattern, ':=', rest_of_line
-
+	grammar = attr('identifier', identifier_pattern), ':=', rest_of_line
+	def get_dot(self):
+		return f'{self.name} [shape="box",  color="gray", label="{self.tname} {apc.cntr.get(self)}" ];'
 
 class Assignment2(str, Base):
 	# Matches an assignment operation
@@ -80,13 +70,17 @@ class LineExpression(List, Base):
 	# Defines the different expressions that can be on a single line
 	grammar = maybe_some([LineFilter, BooleanLiteral, StringLiteral, Comment, Assignment, CommitLiteral, insert.InsertStatement, drop.DropTableStatement,\
 	ctt.CreateTableStatement,  statement.Assignment,ias.InsertSelectStatement, update.UpdateStatement])
-	
+	def get_dot(self):
+		
+		return f'{self.name} [shape="box",  color="black", label="{self.label} {apc.cntr.get(self)}" ];'
 class IfStatement(List, Base):
 	# Defines the structure of an if statement
 	grammar = 'if',  Condition, 'then', \
 			  LineExpression, optional('else'),  optional(LineExpression),\
 			  'end if', ';'
-
+	def get_dot(self):
+		
+		return f'{self.name} [shape="diamond", style=bold, color="black", label="{self.label} {apc.cntr.get(self)}" ];'
 class StatementExpression(List, Base):
 	# Defines the different expressions that can be on a single line
 	grammar = maybe_some([IfStatement, select.Select, statement.Assignment,  statement.Comment ])
@@ -94,7 +88,10 @@ class StatementExpression(List, Base):
 class Block(List, Base):
 	# Defines the structure of an if statement
 	grammar = 'begin', StatementExpression, \
-			  attr('ex',ex.ExceptionBlock),'end', ';',Literal('$$')
+			  ex.ExceptionBlock,'end', ';',Literal('$$')
+	def get_dot(self):
+		
+		return f'{self.name} [shape="box", style=bold, color="black", label="{self.label} {apc.cntr.get(self)}" ];'
 class Identifier(str):
     grammar = re.compile(r'[a-zA-Z_]\w*')
 
@@ -118,6 +115,10 @@ class DeclarationExpression(List,Base):
 	grammar = maybe_some([VariableDeclaration])
 class Declarations(List, Base):
 	grammar = 'as', Literal('$$'),"declare", DeclarationExpression
+	def get_dot(self):
+		
+		return f'{self.name} [shape="box", color="gray", label="DECLARE {apc.cntr.get(self)}" ];'
+	
 identifier = re.compile(r"[a-zA-Z_][a-zA-Z0-9_$]*")
 # Parameter definition within the procedure
 class Type(Keyword):
@@ -125,8 +126,10 @@ class Type(Keyword):
 	
 class Parameter(List):
 	grammar = attr("direction", optional("in")), attr("name", identifier), attr("data_type", Type)
+language_keyword = Keyword("language")
+
 class Language(str, Base):
-	grammar = 'language', name()
+	grammar = language_keyword, name()
 class Security(str, Base):
 	grammar = 'security', 'definer'
 # A list of parameters separated by commas
@@ -136,7 +139,9 @@ class ProcOrFuncName(str):
 	grammar = word
 class FunctionOrProcedure(List, Base):
 	grammar = "create or replace",["function", "procedure"],attr("name", ProcOrFuncName)  , "(", attr("params", Parameters), ")",Language, Security
-	
+	def get_dot(self):
+		
+		return f'{self.name} [shape="septagon", style=bold, color="black", label="Procedure" ];'
 	
 class Code(List):
 	grammar = FunctionOrProcedure, Declarations, Block
@@ -308,7 +313,7 @@ end;
 $$
 
 '''
-cntr=counter()
+#apc.cntr=cntr=counter()
 parsed = parse(test_string, Code)
 
 print('Input:')
@@ -331,7 +336,8 @@ for c in parsed:
 			if str(type(d)).endswith(".VariableDeclaration'>"):
 				print('\tDVAR:',d.name)
 			else:
-				print(111, d, type(d))
+				pass
+				#print(111, d, type(d))
 	elif isinstance(c, Block):
 		print('BLOCK:')
 		for b in c[0]:
@@ -368,72 +374,18 @@ for c in parsed:
 						print(f"\t\tUPDATE: {le}")
 					else:
 						print(le, type(le))
-			elif str(type(b)).endswith(".IfStatement'>"):
-				print('\tIF_COND:', b)
+			elif isinstance(b, ex.ExceptionBlock):
+				print('\tEXCEPTION:', b)
 			else:
 				print(b, type(b))
 			
 	
-		if isinstance(c.ex, ex.ExceptionBlock):
-			print('EXCEPTION:', c.ex)
+		#if isinstance(c.ex, ex.ExceptionBlock):
+		#	print('EXCEPTION:', c.ex)
 	else:
 		print(c, str(type(c)))
 
-from pprint import pprint as pp
-from collections import OrderedDict
-out={}
-level=0
-cnt=0
-for aid,a in enumerate(parsed):
-	#pp(a.__dict__)
-	cnt +=1
-	aname=str(a.__class__.__name__)
-	akey=f'{aname}_{aid}'
-	aobj={}
-	out[aid]=dict(name=aname, attr=a.__dict__, obj=aobj, level=level, id=cnt, type=a.get_type())
-	
-	for bid,b in enumerate(a[0]):
-		level =1
-		cnt +=1
-		bname=str(b.__class__.__name__)
-		bkey=f'{bname}_{bid}'
-		bobj={}
-		attr =  b.__dict__
-		attr.pop('position_in_text', None)
-		aobj[bid]=dict( name=bname,attr=b.__dict__, obj=bobj, level=level, id=cnt)
-		for cid,c in enumerate(b):
-			level =2
-			cnt +=1
-			cname=str(c.__class__.__name__)
-			ckey=f'{cname}_{cid}'
-			cobj={}
-			print(type(c)==str)
-			if type(c) is str:
-				attr=dict(type=type(c), value=str(c))
-			else:
-				attr =  c.__dict__
-				attr.pop('position_in_text', None)
-			for k,v in attr.items():
-				attr[k]=str(v)
-						
-			bobj[cid]=dict( name=cname,attr=attr, obj=cobj, level=level, id=cnt, type= str(type(c)))
-			for did,d in enumerate(c):
-				level =3
-				cnt +=1
-				dname=str(d.__class__.__name__)
-				dkey=f'{dname}_{did}'
-				dobj={}
-				
-				if type(d) is str:
-					attr=dict(type=type(d), value=str(d))
-				else:
-					attr =  d.__dict__
-					attr.pop('position_in_text', None)
-				for k,v in attr.items():
-					attr[k]=str(v)
-				if not (type(c) is str):
-					cobj[did]=dict( name=dname,attr=attr, obj=dobj, level=level, id=cnt, type= str(type(d)))
-print()
+
 #pp(out)
 if 0:
 	import json
@@ -470,73 +422,89 @@ cleaned_string = re.sub(pattern, '', input_string)
 
 
 
-
+class Parsed(object):
+	def get_full_dot(self, parent, dfrom, hdot, fdot):
+		for cid,c in enumerate(parent):
+			c.get_full_dot(parent,'start', cid, hdot, fdot)
 
 	
 		
 hdot=[]
-
+fdot=[]
+apc.parsed=parsed
 if 0:
 	for cid,c in enumerate(parsed):
 		print(cid,parsed.index(c))
 	e()
+if 1:
+	ped=Parsed()
+	ped.get_full_dot(apc.parsed, 'start', hdot, fdot)
 		
 if 0:
-	
-	for k,v in out.items():
-		hdot.append(f'{v["name"]} [label="{v["name"]}", shape=diamond ];')
-else:
 
 	hdot.append('//level 1')
 	for cid,c in enumerate(parsed):
-		name, label = get_name(parsed,c, cid)
-		hdot.append(f'{name} [label="{label}", shape=box ];')
-		cntr.inc(c)
+		if not cid:
+			dfrom = 'start'
+
+		c.init(parsed,c, cid)
+		hdot.append(f'{c.get_dot()}')
+		apc.cntr.inc(c)
+		if 1:
+			dto, label = c.get_name()
+			fdot.append(f'{dfrom} -> {dto}[label="" ];')
+		dfrom=dto
 		for ccid,cc in enumerate(c):
-			name, label = get_name(c,cc, ccid)
-			hdot.append(f'\t{name} [label="{label}", shape=box ];')
-			cntr.inc(cc)
+			cc.init(c,cc, ccid)
+			hdot.append(f'\t{cc.get_dot()}')
+			apc.cntr.inc(cc)
+			if 1:
+				ddto, label=cc.get_name() 
+				
+				fdot.append(f'\t{dto} -> {ddto}[label="" ];')
+				
 			for cccid, ccc in enumerate(cc):
 				try:
-					name, label = get_name(cc,ccc,cccid)
-					hdot.append(f'\t\t{name} [label="{label}", shape=box ];')
-					cntr.inc(ccc)
+					ccc.init(cc,ccc,cccid)
+					hdot.append(f'\t\t{ccc.get_dot()}')
+					apc.cntr.inc(ccc)
 				except Exception as ex:
 					print(c.get_type())
 					print(cc.get_type())
 					print(ccc)
 					raise
+				if 1:
+					dddto, label=ccc.get_name()
+					fdot.append(f'\t\t{ddto} -> {dddto}[label="" ];')
+					
 				if type(ccc) not in []:
 					for ccccid, cccc in enumerate(ccc):
-						try:
-							name, label = get_name(ccc,cccc,ccccid)
-							hdot.append(f'\t\t\t{name} [label="{label}", shape=box ];')
-							cntr.inc(cccc)
-						except Exception as ex:
-							print(c.get_type())
-							print(cc.get_type())
-							print(ccc.get_type())
-							print(cccc)
-							raise
-						
+						if type(cccc) not in [str]:
+							try:
+								cccc.init(ccc,cccc,ccccid)
+								hdot.append(f'\t\t\t{cccc.get_dot()}')
+								apc.cntr.inc(cccc)
+							except Exception as ex:
+								print(c.get_type())
+								print(cc.get_type())
+								print(ccc.get_type())
+								print(cccc)
+								raise
+							if 1: #link
+								ddddto, label=cccc.get_name()
+								fdot.append(f'\t\t\t{dddto} -> {ddddto}[label="" ];')
 
-						if type(cccc) not in [str, Comment]:
-							for cccccid, ccccc in enumerate(cccc):
-								
-								if type(ccccc) not in [str, Comment]:
-									#print(111, type(ccccc))
-									if type(ccccc) in [CommitLiteral]:
-										#print(type(ccccc))
-										ccccc.init(cccc,ccccc,cccccid)
-										#print(ccccc.get_dot())
-										#e()
-										hdot.append(f'\t\t\t\t{ccccc.get_dot()}')
-										cntr.inc(ccccc)
-									else:
+							if type(cccc) not in [str, Comment]:
+								first=0
+								dddddfrom =None
+								for cccccid, ccccc in enumerate(cccc):
+									
+									if type(ccccc) not in [str, Comment]:
+
 										try:
 											ccccc.init(cccc,ccccc,cccccid)
 											hdot.append(f'\t\t\t\t{ccccc.get_dot()}')
-											cntr.inc(cccc)
+											apc.cntr.inc(ccccc)
 										except Exception as ex:
 											print(c.get_type())
 											print(cc.get_type())
@@ -544,75 +512,44 @@ else:
 											print(cccc.get_type())
 											print(ccccc)
 											raise
-							
-						#e(str(ex))
+										if 1: #link
+											
+											if not first:
+												dddddto, label=ccccc.get_name()
+												fdot.append(f'\t\t\t\t{ddddto} -> {dddddto}[label="" ];')
+												dddddfrom = dddddto
+												first +=1
+											else:
+												dddddto, label=ccccc.get_name()
+												fdot.append(f'\t\t\t\t{dddddfrom} -> {dddddto}[label="" ];')
+												dddddfrom = dddddto
+														
+								if dddddfrom:
+									fdot.append(f'{dddddfrom} -> end [label="" ];')
+						else:
+							print('str:',cccc)
+							#e()
 					
 if 0:
 	hdot.append('//level 2')
 	for c in parsed:
 		for cc in c:
 			hdot.append(f'{cc.get_type()} [label="{cc.get_type()}", shape=box ];')
-		
-#pp(hdot)
 
-fdot=[]
-if 0:
-	
-	for k,v in out.items():
-		fdot.append(f'{v["name"]} [label="{v["name"]}", shape=diamond ];')
-else:
+pp(apc.cntr.cnt)
 
-	
-	for cid, c in enumerate(parsed):
-		if not cid:
-			dfrom = 'start'
-		else:
-			dfrom, label = get_name(parsed,parsed[cid-1], cid-1) 
-			
 
-		dto, label = get_name(parsed,c, cid)
-		fdot.append(f'{dfrom} -> {dto}[label="" ];')
-		
-		for ccid, cc in enumerate(c):
-			ddto, label=get_name(c,cc, ccid) 
-			
-			fdot.append(f'{dto} -> {ddto}[label="" ];')
-			for cccid,ccc in enumerate(cc):
-				#dddto= ccc.get_type()
-				dddto, label=get_name(cc,ccc, cccid)
-				fdot.append(f'{ddto} -> {dddto}[label="" ];')
-				if type(ccc) not in []:
-					for ccccid,cccc in enumerate(ccc):
-						#dddto= ccc.get_type()
-						ddddto, label=get_name(ccc,cccc, ccccid)
-						fdot.append(f'{dddto} -> {ddddto}[label="" ];')
-						if type(cccc) not in [str, Comment]:
-							first=0
-							for cccccid, ccccc in enumerate(cccc):
-								#dddto= ccc.get_type()
-								if type(ccccc) not in [str, Comment]:
-									
-									dddddto, label=get_name(cccc,ccccc, cccccid)
-									if not first:
-										fdot.append(f'{ddddto} -> {dddddto}[label="" ];')
-										dddddfrom = dddddto
-										first +=1
-									else:
-										dddddto, label=get_name(cccc,ccccc, cccccid)
-										fdot.append(f'{dddddfrom} -> {dddddto}[label="{label}" ];')
-										dddddfrom = dddddto
-		
-#pp(fdot)
-#parsed[0]
-pp(cntr.cnt)
 #e(0)
 dot=f'''
 {header}
+end [label="End", shape=ellipse];
 {os.linesep.join(hdot)}
 
 // LINKS
 
 {os.linesep.join(fdot)}
+
+
 {footer}
 '''
 #//..\graphviz_diagram\gw\bin\dot -Tpng dotout.dot -o plsql.png; .\plsql.png

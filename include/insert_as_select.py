@@ -9,6 +9,12 @@ try:
 	from include import  where as where
 except:
 	import  where
+	
+import include.config.init_config as init_config  
+apc = init_config.apc
+
+
+e=sys.exit
 # Keyword definition helper for case-insensitive matching
 def ci_keyword(kword):
 	return re.compile(r'\b' + kword + r'\b', re.IGNORECASE)
@@ -90,7 +96,9 @@ class SelectStatement(List):
 class InsertSelectStatement(List, Base):
 	grammar = InsertKword, attr('table', Identifier), attr('columns', ColumnList), \
 			  attr('select', SelectStatement),';'
+	def get_dot(self):
 
+		return f'{self.name} [shape="box", style=bold, color="lightgreen", label="{self.tname} {apc.cntr.get(self)}" ];'
 # The SQL insert-select string to parse
 test_string = '''
 	INSERT INTO package_search_temp (mid, manifest_date, file_name)

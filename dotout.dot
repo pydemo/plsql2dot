@@ -7,98 +7,18 @@ digraph G {
 start [label="Start", shape=tripleoctagon];
 
 
-//level 1
-FunctionOrProcedure_0_0 [label="FunctionOrProcedure", shape=box ];
-	Language_0_0 [label="Language", shape=box ];
-	Security_0_1 [label="Security", shape=box ];
-Declarations_1_1 [label="Declarations", shape=box ];
-	DeclarationExpression_0_0 [label="DeclarationExpression", shape=box ];
-		VariableDeclaration_0_0 [label="VariableDeclaration", shape=box ];
-		VariableDeclaration_0_1 [label="VariableDeclaration", shape=box ];
-		VariableDeclaration_0_2 [label="VariableDeclaration", shape=box ];
-Block_2_2 [label="Block", shape=box ];
-	StatementExpression_0_0 [label="StatementExpression", shape=box ];
-		Assignment_0_0 [label="Assignment", shape=box ];
-			s__Get_count_of_unproc_0_0 [label="'Get count of unproc", shape=box ];
-		include_select_Select_1_1 [label="include_select_Select", shape=box ];
-			s_count____INTO_v_cnt__0_0 [label="count(*) INTO v_cnt_", shape=box ];
-		IfStatement_2_2 [label="IfStatement", shape=box ];
-			Condition_0_0 [label="Condition", shape=box ];
-			LineExpression_1_1 [label="LineExpression", shape=box ];
-				Assignment_1_1 [shape="box",label="Assignment" ];
-				InsertStatement_2_2 [shape="box",label="InsertStatement" ];
-				DropTableStatement_2_3 [shape="box",label="DropTableStatement" ];
-				CreateTableStatement_2_4 [shape="box",label="CreateTableStatement" ];
-				Assignment_5_5 [shape="box",label="Assignment" ];
-				InsertSelectStatement_6_6 [shape="box",label="InsertSelectStatement" ];
-				CommitLiteral_7_7 [shape="septagon", style=bold, color="blue", label="Commit 0" ];
-				InsertSelectStatement_6_8 [shape="box",label="InsertSelectStatement" ];
-				CommitLiteral_9_9 [shape="septagon", style=bold, color="blue", label="Commit 1" ];
-				Assignment_11_11 [shape="box",label="Assignment" ];
-				UpdateStatement_12_12 [shape="box", style=bold, color="lightpink", label="UpdateStatement" ];
-				CommitLiteral_9_13 [shape="septagon", style=bold, color="blue", label="Commit 2" ];
-				UpdateStatement_15_15 [shape="box", style=bold, color="lightpink", label="UpdateStatement" ];
-				CommitLiteral_9_16 [shape="septagon", style=bold, color="blue", label="Commit 3" ];
-				Assignment_18_18 [shape="box",label="Assignment" ];
-				InsertSelectStatement_6_19 [shape="box",label="InsertSelectStatement" ];
-				CommitLiteral_9_20 [shape="septagon", style=bold, color="blue", label="Commit 4" ];
-				Assignment_21_21 [shape="box",label="Assignment" ];
-				InsertSelectStatement_6_22 [shape="box",label="InsertSelectStatement" ];
-				CommitLiteral_9_23 [shape="septagon", style=bold, color="blue", label="Commit 5" ];
-				Assignment_24_24 [shape="box",label="Assignment" ];
-				InsertStatement_2_25 [shape="box",label="InsertStatement" ];
-				CommitLiteral_9_26 [shape="septagon", style=bold, color="blue", label="Commit 6" ];
-			LineExpression_2_2 [label="LineExpression", shape=box ];
-				Assignment_0_0 [shape="box",label="Assignment" ];
-				InsertStatement_1_1 [shape="box",label="InsertStatement" ];
-				CommitLiteral_2_2 [shape="septagon", style=bold, color="blue", label="Commit 7" ];
+end [label="End", shape=ellipse];
+FunctionOrProcedure_0_3 [shape="septagon", style=bold, color="black", label="Procedure" ];
+Declarations_1_6 [shape="box", color="gray", label="DECLARE 2" ];
+Block_2_9 [shape="box", style=bold, color="black", label="Block 2" ];
 
 // LINKS
 
-start -> FunctionOrProcedure_0_0[label="" ];
-FunctionOrProcedure_0_0 -> Language_0_0[label="" ];
-FunctionOrProcedure_0_0 -> Security_0_1[label="" ];
-FunctionOrProcedure_0_0 -> Declarations_1_1[label="" ];
-Declarations_1_1 -> DeclarationExpression_0_0[label="" ];
-DeclarationExpression_0_0 -> VariableDeclaration_0_0[label="" ];
-DeclarationExpression_0_0 -> VariableDeclaration_0_1[label="" ];
-DeclarationExpression_0_0 -> VariableDeclaration_0_2[label="" ];
-Declarations_1_1 -> Block_2_2[label="" ];
-Block_2_2 -> StatementExpression_0_0[label="" ];
-StatementExpression_0_0 -> Assignment_0_0[label="" ];
-Assignment_0_0 -> s__Get_count_of_unproc_0_0[label="" ];
-StatementExpression_0_0 -> include_select_Select_1_1[label="" ];
-include_select_Select_1_1 -> s_count____INTO_v_cnt__0_0[label="" ];
-StatementExpression_0_0 -> IfStatement_2_2[label="" ];
-IfStatement_2_2 -> Condition_0_0[label="" ];
-IfStatement_2_2 -> LineExpression_1_1[label="" ];
-LineExpression_1_1 -> Assignment_1_1[label="" ];
-Assignment_1_1 -> InsertStatement_2_2[label="InsertStatement" ];
-InsertStatement_2_2 -> DropTableStatement_2_3[label="DropTableStatement" ];
-DropTableStatement_2_3 -> CreateTableStatement_2_4[label="CreateTableStatement" ];
-CreateTableStatement_2_4 -> Assignment_5_5[label="Assignment" ];
-Assignment_5_5 -> InsertSelectStatement_6_6[label="InsertSelectStatement" ];
-InsertSelectStatement_6_6 -> CommitLiteral_7_7[label="CommitLiteral" ];
-CommitLiteral_7_7 -> InsertSelectStatement_6_8[label="InsertSelectStatement" ];
-InsertSelectStatement_6_8 -> CommitLiteral_9_9[label="CommitLiteral" ];
-CommitLiteral_9_9 -> Assignment_11_11[label="Assignment" ];
-Assignment_11_11 -> UpdateStatement_12_12[label="UpdateStatement" ];
-UpdateStatement_12_12 -> CommitLiteral_9_13[label="CommitLiteral" ];
-CommitLiteral_9_13 -> UpdateStatement_15_15[label="UpdateStatement" ];
-UpdateStatement_15_15 -> CommitLiteral_9_16[label="CommitLiteral" ];
-CommitLiteral_9_16 -> Assignment_18_18[label="Assignment" ];
-Assignment_18_18 -> InsertSelectStatement_6_19[label="InsertSelectStatement" ];
-InsertSelectStatement_6_19 -> CommitLiteral_9_20[label="CommitLiteral" ];
-CommitLiteral_9_20 -> Assignment_21_21[label="Assignment" ];
-Assignment_21_21 -> InsertSelectStatement_6_22[label="InsertSelectStatement" ];
-InsertSelectStatement_6_22 -> CommitLiteral_9_23[label="CommitLiteral" ];
-CommitLiteral_9_23 -> Assignment_24_24[label="Assignment" ];
-Assignment_24_24 -> InsertStatement_2_25[label="InsertStatement" ];
-InsertStatement_2_25 -> CommitLiteral_9_26[label="CommitLiteral" ];
-IfStatement_2_2 -> LineExpression_2_2[label="" ];
-LineExpression_2_2 -> Assignment_0_0[label="" ];
-Assignment_0_0 -> InsertStatement_1_1[label="InsertStatement" ];
-InsertStatement_1_1 -> CommitLiteral_2_2[label="CommitLiteral" ];
+start -> FunctionOrProcedure_0_3[label="" ];
+start -> Declarations_1_6[label="" ];
+start -> Block_2_9[label="" ];
+
+
 
 
 }

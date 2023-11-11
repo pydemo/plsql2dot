@@ -7,39 +7,46 @@ string_literal_pattern = re.compile(r"'(?:[^'\\]|\\.)*'")  # Handles escaped quo
 function_call_pattern = re.compile(r'\w+\(\)')
 
 from include.base import  Base
+
+import include.config.init_config as init_config  
+apc = init_config.apc
+
+
+e=sys.exit
 		
 # Class for table name, column names, and function calls (like getdate())
 class Identifier(str):
-    grammar = identifier_pattern
+	grammar = identifier_pattern
 
 class FunctionCall(str):
-    grammar = function_call_pattern
+	grammar = function_call_pattern
 
 # Class for string literals within the values clause
 class StringLiteral(str):
-    grammar = string_literal_pattern
+	grammar = string_literal_pattern
 
 # Class for a single value, which can be a string literal or a function call
 class Value(str):
-    grammar = [FunctionCall, StringLiteral, Identifier]
+	grammar = [FunctionCall, StringLiteral, Identifier]
 
 # Class for the list of values to be inserted
 class ValueList(List):
-    grammar = '(', csl(Value), ')'
+	grammar = '(', csl(Value), ')'
 
 # Class for the list of columns in the insert statement
 class ColumnList(List):
-    grammar = '(', csl(Identifier), ')'
+	grammar = '(', csl(Identifier), ')'
 
 # Class for the insert statement itself
 class InsertStatement(List, Base):
-    grammar = 'insert into', attr('table', Identifier), attr('columns', ColumnList), \
-              'values', attr('values', ValueList), ';'
-
+	grammar = 'insert into', attr('table', Identifier), attr('columns', ColumnList), \
+			  'values', attr('values', ValueList), ';'
+	def get_dot(self):
+		return f'{self.name} [shape="box", style=bold, color="yellow", label="{self.tname} {apc.cntr.get(self)}" ];'
 # Example SQL insert statement
 test_string = '''
-    insert into ppc_qlik_reports_log (log_date, report_name, module_name, status)
-    values (getdate(), 'MANIFEST_SEARCH_REPORT', 'Summarizing Manifest Search', v_status);
+	insert into ppc_qlik_reports_log (log_date, report_name, module_name, status)
+	values (getdate(), 'MANIFEST_SEARCH_REPORT', 'Summarizing Manifest Search', v_status);
 '''
 if __name__=='__main__':
 	# Parse the test string

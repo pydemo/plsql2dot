@@ -1,5 +1,9 @@
 from pypeg2 import *
 import re
+from include.base import  Base
+import include.config.init_config as init_config  
+apc = init_config.apc
+e=sys.exit
 
 # This pattern will match any amount of whitespace including newlines
 ws = re.compile(r'\s*')
@@ -8,7 +12,7 @@ rest_of_select_body = re.compile(r'(?:(?!;\s*$).)*', re.DOTALL)
 condition = re.compile(r'[^;]+')
 
 
-class Base(object):
+class Base2(object):
 	def get_type(self):
 		return f'{__name__}.{self.__class__.__name__}'.replace('.','_')
 		
