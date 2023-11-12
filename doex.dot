@@ -1,0 +1,15 @@
+digraph plsql_flow {
+  // Define node styles
+  node [shape=box];
+
+  // Define the nodes
+  start [label="BEGIN", shape=ellipse];
+  operation [label="null;"];
+  exception [label="EXCEPTION\nprocess_exception;", shape=box, style=filled, fillcolor=lightgrey];
+  end [label="END", shape=ellipse];
+
+  // Define the flow between the nodes
+  start -> operation;
+  operation -> exception [label="Exception occurs", style=dashed];
+  exception -> end;
+}

@@ -16,17 +16,18 @@ from include import ex
 from include import insert 
 from include import drop 
 from include import create_temp_table as ctt 
-from include.base import  Base
-from include.base import  String
+from include.base import  Base, BaseBase
+from include.base import  String, StringTable
 e=  sys.exit
 
-
+class Local(object):
+	def set_fname(self): self.fname=__name__
 class BooleanLiteral(Keyword):
 	# Adjusting the regex to handle boolean literals
 	K.regex = re.compile(r'"*\w+"*')
 	grammar = Enum(K('true'), K('false'), K(r'"true"'), K(r'"false"'))
 
-class CommitLiteral(str, Base):
+class CommitLiteral(str, String, Local):
 	# Handles the 'commit' keyword
 	grammar = re.compile(r'commit', re.IGNORECASE), ';'
 
@@ -42,38 +43,54 @@ class StringLiteral(str):
 	quoted_string = re.compile(r'"[^"]*"')
 	grammar = quoted_string
 
-class Comment(str, Base):
+class Comment(str, StringTable, Local):
 	# Matches the rest of the line after a comment
 	rest_of_line = re.compile(r'.*?(?=\n|$)')
 	grammar = '--', rest_of_line
+	def _get_dot(self):
+		return f'{self.name} [shape="box",  color="gray", label="{self.level} {self.label}\n{self.tname} {self.gid} {self.lid}\n {str(self)}\n {apc.cntr.get(self)}" ];'
 
-class Assignment(str, Base):
+	def __get_dot(self):
+
+		return f'''
+		{self.name} [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >Comment</TD></TR>
+				<TR><TD >{str(self)}</TD></TR>
+			</TABLE>
+		>];'''
+			
+			
+		
+class Assignment(str, Base, Local):
 	# Matches an assignment operation
 	identifier_pattern = re.compile(r'\b[a-zA-Z_]\w*\b')
 	rest_of_line = re.compile(r'.*?(?=\n|$)')
-	grammar = attr('identifier', identifier_pattern), ':=', rest_of_line
-	def get_dot(self):
-		return f'{self.name} [shape="box",  color="gray", label="{self.tname} {apc.cntr.get(self)}" ];'
+	grammar = attr('identifier', identifier_pattern), ':=', attr('value',rest_of_line)
+	def _get_dot(self):
+		return f'{self.name} [shape="box",  color="gray", label="AAAAAAAAAAAAAAAAAAAAAAAAAA {self.tname} {apc.cntr.get(self)}\n>{str(self)}<" ];'
 
-class Assignment2(str, Base):
+class Assignment2(str, Base, Local):
 	# Matches an assignment operation
 	identifier_pattern = re.compile(r'\b[a-zA-Z_]\w*\b')
 	rest_of_line = re.compile(r'.*?(?=\n|$)')
 	grammar = identifier_pattern, ':=', rest_of_line
 	
-class Condition(str, Base):
+class Condition(str, Base, Local):
 	# Matches a condition such as 'a > b'
-	grammar = name(), re.compile(r'\s*[><=!]=?\s*'), word
+	identifier_pattern = re.compile(r'\b[a-zA-Z_]\w*\b')
+	cond=re.compile(r'\s*[><=!]=?\s*')
+	grammar = attr('left', identifier_pattern),cond, attr('right',word)
 
 
-class LineExpression(List, Base):
+class LineExpression(List, Base, Local):
 	# Defines the different expressions that can be on a single line
 	grammar = maybe_some([LineFilter, BooleanLiteral, StringLiteral, Comment, Assignment, CommitLiteral, insert.InsertStatement, drop.DropTableStatement,\
 	ctt.CreateTableStatement,  statement.Assignment,ias.InsertSelectStatement, update.UpdateStatement])
 	def get_dot(self):
 		
 		return f'{self.name} [shape="box",  color="black", label="{self.label} {apc.cntr.get(self)}" ];'
-class IfStatement(List, Base):
+class IfStatement(List, Base, Local):
 	# Defines the structure of an if statement
 	grammar = 'if',  Condition, 'then', \
 			  LineExpression, optional('else'),  optional(LineExpression),\
@@ -81,11 +98,11 @@ class IfStatement(List, Base):
 	def get_dot(self):
 		
 		return f'{self.name} [shape="diamond", style=bold, color="black", label="{self.label} {apc.cntr.get(self)}" ];'
-class StatementExpression(List, Base):
+class StatementExpression(List, Base, Local):
 	# Defines the different expressions that can be on a single line
 	grammar = maybe_some([IfStatement, select.Select, statement.Assignment,  statement.Comment ])
 	
-class Block(List, Base):
+class Block(List, Base, Local):
 	# Defines the structure of an if statement
 	grammar = 'begin', StatementExpression, \
 			  ex.ExceptionBlock,'end', ';',Literal('$$')
@@ -104,16 +121,17 @@ class DefaultValue(str):
     grammar = ':=', re.compile(r"'.*?'|\w+")
 
 # Define the grammar for a single variable declaration
-class VariableDeclaration(List, Base):
+class VariableDeclaration(List, Base, Local):
     grammar = attr('name', Identifier), attr('datatype', Datatype), optional(attr('default', DefaultValue)), ';'
 
 
 #class VariableDeclaration_nodefault(List):
 #	grammar = word,  data_type_pattern, ";"
-class DeclarationExpression(List,Base):
+class DeclarationExpression(List,Base, Local):
 	# Defines the different expressions that can be on a single line
 	grammar = maybe_some([VariableDeclaration])
-class Declarations(List, Base):
+	
+class Declarations(List, Base, Local):
 	grammar = 'as', Literal('$$'),"declare", DeclarationExpression
 	def get_dot(self):
 		
@@ -128,16 +146,16 @@ class Parameter(List):
 	grammar = attr("direction", optional("in")), attr("name", identifier), attr("data_type", Type)
 language_keyword = Keyword("language")
 
-class Language(str, Base):
+class Language(str, Base, Local):
 	grammar = language_keyword, name()
-class Security(str, Base):
-	grammar = 'security', 'definer'
+class Security(str, String, Local):
+	grammar = Keyword("security"), Keyword("definer")
 # A list of parameters separated by commas
 class Parameters(List):
 	grammar = optional(csl(Parameter))
 class ProcOrFuncName(str):
 	grammar = word
-class FunctionOrProcedure(List, Base):
+class FunctionOrProcedure(List, Base, Local):
 	grammar = "create or replace",["function", "procedure"],attr("name", ProcOrFuncName)  , "(", attr("params", Parameters), ")",Language, Security
 	def get_dot(self):
 		
@@ -325,7 +343,7 @@ for c in parsed:
 	
 	#print( str(type(c)))
 	if isinstance(c,FunctionOrProcedure):
-		print('NAME:',c.name, c.get_type())
+		print('NAME:',c.name)
 		#e()
 	elif isinstance(c,Declarations):
 		
@@ -364,6 +382,9 @@ for c in parsed:
 						print("\t\t\tCOLS:", [str(column) for column in le.columns])
 						print("\t\t\tVALS:", [str(value) for value in le.values])
 					elif isinstance(le, drop.DropTableStatement):
+						pp(dir(le))
+						pp(le.__dict__)
+						#e()
 						print(f"\t\tDROP TABLE: {le.table}")
 					elif isinstance(le, ctt.CreateTableStatement):
 						print(f"\t\tCREATE TEMP TABLE: {le.table}, LIKE: {le.like_clause.like_table}")
@@ -422,10 +443,11 @@ cleaned_string = re.sub(pattern, '', input_string)
 
 
 
-class Parsed(object):
+class Parsed(Local):
+
 	def get_full_dot(self, parent, dfrom, hdot, fdot):
 		for cid,c in enumerate(parent):
-			c.get_full_dot(parent,'start', cid, hdot, fdot)
+			c.get_full_dot(parent,'start', cid, hdot, fdot, level=1)
 
 	
 		
@@ -438,6 +460,7 @@ if 0:
 	e()
 if 1:
 	ped=Parsed()
+	
 	ped.get_full_dot(apc.parsed, 'start', hdot, fdot)
 		
 if 0:
@@ -449,7 +472,7 @@ if 0:
 
 		c.init(parsed,c, cid)
 		hdot.append(f'{c.get_dot()}')
-		apc.cntr.inc(c)
+		apc.cntr.inc(c, __name__)
 		if 1:
 			dto, label = c.get_name()
 			fdot.append(f'{dfrom} -> {dto}[label="" ];')

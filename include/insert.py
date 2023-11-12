@@ -13,7 +13,12 @@ apc = init_config.apc
 
 
 e=sys.exit
-		
+
+
+class Local(object):
+	def set_fname(self): self.fname=__name__
+	
+	
 # Class for table name, column names, and function calls (like getdate())
 class Identifier(str):
 	grammar = identifier_pattern
@@ -38,7 +43,7 @@ class ColumnList(List):
 	grammar = '(', csl(Identifier), ')'
 
 # Class for the insert statement itself
-class InsertStatement(List, Base):
+class InsertStatement(List, Base, Local):
 	grammar = 'insert into', attr('table', Identifier), attr('columns', ColumnList), \
 			  'values', attr('values', ValueList), ';'
 	def get_dot(self):

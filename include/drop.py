@@ -1,23 +1,26 @@
 from pypeg2 import *
 import re
-
+from include.base import String, Base
 import include.config.init_config as init_config  
 apc = init_config.apc
 
 
 e=sys.exit
-class Base2(object):
-	def get_type(self):
-		return f'{__name__}.{self.__class__.__name__}'.replace('.','_')
 
-from include.base import  Base
+
+
+class Local(object):
+	def set_fname(self): self.fname=__name__
+	
+
+
 
 # Class to represent an identifier, such as table names
-class Identifier(str):
+class Identifier(str, String, Local):
 	grammar = re.compile(r'[a-zA-Z_]\w*')
 
 # DROP TABLE statement
-class DropTableStatement(List, Base):
+class DropTableStatement(List, Base,Local):
 	grammar = 'DROP TABLE', 'IF EXISTS', attr('table', Identifier), ';'
 
 	def get_dot(self):

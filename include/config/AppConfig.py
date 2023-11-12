@@ -16,12 +16,14 @@ from collections import defaultdict
 
 class Counter(object):
 	def __init__(self):
-		self.cnt=defaultdict(lambda: 1)
+		self.cnt=defaultdict(int) #(lambda: 1)
 	def inc(self, obj):
-		tname=obj.__class__.__name__
+		#tname=obj.__class__.__name__
+		tname=f'{obj.fname}.{obj.__class__.__name__}'.replace('.','_')
 		self.cnt[tname] +=1
 	def get(self, obj):
-		tname=obj.__class__.__name__
+		#tname=obj.__class__.__name__
+		tname=f'{obj.fname}.{obj.__class__.__name__}'.replace('.','_')
 		return self.cnt[tname]
 		
 

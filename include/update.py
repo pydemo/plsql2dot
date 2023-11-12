@@ -1,7 +1,7 @@
 import sys
 from pypeg2 import *
 from pprint import pprint as pp
-from include.base import  Base
+from include.base import String, Base
 
 try:
 
@@ -20,21 +20,20 @@ identifier = re.compile(r"[a-zA-Z_][a-zA-Z0-9_\.]*")  # Identifiers can include 
 string_literal = re.compile(r"'[^']*'")  # String literals
 function_call = re.compile(r"[a-zA-Z_][a-zA-Z0-9_]*\(\)")  # Function call, like getdate()
 
-class Base2(object):
-	def get_type(self):
-		return f'{__name__}.{self.__class__.__name__}'.replace('.','_')
 
+class Local(object):
+	def set_fname(self): self.fname=__name__
 		
 # Define the structure for a simple assignment (e.g., column = 'value')
-class Assignment(str):
+class Assignment(str, String, Local):
 	grammar = identifier, "=", [string_literal, function_call]
 
 # Define the structure for the SET clause with one or more assignments
-class SetClause(List):
+class SetClause(List, Base,Local):
 	grammar = 'SET', csl(Assignment)
 
 # Define the structure for the UPDATE statement
-class UpdateStatement(List, Base):
+class UpdateStatement(List, Base, Local):
 	grammar = 'UPDATE', identifier, SetClause, where.WhereClause, optional(";")
 	def get_dot(self):
 

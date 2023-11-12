@@ -1,6 +1,7 @@
 from pypeg2 import *
 import re
 from pprint import pprint as pp
+from include.base import String,  Base
 import include.config.init_config as init_config  
 apc = init_config.apc
 
@@ -12,22 +13,19 @@ ws = re.compile(r'\s*')
 rest_of_line = re.compile(r'.*$', re.MULTILINE)
 
 
-class Base2(object):
-	def get_type(self):
-		return f'{__name__}.{self.__class__.__name__}'.replace('.','_')
-from include.base import  Base
+from include.base import  String
 
-class String(str):
-	pass
+
 
 string_literal = re.compile(r"'(?:[^'\\]|\\.)*'")
-class Value(str,Base):
+
+class Local(object):
+	def set_fname(self): self.fname=__name__
 	
-	grammar =  string_literal
 	
-class Assignment(List, Base):
-	grammar = name(),['=', ':='], string_literal, ';'	
-	def get_dot(self):
+class Assignment(List, Base, Local):
+	grammar = attr('identifier',name()),['=', ':='], attr('value',string_literal), ';'	
+	def _get_dot(self):
 		return f'{self.name} [shape="box",  color="gray", label="Stmt {self.tname} {apc.cntr.get(self)}" ];'	
 class Comment(str):
 	grammar = '--', rest_of_line

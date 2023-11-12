@@ -3,14 +3,12 @@ import re
 
 import include.config.init_config as init_config  
 apc = init_config.apc
-
+from include.base import  Base
 
 e=sys.exit
 
-class Base2(object):
-	def get_type(self):
-		return f'{__name__}.{self.__class__.__name__}'.replace('.','_')
-from include.base import  Base
+class Local(object):
+	def set_fname(self): self.fname=__name__
 # Class to represent an identifier, such as table names
 class Identifier(str):
 	grammar = re.compile(r'[a-zA-Z_]\w*')
@@ -21,9 +19,11 @@ class LikeClause(List):
 	grammar = 'LIKE', attr('like_table', Identifier)
 
 # CREATE TABLE statement
-class CreateTableStatement(List, Base):
+class CreateTableStatement(List, Base,  Local):
+	fname=__name__
 	grammar = 'CREATE', 'TEMP TABLE', attr('table', Identifier), \
 			  '(', attr('like_clause', LikeClause), ')', ';'
+	
 	def get_dot(self):
 		return f'{self.name} [shape="box",  color="orange", label="{self.tname} {apc.cntr.get(self)}" ];'
 # Statement which can be either DROP TABLE or CREATE TABLE

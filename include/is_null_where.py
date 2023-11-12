@@ -1,4 +1,10 @@
 from pypeg2 import *
+from include.base import String,  Base
+import include.config.init_config as init_config  
+apc = init_config.apc
+
+
+e=sys.exit
 
 # Define the patterns for matching
 identifier = re.compile(r"[a-zA-Z_][a-zA-Z0-9_\.]*")  # Identifiers can contain dots for table.column
@@ -26,6 +32,11 @@ quoted_string = re.compile(r"'[^']*'")
 number = re.compile(r"\d+")
 expression = re.compile(r".+?(?= AND|$)")
 function_call_pattern = re.compile(r'\w+\(\)')
+
+class Local(object):
+	def set_fname(self): self.fname=__name__
+	
+	
 class Column(str):
 	grammar = [(name(),'.',name()), quoted_string , identifier , number, name()]
 
@@ -61,10 +72,10 @@ class IsNullCondition(str):
 	null_condition = re.compile(r"IS NULL", re.IGNORECASE)  # NULL condition
 	grammar = identifier, null_condition
 	
-class Condition(str):
+class Condition(str, String, Local):
 	grammar = [Comparison,FuncCondition, IsNullCondition]
 
-class WhereClause(List):
+class WhereClause(List, Base, Local):
 	grammar = WHERE, csl(Condition, separator=AND) , optional(';')
 
 # Your test string

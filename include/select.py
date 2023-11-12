@@ -11,10 +11,8 @@ rest_of_line = re.compile(r'.*$', re.DOTALL)
 rest_of_select_body = re.compile(r'(?:(?!;\s*$).)*', re.DOTALL)
 condition = re.compile(r'[^;]+')
 
-
-class Base2(object):
-	def get_type(self):
-		return f'{__name__}.{self.__class__.__name__}'.replace('.','_')
+class Local(object):
+	def set_fname(self): self.fname=__name__
 		
 		
 class Condition(str):
@@ -24,7 +22,7 @@ class Condition(str):
 class ConditionList(List):
 	grammar = csl(Condition)
 
-class Select(List, Base):
+class Select(List, Base, Local):
 	grammar = ['SELECT', 'select'],condition,';'
 
 class SQLExpression(List):

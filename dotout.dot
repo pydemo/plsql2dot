@@ -8,15 +8,539 @@ start [label="Start", shape=tripleoctagon];
 
 
 end [label="End", shape=ellipse];
-FunctionOrProcedure_0_3 [shape="septagon", style=bold, color="black", label="Procedure" ];
-Declarations_1_6 [shape="box", color="gray", label="DECLARE 2" ];
-Block_2_9 [shape="box", style=bold, color="black", label="Block 2" ];
+lFunctionOrProcedure_0_2 [shape="septagon", style=bold, color="black", label="Procedure" ];
+lLanguage_0_5 [shape="box",label="2 Language 1" ];
+
+		TableNode_4 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>name</TD><TD>Symbol('plpgsql')</TD></TR>
+			</TABLE>
+		>];
+lSecurity_0_8 [shape="box",label="2 Security 1" ];
+
+		TableNode_1 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>name</TD><TD>'sp_rs_refresh_pkgs_search'</TD></TR>
+<TR><TD>params</TD><TD>Parameters([Parameter([], name</TD></TR>
+			</TABLE>
+		>];
+lDeclarations_1_11 [shape="box", color="gray", label="DECLARE 1" ];
+lDeclarationExpression_0_14 [shape="box",label="2 DeclarationExpression 1" ];
+lVariableDeclaration_0_17 [shape="box",label="3 VariableDeclaration 1" ];
+
+		TableNode_16 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>name</TD><TD>'v_cnt_search_pkgs'</TD></TR>
+<TR><TD>datatype</TD><TD>'integer'</TD></TR>
+			</TABLE>
+		>];
+lVariableDeclaration_0_20 [shape="box",label="3 VariableDeclaration 2" ];
+
+		TableNode_19 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>name</TD><TD>'v_status'</TD></TR>
+<TR><TD>datatype</TD><TD>'varchar(50)'</TD></TR>
+			</TABLE>
+		>];
+lVariableDeclaration_0_23 [shape="box",label="3 VariableDeclaration 3" ];
+
+		TableNode_22 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>name</TD><TD>'v_location_name'</TD></TR>
+<TR><TD>datatype</TD><TD>'varchar(100)'</TD></TR>
+<TR><TD>default</TD><TD>"'sp_rs_refresh_pkgs_search'"</TD></TR>
+			</TABLE>
+		>];
+lBlock_2_26 [shape="box", style=bold, color="black", label="Block 1" ];
+lStatementExpression_0_29 [shape="box",label="2 StatementExpression 1" ];
+lAssignment_0_32 [shape="box",label="3 Assignment 1" ];
+
+		TableNode_31 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>identifier</TD><TD>Attribute(name='name', thing=S</TD></TR>
+<TR><TD>value</TD><TD>"'Get count of unprocessed sea</TD></TR>
+			</TABLE>
+		>];
+lSelect_1_35 [shape="box",label="3 Select 1" ];
+
+		l4_StringVal_0_38 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >StringVal</TD></TR>
+				<TR><TD >count(*) INTO v_cnt_search_pkgs from stage_pkgs_outbound</TD></TR>
+<TR><TD >WHERE pkgs_search_processed = &#39;N&#39; AND</TD></TR>
+<TR><TD >ready_to_process = &#39;Y&#39; AND payment_rec_arrived</TD></TR>
+<TR><TD >= &#39;Y&#39; AND dtc &gt; p_cutoff_date</TD></TR>
+			</TABLE>
+		>];
+lIfStatement_2_41 [shape="diamond", style=bold, color="black", label="IfStatement 1" ];
+lCondition_0_44 [shape="box",label="4 Condition 1" ];
+
+		TableNode_43 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>left</TD><TD>'v_cnt_search_pkgs'</TD></TR>
+<TR><TD>right</TD><TD>'0'</TD></TR>
+			</TABLE>
+		>];
+lLineExpression_1_47 [shape="box",  color="black", label="LineExpression 1" ];
+
+		lComment_0_50 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >Comment</TD></TR>
+				<TR><TD >This includes census,</TD></TR>
+<TR><TD >duplicates and unmanifested adjustments</TD></TR>
+			</TABLE>
+		>];
+lAssignment_1_53 [shape="box",label="5 Assignment 1" ];
+
+		TableNode_52 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>identifier</TD><TD>'v_status'</TD></TR>
+<TR><TD>value</TD><TD>"'BEGIN pkgs search summary';"</TD></TR>
+			</TABLE>
+		>];
+lInsertStatement_1_56 [shape="box", style=bold, color="yellow", label="InsertStatement 1" ];
+
+		TableNode_55 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>table</TD><TD>'ppc_qlik_reports_log'</TD></TR>
+<TR><TD>columns</TD><TD>ColumnList(['log_date', 'repor</TD></TR>
+<TR><TD>values</TD><TD>ValueList(['getdate()', "'MANI</TD></TR>
+			</TABLE>
+		>];
+lDropTableStatement_1_59 [shape="box",  color="red", label="DropTableStatement 1" ];
+
+		TableNode_58 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>table</TD><TD>'package_search_temp'</TD></TR>
+			</TABLE>
+		>];
+lCreateTableStatement_1_62 [shape="box",  color="orange", label="CreateTableStatement 1" ];
+
+		TableNode_61 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>table</TD><TD>'package_search_temp'</TD></TR>
+<TR><TD>like_clause</TD><TD>LikeClause([])</TD></TR>
+			</TABLE>
+		>];
+lAssignment_1_65 [shape="box",label="5 Assignment 2" ];
+
+		TableNode_64 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>identifier</TD><TD>Attribute(name='name', thing=S</TD></TR>
+<TR><TD>value</TD><TD>"'Insert into package_search_t</TD></TR>
+			</TABLE>
+		>];
+lInsertSelectStatement_6_68 [shape="box", style=bold, color="lightgreen", label="InsertSelectStatement 1" ];
+
+		l6_StringVal_0_71 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >StringVal</TD></TR>
+				<TR><TD >INSERT</TD></TR>
+			</TABLE>
+		>];
+
+		l6_StringVal_1_74 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >StringVal</TD></TR>
+				<TR><TD >INTO</TD></TR>
+			</TABLE>
+		>];
+
+		TableNode_67 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>table</TD><TD>'package_search_temp'</TD></TR>
+<TR><TD>columns</TD><TD>ColumnList(['mid', 'manifest_d</TD></TR>
+<TR><TD>select</TD><TD>SelectStatement(['SELECT', 'FR</TD></TR>
+			</TABLE>
+		>];
+lCommitLiteral_7_77 [shape="septagon", style=bold, color="blue", label="Commit 1" ];
+lInsertSelectStatement_6_80 [shape="box", style=bold, color="lightgreen", label="InsertSelectStatement 2" ];
+
+		l6_StringVal_0_83 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >StringVal</TD></TR>
+				<TR><TD >INSERT</TD></TR>
+			</TABLE>
+		>];
+
+		l6_StringVal_1_86 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >StringVal</TD></TR>
+				<TR><TD >INTO</TD></TR>
+			</TABLE>
+		>];
+
+		TableNode_79 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>table</TD><TD>'package_search_temp'</TD></TR>
+<TR><TD>columns</TD><TD>ColumnList(['mid', 'crid', 'ma</TD></TR>
+<TR><TD>select</TD><TD>SelectStatement(['SELECT', 'FR</TD></TR>
+			</TABLE>
+		>];
+lCommitLiteral_9_89 [shape="septagon", style=bold, color="blue", label="Commit 2" ];
+
+		lComment_10_92 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >Comment</TD></TR>
+				<TR><TD >Updating search processed status for packages</TD></TR>
+			</TABLE>
+		>];
+lAssignment_1_95 [shape="box",label="5 Assignment 2" ];
+
+		TableNode_94 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>identifier</TD><TD>'v_location_name'</TD></TR>
+<TR><TD>value</TD><TD>"'Update stage_pkgs_outbound f</TD></TR>
+			</TABLE>
+		>];
+lUpdateStatement_12_98 [shape="box", style=bold, color="lightpink", label="UpdateStatement 1" ];
+
+		l6_StringVal_0_101 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >StringVal</TD></TR>
+				<TR><TD >stage_pkgs_outbound</TD></TR>
+			</TABLE>
+		>];
+lSetClause_1_104 [shape="box",label="6 SetClause 1" ];
+lAssignment_0_107 [shape="box",label="7 Assignment 1" ];
+lAssignment_1_110 [shape="box",label="7 Assignment 2" ];
+lWhereClause_2_113 [shape="box",label="6 WhereClause 1" ];
+
+		l7_StringVal_0_116 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >StringVal</TD></TR>
+				<TR><TD >WHERE</TD></TR>
+			</TABLE>
+		>];
+lCondition_1_119 [shape="box",label="7 Condition 1" ];
+
+		l7_StringVal_2_122 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >StringVal</TD></TR>
+				<TR><TD >AND</TD></TR>
+			</TABLE>
+		>];
+lCondition_3_125 [shape="box",label="7 Condition 2" ];
+
+		l7_StringVal_2_128 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >StringVal</TD></TR>
+				<TR><TD >AND</TD></TR>
+			</TABLE>
+		>];
+lCondition_5_131 [shape="box",label="7 Condition 3" ];
+
+		l7_StringVal_2_134 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >StringVal</TD></TR>
+				<TR><TD >AND</TD></TR>
+			</TABLE>
+		>];
+lCondition_7_137 [shape="box",label="7 Condition 4" ];
+lCommitLiteral_9_140 [shape="septagon", style=bold, color="blue", label="Commit 3" ];
+
+		lComment_14_143 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >Comment</TD></TR>
+				<TR><TD >Updating search processed status</TD></TR>
+<TR><TD >for packages with certain conditions</TD></TR>
+			</TABLE>
+		>];
+lUpdateStatement_15_146 [shape="box", style=bold, color="lightpink", label="UpdateStatement 2" ];
+
+		l6_StringVal_0_149 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >StringVal</TD></TR>
+				<TR><TD >stage_pkgs_outbound</TD></TR>
+			</TABLE>
+		>];
+lSetClause_1_152 [shape="box",label="6 SetClause 2" ];
+lAssignment_0_155 [shape="box",label="7 Assignment 3" ];
+lAssignment_1_158 [shape="box",label="7 Assignment 4" ];
+lWhereClause_2_161 [shape="box",label="6 WhereClause 2" ];
+
+		l7_StringVal_0_164 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >StringVal</TD></TR>
+				<TR><TD >WHERE</TD></TR>
+			</TABLE>
+		>];
+lCondition_1_167 [shape="box",label="7 Condition 5" ];
+
+		l7_StringVal_2_170 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >StringVal</TD></TR>
+				<TR><TD >AND</TD></TR>
+			</TABLE>
+		>];
+lCondition_3_173 [shape="box",label="7 Condition 6" ];
+lCommitLiteral_9_176 [shape="septagon", style=bold, color="blue", label="Commit 4" ];
+
+		lComment_17_179 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >Comment</TD></TR>
+				<TR><TD >Inserting data into package_search_by_pic after processing</TD></TR>
+			</TABLE>
+		>];
+lAssignment_1_182 [shape="box",label="5 Assignment 3" ];
+
+		TableNode_181 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>identifier</TD><TD>'v_location_name'</TD></TR>
+<TR><TD>value</TD><TD>"'Loading pkgs into package_se</TD></TR>
+			</TABLE>
+		>];
+lInsertSelectStatement_6_185 [shape="box", style=bold, color="lightgreen", label="InsertSelectStatement 3" ];
+
+		l6_StringVal_0_188 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >StringVal</TD></TR>
+				<TR><TD >INSERT</TD></TR>
+			</TABLE>
+		>];
+
+		l6_StringVal_1_191 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >StringVal</TD></TR>
+				<TR><TD >INTO</TD></TR>
+			</TABLE>
+		>];
+
+		TableNode_184 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>table</TD><TD>'package_search_by_pic'</TD></TR>
+<TR><TD>columns</TD><TD>ColumnList(['mid', 'crid', 'ma</TD></TR>
+<TR><TD>select</TD><TD>SelectStatement(['SELECT', 'FR</TD></TR>
+			</TABLE>
+		>];
+lCommitLiteral_9_194 [shape="septagon", style=bold, color="blue", label="Commit 5" ];
+lAssignment_1_197 [shape="box",label="5 Assignment 4" ];
+
+		TableNode_196 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>identifier</TD><TD>'v_location_name'</TD></TR>
+<TR><TD>value</TD><TD>"'Loading pkgs into package_se</TD></TR>
+			</TABLE>
+		>];
+lInsertSelectStatement_6_200 [shape="box", style=bold, color="lightgreen", label="InsertSelectStatement 4" ];
+
+		l6_StringVal_0_203 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >StringVal</TD></TR>
+				<TR><TD >INSERT</TD></TR>
+			</TABLE>
+		>];
+
+		l6_StringVal_1_206 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >StringVal</TD></TR>
+				<TR><TD >INTO</TD></TR>
+			</TABLE>
+		>];
+
+		TableNode_199 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>table</TD><TD>'package_search_by_efn'</TD></TR>
+<TR><TD>columns</TD><TD>ColumnList(['mid', 'crid', 'ma</TD></TR>
+<TR><TD>select</TD><TD>SelectStatement(['SELECT', 'FR</TD></TR>
+			</TABLE>
+		>];
+lCommitLiteral_9_209 [shape="septagon", style=bold, color="blue", label="Commit 6" ];
+lAssignment_1_212 [shape="box",label="5 Assignment 5" ];
+
+		TableNode_211 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>identifier</TD><TD>'v_status'</TD></TR>
+<TR><TD>value</TD><TD>"'Loaded pic, efn tables with </TD></TR>
+			</TABLE>
+		>];
+lInsertStatement_1_215 [shape="box", style=bold, color="yellow", label="InsertStatement 2" ];
+
+		TableNode_214 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>table</TD><TD>'ppc_qlik_reports_log'</TD></TR>
+<TR><TD>columns</TD><TD>ColumnList(['log_date', 'repor</TD></TR>
+<TR><TD>values</TD><TD>ValueList(['getdate()', "'MANI</TD></TR>
+			</TABLE>
+		>];
+lCommitLiteral_9_218 [shape="septagon", style=bold, color="blue", label="Commit 7" ];
+lLineExpression_2_221 [shape="box",  color="black", label="LineExpression 2" ];
+lAssignment_0_224 [shape="box",label="5 Assignment 6" ];
+
+		TableNode_223 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>identifier</TD><TD>'v_status'</TD></TR>
+<TR><TD>value</TD><TD>"'Manifested search pkgs not f</TD></TR>
+			</TABLE>
+		>];
+lInsertStatement_0_227 [shape="box", style=bold, color="yellow", label="InsertStatement 3" ];
+
+		TableNode_226 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>table</TD><TD>'ppc_qlik_reports_log'</TD></TR>
+<TR><TD>columns</TD><TD>ColumnList(['log_date', 'repor</TD></TR>
+<TR><TD>values</TD><TD>ValueList(['getdate()', "'MANI</TD></TR>
+			</TABLE>
+		>];
+lCommitLiteral_2_230 [shape="septagon", style=bold, color="blue", label="Commit 8" ];
+lExceptionBlock_1_233 [shape="box",label="2 ExceptionBlock 1" ];
+
+		TableNode_232 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>code</TD><TD>CodeBlock(["'SQLERRM=(%) SQLST</TD></TR>
+			</TABLE>
+		>];
+exception [label="Error Exit", color="red" shape=doublecircle];
 
 // LINKS
 
-start -> FunctionOrProcedure_0_3[label="" ];
-start -> Declarations_1_6[label="" ];
-start -> Block_2_9[label="" ];
+start -> lFunctionOrProcedure_0_2[label="1 " ];
+lFunctionOrProcedure_0_2 -> lLanguage_0_5[label="2 " ];
+lLanguage_0_5 -> TableNode_4[label="attr2" ];
+lLanguage_0_5 -> lSecurity_0_8[label="String
+" ];
+lFunctionOrProcedure_0_2 -> TableNode_1[label="attr2" ];
+start -> lDeclarations_1_11[label="1 " ];
+lDeclarations_1_11 -> lDeclarationExpression_0_14[label="2 " ];
+lDeclarationExpression_0_14 -> lVariableDeclaration_0_17[label="3 " ];
+lVariableDeclaration_0_17 -> TableNode_16[label="attr2" ];
+lVariableDeclaration_0_17 -> lVariableDeclaration_0_20[label="3 " ];
+lVariableDeclaration_0_20 -> TableNode_19[label="attr2" ];
+lVariableDeclaration_0_20 -> lVariableDeclaration_0_23[label="3 " ];
+lVariableDeclaration_0_23 -> TableNode_22[label="attr2" ];
+start -> lBlock_2_26[label="1 " ];
+lBlock_2_26 -> lStatementExpression_0_29[label="2 " ];
+lStatementExpression_0_29 -> lAssignment_0_32[label="3 " ];
+lAssignment_0_32 -> TableNode_31[label="attr2" ];
+lAssignment_0_32 -> lSelect_1_35[label="3 " ];
+lSelect_1_35 -> l4_StringVal_0_38[label="StringVal" ];
+lSelect_1_35 -> lIfStatement_2_41[label="3 " ];
+lIfStatement_2_41 -> lCondition_0_44[label="4 " ];
+lCondition_0_44 -> TableNode_43[label="attr2" ];
+lCondition_0_44 -> lLineExpression_1_47[label="4 " ];
+lLineExpression_1_47 -> lComment_0_50[label="Comment" ];
+lComment_0_50 -> lAssignment_1_53[label="5 " ];
+lAssignment_1_53 -> TableNode_52[label="attr2" ];
+lAssignment_1_53 -> lInsertStatement_1_56[label="5 " ];
+lInsertStatement_1_56 -> TableNode_55[label="attr2" ];
+lInsertStatement_1_56 -> lDropTableStatement_1_59[label="5 " ];
+lDropTableStatement_1_59 -> TableNode_58[label="attr2" ];
+lDropTableStatement_1_59 -> lCreateTableStatement_1_62[label="5 " ];
+lCreateTableStatement_1_62 -> TableNode_61[label="attr2" ];
+lCreateTableStatement_1_62 -> lAssignment_1_65[label="5 " ];
+lAssignment_1_65 -> TableNode_64[label="attr2" ];
+lAssignment_1_65 -> lInsertSelectStatement_6_68[label="5 " ];
+lInsertSelectStatement_6_68 -> l6_StringVal_0_71[label="StringVal" ];
+l6_StringVal_0_71 -> l6_StringVal_1_74[label="StringVal" ];
+lInsertSelectStatement_6_68 -> TableNode_67[label="attr2" ];
+lInsertSelectStatement_6_68 -> lCommitLiteral_7_77[label="String
+COMMIT" ];
+lCommitLiteral_7_77 -> lInsertSelectStatement_6_80[label="5 " ];
+lInsertSelectStatement_6_80 -> l6_StringVal_0_83[label="StringVal" ];
+l6_StringVal_0_83 -> l6_StringVal_1_86[label="StringVal" ];
+lInsertSelectStatement_6_80 -> TableNode_79[label="attr2" ];
+lInsertSelectStatement_6_80 -> lCommitLiteral_9_89[label="String
+commit" ];
+lCommitLiteral_9_89 -> lComment_10_92[label="Comment" ];
+lComment_10_92 -> lAssignment_1_95[label="5 " ];
+lAssignment_1_95 -> TableNode_94[label="attr2" ];
+lAssignment_1_95 -> lUpdateStatement_12_98[label="5 " ];
+lUpdateStatement_12_98 -> l6_StringVal_0_101[label="StringVal" ];
+l6_StringVal_0_101 -> lSetClause_1_104[label="6 " ];
+lSetClause_1_104 -> lAssignment_0_107[label="String
+['pkgs_search_processed', ''Y'']" ];
+lAssignment_0_107 -> lAssignment_1_110[label="String
+['dtu', 'getdate()']" ];
+lSetClause_1_104 -> lWhereClause_2_113[label="6 " ];
+lWhereClause_2_113 -> l7_StringVal_0_116[label="StringVal" ];
+l7_StringVal_0_116 -> lCondition_1_119[label="String
+['pkgs_search_processed', '=', ''N'']" ];
+lCondition_1_119 -> l7_StringVal_2_122[label="StringVal" ];
+l7_StringVal_2_122 -> lCondition_3_125[label="String
+['ready_to_process', '=', ''Y'']" ];
+lCondition_3_125 -> l7_StringVal_2_128[label="StringVal" ];
+l7_StringVal_2_128 -> lCondition_5_131[label="String
+['payment_rec_arrived', '=', ''Y'']" ];
+lCondition_5_131 -> l7_StringVal_2_134[label="StringVal" ];
+l7_StringVal_2_134 -> lCondition_7_137[label="String
+['[\'COALESCE\', \'dup_unmanifested_or_postagedue\', '\'N\'']', '!=', ''Y'']" ];
+lUpdateStatement_12_98 -> lCommitLiteral_9_140[label="String
+commit" ];
+lCommitLiteral_9_140 -> lComment_14_143[label="Comment" ];
+lComment_14_143 -> lUpdateStatement_15_146[label="5 " ];
+lUpdateStatement_15_146 -> l6_StringVal_0_149[label="StringVal" ];
+l6_StringVal_0_149 -> lSetClause_1_152[label="6 " ];
+lSetClause_1_152 -> lAssignment_0_155[label="String
+['pkgs_search_processed', ''Y'']" ];
+lAssignment_0_155 -> lAssignment_1_158[label="String
+['dtu', 'getdate()']" ];
+lSetClause_1_152 -> lWhereClause_2_161[label="6 " ];
+lWhereClause_2_161 -> l7_StringVal_0_164[label="StringVal" ];
+l7_StringVal_0_164 -> lCondition_1_167[label="String
+['pkgs_search_processed', '=', ''N'']" ];
+lCondition_1_167 -> l7_StringVal_2_170[label="StringVal" ];
+l7_StringVal_2_170 -> lCondition_3_173[label="String
+['[\'COALESCE\', \'dup_unmanifested_or_postagedue\', '\'N\'']', '=', ''Y'']" ];
+lUpdateStatement_15_146 -> lCommitLiteral_9_176[label="String
+commit" ];
+lCommitLiteral_9_176 -> lComment_17_179[label="Comment" ];
+lComment_17_179 -> lAssignment_1_182[label="5 " ];
+lAssignment_1_182 -> TableNode_181[label="attr2" ];
+lAssignment_1_182 -> lInsertSelectStatement_6_185[label="5 " ];
+lInsertSelectStatement_6_185 -> l6_StringVal_0_188[label="StringVal" ];
+l6_StringVal_0_188 -> l6_StringVal_1_191[label="StringVal" ];
+lInsertSelectStatement_6_185 -> TableNode_184[label="attr2" ];
+lInsertSelectStatement_6_185 -> lCommitLiteral_9_194[label="String
+commit" ];
+lCommitLiteral_9_194 -> lAssignment_1_197[label="5 " ];
+lAssignment_1_197 -> TableNode_196[label="attr2" ];
+lAssignment_1_197 -> lInsertSelectStatement_6_200[label="5 " ];
+lInsertSelectStatement_6_200 -> l6_StringVal_0_203[label="StringVal" ];
+l6_StringVal_0_203 -> l6_StringVal_1_206[label="StringVal" ];
+lInsertSelectStatement_6_200 -> TableNode_199[label="attr2" ];
+lInsertSelectStatement_6_200 -> lCommitLiteral_9_209[label="String
+commit" ];
+lCommitLiteral_9_209 -> lAssignment_1_212[label="5 " ];
+lAssignment_1_212 -> TableNode_211[label="attr2" ];
+lAssignment_1_212 -> lInsertStatement_1_215[label="5 " ];
+lInsertStatement_1_215 -> TableNode_214[label="attr2" ];
+lInsertStatement_1_215 -> lCommitLiteral_9_218[label="String
+commit" ];
+lLineExpression_1_47 -> lLineExpression_2_221[label="4 " ];
+lLineExpression_2_221 -> lAssignment_0_224[label="5 " ];
+lAssignment_0_224 -> TableNode_223[label="attr2" ];
+lAssignment_0_224 -> lInsertStatement_0_227[label="5 " ];
+lInsertStatement_0_227 -> TableNode_226[label="attr2" ];
+lInsertStatement_0_227 -> lCommitLiteral_2_230[label="String
+commit" ];
+lStatementExpression_0_29 -> lExceptionBlock_1_233[label="2 " ];
+lExceptionBlock_1_233 -> TableNode_232[label="attr2" ];
+lExceptionBlock_1_233 -> exception[label="Abnormal exit"  style=dashed ];
+exception -> end[label=""];
 
 
 
