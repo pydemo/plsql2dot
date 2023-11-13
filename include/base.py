@@ -16,10 +16,11 @@ class BaseBase(object):
 	def get_type(self):
 		return f'{self.__class__.__name__}'
 	def init(self, parent, lid):
-		self.set_fname()
-		self.attr={k:v for k, v in self.__dict__.items() if k not in ['position_in_text', 'fname']}
-		self.parent=parent
 		self.lid = lid
+		self.set_fname()
+		self.attr={k:v for k, v in self.__dict__.items() if k not in ['position_in_text', 'fname','lid']}
+		self.parent=parent
+		
 		self.gid = gid = apc.get_gid()
 		#print(1111,gid)
 		self.set_name()
@@ -36,13 +37,15 @@ class BaseBase(object):
 		return f'{self.name} [shape="box",label="{self.level} {self.tname} {apc.cntr.get(self)}" ];'
 	def set_name(self):
 		p,c=self.parent, self
+		assert self.lid >=0
 		if type(c) in [StringVal]:
 			obj=self.val
-			self.name, self.label = f'l{self.level}_{c.get_type()}_{p.index(obj)}_{apc.get_gid()}', c.get_type()
+			self.name, self.label = f'l{self.level}_{c.get_type()}_{self.lid}_{apc.get_gid()}', c.get_type()
 		else:
 			obj=self
 			#print('parent:',type(p))
-			self.name, self.label = f'l{c.get_type()}_{p.index(obj)}_{apc.get_gid()}', c.get_type()
+			print(1, c.get_type())
+			self.name, self.label = f'l{c.get_type()}_{self.lid}_{apc.get_gid()}', c.get_type()
 
 def clean_for_graphviz(multi_line_string):
 	# Escape backslashes first
@@ -219,46 +222,37 @@ class Base(BaseBase):
 		self.dfrom=dfrom
 		gid =apc.get_gid()
 		self.level=level
-		
-
 		hdot.append(f'{self.get_dot()}')
 		cfrom=self.name
 		if 1:
 			dto, label = self.get_name()
 			fdot.append(f'{self.dfrom} -> {dto}[label="{self.level} " ];')
-		#if  type(self) not in [str]:
-		print('before loop:', type(self), len(self))
-		#print('before loop:', self[0])
-		# Assume `obj` is your object
+
+
+		self.show_children(cfrom, hdot, fdot)
+		self.show_attr(hdot, fdot)
+
+	def show_children(self, cfrom, hdot, fdot):
 		base_classes = self.__class__.__bases__
 		print('Base: ',base_classes, str in base_classes)
 		if str in base_classes:
 			print('STR in BASE', type(self), self)
 			#self.get_str_dot(self.name, hdot, fdot)
-			self.get_dot_attr( hdot, fdot)
-		else:
+			#self.get_dot_attr( hdot, fdot)
+		else:	
 			for cid,c in enumerate(self):
 				print (self.name, type(c), f'>{c}<')
-				#assert c, self.name
+
 				print (self.name, type(c))
 				if type(c) in [str]:
-					print('Base 2 : ',c.__class__.__bases__, str in base_classes)
+					
 					c = StringVal(c, self.level+1)
 					c.get_full_dot(self, cfrom, cid, hdot, fdot)
 					
 				else:
 					c.get_full_dot(self, cfrom, cid, hdot, fdot, self.level+1)
 				cfrom = c.name
-			self.get_dot_attr( hdot, fdot)
-		if 0:
-			if '__main__.Secur' in str(type(self)):
-				pp(self.attr)
-				print(len(self), str in base_classes)
-				if 1:
-					#pp(hdot)
-					hdot1, fdot1 =[],[]
-					self.get_dot_attr( hdot1, fdot1)
-					pp(fdot)
-					pp(fdot1)
-				e()
-		
+
+	def show_attr(self, hdot, fdot):
+		print('SHOW ATTR')
+		self.get_dot_attr( hdot, fdot)

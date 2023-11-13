@@ -3,13 +3,16 @@ digraph plsql_flow {
   node [shape=box];
 
   // Define the nodes
-  start [label="BEGIN", shape=ellipse];
+  begin_block [label="BEGIN"];
   operation [label="null;"];
-  exception [label="EXCEPTION\nprocess_exception;", shape=box, style=filled, fillcolor=lightgrey];
-  end [label="END", shape=ellipse];
+  exception_block [label="EXCEPTION\nprocess_exception;"];
+  note [label="Note: Custom \nexception handling", shape=none, fontsize=10, fontcolor=red];
 
   // Define the flow between the nodes
-  start -> operation;
-  operation -> exception [label="Exception occurs", style=dashed];
-  exception -> end;
+  begin_block -> operation;
+  operation -> exception_block [label="Exception occurs", style=dashed];
+  exception_block -> end_block [label="END"];
+
+  // Invisible edge with a note positioned close to the exception_block
+  exception_block -> note [style=vis, weight=1000]; // High weight to pull them closer
 }

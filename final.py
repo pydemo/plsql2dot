@@ -17,7 +17,7 @@ from include import insert
 from include import drop 
 from include import create_temp_table as ctt 
 from include.base import  Base, BaseBase
-from include.base import  String, StringTable
+from include.base import  String, StringVal, StringTable
 e=  sys.exit
 
 class Local(object):
@@ -80,24 +80,55 @@ class Condition(str, Base, Local):
 	# Matches a condition such as 'a > b'
 	identifier_pattern = re.compile(r'\b[a-zA-Z_]\w*\b')
 	cond=re.compile(r'\s*[><=!]=?\s*')
-	grammar = attr('left', identifier_pattern),cond, attr('right',word)
+	grammar = attr('left', identifier_pattern),attr('cond',cond), attr('right',word)
+	def init(self, parent, lid):
+		Base.init(self,parent, lid)
+		assert type(parent) in [IfStatement]
+		
+	def get_dot(self):
 
+		return f'{self.name} [shape="box",  color="black", label="{self.label} {apc.cntr.get(self)}\n{self.attr["left"]}{self.attr["cond"]}{self.attr["right"]}" ];'
+	def show_attr(self, hdot, fdot):
+		pass
+	def show_children(self, cfrom, hdot, fdot):
+		base_classes = self.__class__.__bases__
+		print('Base: ',base_classes, str in base_classes)
+		assert str in base_classes, base_classes
+		#pp(self.parent.attr)
+		#e()
+		attr=self.parent.attr
+		for cid,ck in enumerate(attr):
+			c=attr[ck]
+			print (self.name, type(c), f'>{c}<')
 
+			print (self.name, type(c))
+			if not type(c) in [LineExpression]:
+				print(type(c))
+				pp(attr.keys())
+				pp(self.attr)
+				e()
+			c.get_full_dot(self, self.name, cid, hdot, fdot, self.level+1)
+			cfrom = c.name
+		
 class LineExpression(List, Base, Local):
 	# Defines the different expressions that can be on a single line
 	grammar = maybe_some([LineFilter, BooleanLiteral, StringLiteral, Comment, Assignment, CommitLiteral, insert.InsertStatement, drop.DropTableStatement,\
 	ctt.CreateTableStatement,  statement.Assignment,ias.InsertSelectStatement, update.UpdateStatement])
 	def get_dot(self):
-		
 		return f'{self.name} [shape="box",  color="black", label="{self.label} {apc.cntr.get(self)}" ];'
+		
 class IfStatement(List, Base, Local):
 	# Defines the structure of an if statement
 	grammar = 'if',  Condition, 'then', \
-			  LineExpression, optional('else'),  optional(LineExpression),\
+			  attr('true',LineExpression), optional('else'),  attr('false',LineExpression),\
 			  'end if', ';'
 	def get_dot(self):
 		
 		return f'{self.name} [shape="diamond", style=bold, color="black", label="{self.label} {apc.cntr.get(self)}" ];'
+	def show_attr(self, hdot, fdot):
+		pass
+
+		
 class StatementExpression(List, Base, Local):
 	# Defines the different expressions that can be on a single line
 	grammar = maybe_some([IfStatement, select.Select, statement.Assignment,  statement.Comment ])
@@ -369,7 +400,7 @@ for c in parsed:
 			elif str(type(b)).endswith(".IfStatement'>"):
 				print('\tIF_COND:', b)
 				
-				for le in b[1]:
+				for le in b:
 					if str(type(le)).endswith(".Comment'>"):
 						print('\t\tCOMMENT: --', le)
 					elif str(type(le)).endswith(".Assignment'>"):
@@ -454,110 +485,11 @@ class Parsed(Local):
 hdot=[]
 fdot=[]
 apc.parsed=parsed
-if 0:
-	for cid,c in enumerate(parsed):
-		print(cid,parsed.index(c))
-	e()
 if 1:
 	ped=Parsed()
 	
 	ped.get_full_dot(apc.parsed, 'start', hdot, fdot)
-		
-if 0:
 
-	hdot.append('//level 1')
-	for cid,c in enumerate(parsed):
-		if not cid:
-			dfrom = 'start'
-
-		c.init(parsed,c, cid)
-		hdot.append(f'{c.get_dot()}')
-		apc.cntr.inc(c, __name__)
-		if 1:
-			dto, label = c.get_name()
-			fdot.append(f'{dfrom} -> {dto}[label="" ];')
-		dfrom=dto
-		for ccid,cc in enumerate(c):
-			cc.init(c,cc, ccid)
-			hdot.append(f'\t{cc.get_dot()}')
-			apc.cntr.inc(cc)
-			if 1:
-				ddto, label=cc.get_name() 
-				
-				fdot.append(f'\t{dto} -> {ddto}[label="" ];')
-				
-			for cccid, ccc in enumerate(cc):
-				try:
-					ccc.init(cc,ccc,cccid)
-					hdot.append(f'\t\t{ccc.get_dot()}')
-					apc.cntr.inc(ccc)
-				except Exception as ex:
-					print(c.get_type())
-					print(cc.get_type())
-					print(ccc)
-					raise
-				if 1:
-					dddto, label=ccc.get_name()
-					fdot.append(f'\t\t{ddto} -> {dddto}[label="" ];')
-					
-				if type(ccc) not in []:
-					for ccccid, cccc in enumerate(ccc):
-						if type(cccc) not in [str]:
-							try:
-								cccc.init(ccc,cccc,ccccid)
-								hdot.append(f'\t\t\t{cccc.get_dot()}')
-								apc.cntr.inc(cccc)
-							except Exception as ex:
-								print(c.get_type())
-								print(cc.get_type())
-								print(ccc.get_type())
-								print(cccc)
-								raise
-							if 1: #link
-								ddddto, label=cccc.get_name()
-								fdot.append(f'\t\t\t{dddto} -> {ddddto}[label="" ];')
-
-							if type(cccc) not in [str, Comment]:
-								first=0
-								dddddfrom =None
-								for cccccid, ccccc in enumerate(cccc):
-									
-									if type(ccccc) not in [str, Comment]:
-
-										try:
-											ccccc.init(cccc,ccccc,cccccid)
-											hdot.append(f'\t\t\t\t{ccccc.get_dot()}')
-											apc.cntr.inc(ccccc)
-										except Exception as ex:
-											print(c.get_type())
-											print(cc.get_type())
-											print(ccc.get_type())
-											print(cccc.get_type())
-											print(ccccc)
-											raise
-										if 1: #link
-											
-											if not first:
-												dddddto, label=ccccc.get_name()
-												fdot.append(f'\t\t\t\t{ddddto} -> {dddddto}[label="" ];')
-												dddddfrom = dddddto
-												first +=1
-											else:
-												dddddto, label=ccccc.get_name()
-												fdot.append(f'\t\t\t\t{dddddfrom} -> {dddddto}[label="" ];')
-												dddddfrom = dddddto
-														
-								if dddddfrom:
-									fdot.append(f'{dddddfrom} -> end [label="" ];')
-						else:
-							print('str:',cccc)
-							#e()
-					
-if 0:
-	hdot.append('//level 2')
-	for c in parsed:
-		for cc in c:
-			hdot.append(f'{cc.get_type()} [label="{cc.get_type()}", shape=box ];')
 
 pp(apc.cntr.cnt)
 

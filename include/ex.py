@@ -36,8 +36,10 @@ class ExceptionBlock(List, Base, Local):
 	def get_full_dot(self, parent, dfrom, lid, hdot, fdot, level):
 		Base.get_full_dot(self, parent, dfrom, lid, hdot, fdot, level)
 		hdot.append('exception [label="Error Exit", color="red" shape=doublecircle];')
+		hdot.append('note [label="Exception handling", shape=none, fontsize=10, fontcolor=red];')
 		fdot.append(f'{self.name} -> exception[label="Abnormal exit"  style=dashed ];')
 		fdot.append(f'exception -> end[label=""];')
+		fdot.append(f'note -> {self.name} [ weight=1000]')
 
 # Test string
 test_string = '''
