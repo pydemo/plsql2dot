@@ -21,7 +21,7 @@ class BaseBase(object):
 		self.attr={k:v for k, v in self.__dict__.items() if k not in ['position_in_text', 'fname','lid']}
 		self.parent=parent
 		
-		self.gid = gid = apc.get_gid()
+		self.gid = gid = apc.get_gid(self)
 		#print(1111,gid)
 		self.set_name()
 		self.tname=self.__class__.__name__
@@ -40,12 +40,12 @@ class BaseBase(object):
 		assert self.lid >=0
 		if type(c) in [StringVal]:
 			obj=self.val
-			self.name, self.label = f'l{self.level}_{c.get_type()}_{self.lid}_{apc.get_gid()}', c.get_type()
+			self.name, self.label = f'l{self.level}_{c.get_type()}_{self.lid}_{self.gid}', c.get_type()
 		else:
 			obj=self
 			#print('parent:',type(p))
 			print(1, c.get_type())
-			self.name, self.label = f'l{c.get_type()}_{self.lid}_{apc.get_gid()}', c.get_type()
+			self.name, self.label = f'l{c.get_type()}_{self.lid}_{self.gid}', c.get_type()
 
 def clean_for_graphviz(multi_line_string):
 	# Escape backslashes first
@@ -100,10 +100,10 @@ class StringVal(BaseBase, Local):
 	def __init__(self, val, level):
 		self.val=val
 		self.level=level
-	def get_full_dot(self, parent, dfrom, lid, hdot, fdot):
+	def get_full_dot(self, parent, dfrom, lid, hdot, fdot, level):
 		self.init(parent, lid)
 		self.dfrom=dfrom
-		gid =apc.get_gid()
+		#gid =apc.get_gid()
 		
 		print('A'*40, type(self.val))
 		pp(self.val)
@@ -129,7 +129,7 @@ class StringVal(BaseBase, Local):
 			dto, label = self.get_name()
 			label= str(self.val).replace('"',"'")
 			if 1:
-				fdot.append(f'{self.dfrom} -> {dto}[label="StringVal" ];')
+				fdot.append(f'{self.dfrom} -> {dto}[label="StringVal ({level})" ];')
 
 
 class StringTable(BaseBase):
@@ -137,7 +137,7 @@ class StringTable(BaseBase):
 		self.level=level
 		self.init(parent, lid)
 		self.dfrom=dfrom
-		gid =apc.get_gid()
+		#gid =apc.get_gid()
 		val=self
 		print('A'*40, type(val))
 		pp(val)
@@ -163,14 +163,14 @@ class StringTable(BaseBase):
 			dto, label = self.get_name()
 			label= str(val).replace('"',"'")
 			if 1:
-				fdot.append(f'{self.dfrom} -> {dto}[label="{self.tname}" ];')
+				fdot.append(f'{self.dfrom} -> {dto}[label="{self.tname} ({level})" ];')
 				
 class String(BaseBase):
 	def get_full_dot(self, parent, dfrom, lid, hdot, fdot, level):
 		self.init(parent, lid)
 		self.dfrom=dfrom
 		self.level=level
-		gid =apc.get_gid()
+		
 		
 
 		hdot.append(f'{self.get_dot()}')
@@ -178,7 +178,7 @@ class String(BaseBase):
 		if 1:
 			dto, label = self.get_name()
 			label= str(self).replace('"',"'")
-			fdot.append(f'{self.dfrom} -> {dto}[label="String\n{label}" ];')
+			fdot.append(f'{self.dfrom} -> {dto}[label="String\n{label} ({level})" ];')
 			
 class Base(BaseBase):
 	def get_str_dot(self,  dfrom,  hdot, fdot):
@@ -186,7 +186,7 @@ class Base(BaseBase):
 		parent =self.parent
 		lid=self.lid
 		self.dfrom=dfrom
-		gid =apc.get_gid()
+		
 		
 
 		hdot.append(f'{self.get_dot()}')
@@ -216,17 +216,17 @@ class Base(BaseBase):
 			cfrom, clabel = self.get_name()
 			fdot.append(f'{cfrom} -> TableNode_{self.gid}[label="attr2" ];')
 					
-	def get_full_dot(self, parent, dfrom, lid, hdot, fdot, level):
+	def get_full_dot(self, parent, dfrom, lid, hdot, fdot, level, label=''):
 
 		self.init(parent, lid)
 		self.dfrom=dfrom
-		gid =apc.get_gid()
+		
 		self.level=level
 		hdot.append(f'{self.get_dot()}')
 		cfrom=self.name
 		if 1:
-			dto, label = self.get_name()
-			fdot.append(f'{self.dfrom} -> {dto}[label="{self.level} " ];')
+			dto, _ = self.get_name()
+			fdot.append(f'{self.dfrom} -> {dto}[label="{label} ({self.level}) " ];')
 
 
 		self.show_children(cfrom, hdot, fdot)
@@ -247,10 +247,10 @@ class Base(BaseBase):
 				if type(c) in [str]:
 					
 					c = StringVal(c, self.level+1)
-					c.get_full_dot(self, cfrom, cid, hdot, fdot)
+					c.get_full_dot(self, cfrom, cid, hdot, fdot, self.level+cid+1)
 					
 				else:
-					c.get_full_dot(self, cfrom, cid, hdot, fdot, self.level+1)
+					c.get_full_dot(self, cfrom, cid, hdot, fdot, self.level+cid+1)
 				cfrom = c.name
 
 	def show_attr(self, hdot, fdot):

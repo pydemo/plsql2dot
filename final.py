@@ -97,6 +97,7 @@ class Condition(str, Base, Local):
 		#pp(self.parent.attr)
 		#e()
 		attr=self.parent.attr
+		bids=[]
 		for cid,ck in enumerate(attr):
 			c=attr[ck]
 			print (self.name, type(c), f'>{c}<')
@@ -107,8 +108,19 @@ class Condition(str, Base, Local):
 				pp(attr.keys())
 				pp(self.attr)
 				e()
-			c.get_full_dot(self, self.name, cid, hdot, fdot, self.level+1)
+			c.get_full_dot(self, self.name, cid, hdot, fdot, self.level+1, label=ck)
 			cfrom = c.name
+			bids.append([apc.gid, ck])
+		pp(bids)
+		pp(apc.all[bids[1][0]])
+		#pp(apc.all[bids[0]].name)
+		self.get_end_if_dot(bids,hdot, fdot )
+		#e()
+	def get_end_if_dot(self,bids,hdot, fdot ):
+		end_if= f'end_if_{self.parent.gid}'
+		hdot.append(f'{end_if} [shape="circle",  color="black", label="End If" ];')
+		fdot.append(f'{apc.all[bids[0][0]].name} -> {end_if}[label="{bids[0][1]}" ];')
+		fdot.append(f'{apc.all[bids[1][0]].name} -> {end_if}[label="{bids[1][1]}" ];')
 		
 class LineExpression(List, Base, Local):
 	# Defines the different expressions that can be on a single line
@@ -120,7 +132,7 @@ class LineExpression(List, Base, Local):
 class IfStatement(List, Base, Local):
 	# Defines the structure of an if statement
 	grammar = 'if',  Condition, 'then', \
-			  attr('true',LineExpression), optional('else'),  attr('false',LineExpression),\
+			  attr('True',LineExpression), optional('else'),  attr('False',LineExpression),\
 			  'end if', ';'
 	def get_dot(self):
 		

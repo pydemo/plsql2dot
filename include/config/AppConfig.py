@@ -36,8 +36,10 @@ class AppConfig(Config):
 			self.kwargs=kwargs
 			self.ui_layout=kwargs['ui_layout']
 			self.params=params=kwargs['params']
-	def get_gid(self):
+		self.all={}
+	def get_gid(self, obj):
 		self.gid += 1
+		self.all[self.gid] = obj
 		return self.gid
 	def load_ui_cfg(self, quiet=False):
 
