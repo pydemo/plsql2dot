@@ -34,7 +34,7 @@ class SetClause(List, Base,Local):
 
 # Define the structure for the UPDATE statement
 class UpdateStatement(List, Base, Local):
-	grammar = 'UPDATE', identifier, SetClause, where.WhereClause, optional(";")
+	grammar = 'UPDATE', identifier, SetClause, attr('where',where.WhereClause), optional(";")
 	def get_dot(self):
 
 		return f'{self.name} [shape="box", style=bold, color="lightpink", label="{self.tname} {apc.cntr.get(self)}" ];'
