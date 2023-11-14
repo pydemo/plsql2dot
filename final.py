@@ -214,6 +214,25 @@ class Security(str, String, Local):
 # A list of parameters separated by commas
 class Parameters(List, Base, Local):
 	grammar = optional(csl(Parameter))
+	
+	def show_children(self, cfrom, hdot, fdot):
+		out=[]
+		for cid,c in enumerate(self):
+			c.init(self, cid)
+			#pp(c.attr)
+			#e()
+			out.append(c.get_dot())
+		hdot.append( f'''
+		{self.name} [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >Variable</TD><TD >Datatype</TD><TD >Default</TD></TR>
+				{os.linesep.join(out)}
+			</TABLE>
+		>];''')
+		if 1:
+			fdot.append(f'{self.dfrom} -> {self.name}[label="{self.tname} ({self.level})" ];')
+
+	
 class ProcOrFuncName(str):
 	grammar = word
 class FunctionOrProcedure(List, Base, Local):
