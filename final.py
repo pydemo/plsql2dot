@@ -69,33 +69,47 @@ class LineExpression(List, Base, Local):
 
 	def init(self, parent, lid):
 		Base.init(self,parent, lid)
-		assert type(parent) in [IfStatement]
+		#assert type(parent) in [Condition]
 
-	def show_children(self, cfrom, hdot, fdot):
-		base_classes = self.__class__.__bases__
-		assert str in base_classes, base_classes
-		cfdot =  []
-		attr=self.parent.attr
-		bids=[]
-		cfrom = self
-		for cid,c in enumerate(self):
-			
-			c.get_full_dot(self, cfrom.name, cid, hdot, cfdot, self.level+1)
-			cfrom = c
-			#bids.append([apc.gid, ck])
-
+	def show_children(self, parent, hdot, fdot):
 		
+		
+		cfdot =  []
+		#attr=self.parent.attr
+		bids=[]
+		#cfrom = self
+		cfrom=parent
+		if 1:
+			for cid,c in enumerate(self):
+
+				if 1:
+					comm=None
+					if type(cfrom) in [Comment]:
+						comm=cfrom
+						#print(111, cid, comm.lid, type(c), parent)
+						
+						#e()
+						if comm.lid == 0:
+							cfrom=parent
+						else:
+							cfrom=parent[comm.lid-1]
+							
+					c.get_full_dot(self, cfrom.name, cid, hdot, cfdot, self.level+cid+1)
+					if comm:
+						cfdot.append(f'{comm.name} -> {c.name}[label="comm ({self.level}) " style=dashed color="lightblue"];')
+						comm=None
+				cfrom = c
 		
 			bids.append([apc.gid, c])
 		
-		self.get_end_if_dot(bids,hdot, cfdot )
+		#self.get_end_if_dot(bids,hdot, cfdot )
 		self.get_subgraph(cfdot, fdot)
-		end_if= f'end_if_{self.parent.gid}'
-		fdot.append(f'{end_if} -> end;')
+		#end_if= f'end_if_{self.parent.gid}'
+		#fdot.append(f'{end_if} -> end;')
 
 	def get_subgraph(self, cfdot, fdot):
 		fdot.append(f'''
-		subgraph Cluster_{self.name}{
+		subgraph Cluster_{self.name}{{
 		edge [color=blue, style=dashed];
 		node [color=lightblue, style=filled];
 		''')
@@ -107,7 +121,7 @@ class LineExpression(List, Base, Local):
 		end_if= f'end_if_{self.parent.gid}'
 		hdot.append(f'{end_if} [shape="ellipse",  color="black", label="End If" ];')
 		fdot.append(f'{apc.all[bids[0][0]].name} -> {end_if}[label="{bids[0][1]}" ];')
-		fdot.append(f'{apc.all[bids[1][0]].name} -> {end_if}[label="{bids[1][1]}" ];')
+		#fdot.append(f'{apc.all[bids[1][0]].name} -> {end_if}[label="{bids[1][1]}" ];')
 		
 
 class Condition(str, Base, Local):

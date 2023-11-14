@@ -265,7 +265,7 @@ lExceptionBlock_1_46 [shape="box",label="3 ExceptionBlock 1" ];
 		TableNode_46 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >attr</TD><TD>value</TD></TR>
-				<TR><TD>others</TD><TD>'others'</TD></TR>
+				<TR><TD>cond</TD><TD>'others'</TD></TR>
 <TR><TD>msg</TD><TD>[info 'SQLERRM=(%) SQLSTATE=(%</TD></TR>
 			</TABLE>
 		>];
@@ -303,6 +303,11 @@ lIfStatement_2_12 -> lCondition_0_13[label=" (7) " ];
 		node [color=lightblue, style=filled];
 		
 lCondition_0_13 -> lLineExpression_0_14[label="True (8) " ];
+
+		subgraph Cluster_lLineExpression_0_14{
+		edge [color=blue, style=dashed];
+		node [color=lightblue, style=filled];
+		
 lLineExpression_0_14 -> lAssignment_1_16[label=" (10) " ];
 lAssignment_1_16 -> TableNode_16[label="attr2" ];
 lComment_0_15 -> lAssignment_1_16[label="comm (8) " style=dashed color="lightblue"];
@@ -353,13 +358,22 @@ lAssignment_24_39 -> lInsertStatement_25_40[label=" (34) " ];
 lInsertStatement_25_40 -> TableNode_40[label="attr2" ];
 lInsertStatement_25_40 -> lCommitLiteral_26_41[label="String
 commit (35)" ];
+
+		}
 lCondition_0_13 -> lLineExpression_1_42[label="False (8) " ];
+
+		subgraph Cluster_lLineExpression_1_42{
+		edge [color=blue, style=dashed];
+		node [color=lightblue, style=filled];
+		
 lLineExpression_1_42 -> lAssignment_0_43[label=" (9) " ];
 lAssignment_0_43 -> TableNode_43[label="attr2" ];
 lAssignment_0_43 -> lInsertStatement_1_44[label=" (10) " ];
 lInsertStatement_1_44 -> TableNode_44[label="attr2" ];
 lInsertStatement_1_44 -> lCommitLiteral_2_45[label="String
 commit (11)" ];
+
+		}
 lCommitLiteral_26_41 -> end_if_12[label="True" ];
 lCommitLiteral_2_45 -> end_if_12[label="False" ];
 
