@@ -40,7 +40,35 @@ class ExceptionBlock(List, Base, Local):
 		fdot.append(f'{self.name} -> exception[label="Abnormal exit"  style=dashed ];')
 		fdot.append(f'exception -> end[label=""];')
 		fdot.append(f'note -> {self.name} [ weight=1000]')
+	def show_children(self, cfrom, hdot, fdot):
+		base_classes = self.__class__.__bases__
+		assert not str in base_classes, base_classes
+		cfdot =  []
+		attr=self.parent.attr
+		#bids=[]
+		for cid,c in enumerate(self):
+			
+			c.get_full_dot(self, self.name, cid, hdot, cfdot, self.level+1)
+			cfrom = c
+			#bids.append([apc.gid, ck])
 
+		
+		self.get_subgraph(cfdot, fdot)
+		#end_if= f'end_if_{self.parent.gid}'
+		#fdot.append(f'{end_if} -> end;')
+	def get_subgraph(self, cfdot, fdot):
+		fdot.append(f'''
+		subgraph Cluster_{self.name}{{
+		edge [color=blue, style=dashed];
+		node [color=lightblue, style=filled];
+		''')
+		fdot +=cfdot
+		fdot.append('''
+		}''')
+		#pp(cfdot)
+		#e()
+		
+		
 # Test string
 test_string = '''
 exception when others then
