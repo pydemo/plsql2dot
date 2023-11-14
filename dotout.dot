@@ -265,11 +265,11 @@ lExceptionBlock_1_46 [shape="box",label="3 ExceptionBlock 1" ];
 		TableNode_46 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >attr</TD><TD>value</TD></TR>
-				<TR><TD>code</TD><TD>CodeBlock(["'SQLERRM=(%) SQLST</TD></TR>
+				<TR><TD>others</TD><TD>'others'</TD></TR>
+<TR><TD>msg</TD><TD>[info 'SQLERRM=(%) SQLSTATE=(%</TD></TR>
 			</TABLE>
 		>];
-exception [label="Exception", color="red" shape=doublecircle];
-note [label="Exception handling", shape=none, fontsize=10, fontcolor=red];
+note [label="Exception handling", shape=none, fontsize=14, fontcolor=red];
 lParameters_3_48 [shape="box",label="1 Parameters 1" ];
 
 		lParameters_3_48 [shape=none, margin=0, label=<
@@ -366,10 +366,16 @@ lCommitLiteral_2_45 -> end_if_12[label="False" ];
 		}
 end_if_12 -> end;
 lBlock_1_7 -> lExceptionBlock_1_46[label=" (3) " ];
-lExceptionBlock_1_46 -> TableNode_46[label="attr2" ];
-lExceptionBlock_1_46 -> exception[label="Abnormal exit"  style=dashed ];
-exception -> end[label=""];
+lExceptionBlock_1_46 -> end[label="Abnormal exit"  style=dashed color=red style=bold];
+
+		subgraph Cluster_lExceptionBlock_1_46{
+		edge [color=blue, style=dashed];
+		node [color=lightblue, style=filled];
+		
 note -> lExceptionBlock_1_46 [ weight=1000]
+lExceptionBlock_1_46 -> TableNode_46[label="attr2" ];
+
+		}
 
 		}
 start -> lParameters_3_48[label=" (1) " ];
