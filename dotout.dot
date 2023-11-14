@@ -311,6 +311,11 @@ lAssignment_0_11 -> lSelect_1_12[label=" (4) " ];
 lSelect_1_12 -> l5_StringVal_0_13[label="StringVal (5)" ];
 lSelect_1_12 -> lIfStatement_2_14[label=" (5) " ];
 lIfStatement_2_14 -> lCondition_0_15[label=" (6) " ];
+
+		subgraph Cluster_O{
+		edge [color=blue, style=dashed];
+		node [color=lightblue, style=filled];
+		
 lCondition_0_15 -> lLineExpression_0_16[label="True (7) " ];
 lLineExpression_0_16 -> lComment_0_17[label="Comment (8)" ];
 lComment_0_17 -> lAssignment_1_18[label=" (9) " ];
@@ -371,6 +376,8 @@ lInsertStatement_1_46 -> lCommitLiteral_2_47[label="String
 commit (10)" ];
 lCommitLiteral_26_43 -> end_if_14[label="True" ];
 lCommitLiteral_2_47 -> end_if_14[label="False" ];
+
+		}
 end_if_14 -> end;
 lStatementExpression_0_10 -> lExceptionBlock_1_48[label=" (3) " ];
 lExceptionBlock_1_48 -> TableNode_48[label="attr2" ];

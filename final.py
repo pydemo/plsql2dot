@@ -75,7 +75,15 @@ class Assignment2(str, Base, Local):
 	identifier_pattern = re.compile(r'\b[a-zA-Z_]\w*\b')
 	rest_of_line = re.compile(r'.*?(?=\n|$)')
 	grammar = identifier_pattern, ':=', rest_of_line
-	
+
+class LineExpression(List, Base, Local):
+	# Defines the different expressions that can be on a single line
+	grammar = maybe_some([LineFilter, BooleanLiteral, StringLiteral, Comment, Assignment, CommitLiteral, insert.InsertStatement, drop.DropTableStatement,\
+	ctt.CreateTableStatement,  statement.Assignment,ias.InsertSelectStatement, update.UpdateStatement])
+	def get_dot(self):
+		return f'{self.name} [shape="box",  color="black", label="{self.label} {apc.cntr.get(self)}" ];'
+
+
 class Condition(str, Base, Local):
 	# Matches a condition such as 'a > b'
 	identifier_pattern = re.compile(r'\b[a-zA-Z_]\w*\b')
@@ -92,10 +100,8 @@ class Condition(str, Base, Local):
 		pass
 	def show_children(self, cfrom, hdot, fdot):
 		base_classes = self.__class__.__bases__
-		print('Base: ',base_classes, str in base_classes)
 		assert str in base_classes, base_classes
-		#pp(self.parent.attr)
-		#e()
+		cfdot =  []
 		attr=self.parent.attr
 		bids=[]
 		for cid,ck in enumerate(attr):
@@ -108,27 +114,33 @@ class Condition(str, Base, Local):
 				pp(attr.keys())
 				pp(self.attr)
 				e()
-			c.get_full_dot(self, self.name, cid, hdot, fdot, self.level+1, label=ck)
+			c.get_full_dot(self, self.name, cid, hdot, cfdot, self.level+1, label=ck)
 			cfrom = c.name
 			bids.append([apc.gid, ck])
-		pp(bids)
-		pp(apc.all[bids[1][0]])
-		#pp(apc.all[bids[0]].name)
-		self.get_end_if_dot(bids,hdot, fdot )
-		#e()
+
+		self.get_end_if_dot(bids,hdot, cfdot )
+		self.get_subgraph(cfdot, fdot)
+		end_if= f'end_if_{self.parent.gid}'
+		fdot.append(f'{end_if} -> end;')
+
+	def get_subgraph(self, cfdot, fdot):
+		fdot.append('''
+		subgraph Cluster_O{
+		edge [color=blue, style=dashed];
+		node [color=lightblue, style=filled];
+		''')
+		fdot +=cfdot
+		fdot.append('''
+		}''')
+		
 	def get_end_if_dot(self,bids,hdot, fdot ):
 		end_if= f'end_if_{self.parent.gid}'
 		hdot.append(f'{end_if} [shape="ellipse",  color="black", label="End If" ];')
 		fdot.append(f'{apc.all[bids[0][0]].name} -> {end_if}[label="{bids[0][1]}" ];')
 		fdot.append(f'{apc.all[bids[1][0]].name} -> {end_if}[label="{bids[1][1]}" ];')
-		fdot.append(f'{end_if} -> end;')
 		
-class LineExpression(List, Base, Local):
-	# Defines the different expressions that can be on a single line
-	grammar = maybe_some([LineFilter, BooleanLiteral, StringLiteral, Comment, Assignment, CommitLiteral, insert.InsertStatement, drop.DropTableStatement,\
-	ctt.CreateTableStatement,  statement.Assignment,ias.InsertSelectStatement, update.UpdateStatement])
-	def get_dot(self):
-		return f'{self.name} [shape="box",  color="black", label="{self.label} {apc.cntr.get(self)}" ];'
+		
+
 		
 class IfStatement(List, Base, Local):
 	# Defines the structure of an if statement
@@ -141,7 +153,8 @@ class IfStatement(List, Base, Local):
 	def show_attr(self, hdot, fdot):
 		pass
 
-		
+
+
 class StatementExpression(List, Base, Local):
 	# Defines the different expressions that can be on a single line
 	grammar = maybe_some([IfStatement, select.Select, statement.Assignment,  statement.Comment ])
