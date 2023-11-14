@@ -44,7 +44,7 @@ class ExceptionBlock(List, Base, Local):
 	raisee = re.compile(r'raise', re.IGNORECASE)
 	thenn = re.compile(r'then', re.IGNORECASE)
 	others = re.compile(r'others', re.IGNORECASE)
-	grammar = exception_keyword, when_keyword, attr('others',others), then_keyword, raise_keyword,  attr('msg', csl(ExMessage))
+	grammar = exception_keyword, when_keyword, attr('cond',others), then_keyword, raise_keyword,  attr('msg', csl(ExMessage))
 	
 	
 	def get_full_dot(self, parent, dfrom, lid, hdot, fdot, level):
