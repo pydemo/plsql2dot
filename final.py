@@ -67,6 +67,48 @@ class LineExpression(List, Base, Local):
 	def get_dot(self):
 		return f'{self.name} [shape="box",  color="black", label="{self.label} {apc.cntr.get(self)}" ];'
 
+	def init(self, parent, lid):
+		Base.init(self,parent, lid)
+		assert type(parent) in [IfStatement]
+
+	def show_children(self, cfrom, hdot, fdot):
+		base_classes = self.__class__.__bases__
+		assert str in base_classes, base_classes
+		cfdot =  []
+		attr=self.parent.attr
+		bids=[]
+		cfrom = self
+		for cid,c in enumerate(self):
+			
+			c.get_full_dot(self, cfrom.name, cid, hdot, cfdot, self.level+1)
+			cfrom = c
+			#bids.append([apc.gid, ck])
+
+		
+		
+			bids.append([apc.gid, c])
+		
+		self.get_end_if_dot(bids,hdot, cfdot )
+		self.get_subgraph(cfdot, fdot)
+		end_if= f'end_if_{self.parent.gid}'
+		fdot.append(f'{end_if} -> end;')
+
+	def get_subgraph(self, cfdot, fdot):
+		fdot.append(f'''
+		subgraph Cluster_{self.name}{
+		edge [color=blue, style=dashed];
+		node [color=lightblue, style=filled];
+		''')
+		fdot +=cfdot
+		fdot.append('''
+		}''')
+		
+	def get_end_if_dot(self,bids,hdot, fdot ):
+		end_if= f'end_if_{self.parent.gid}'
+		hdot.append(f'{end_if} [shape="ellipse",  color="black", label="End If" ];')
+		fdot.append(f'{apc.all[bids[0][0]].name} -> {end_if}[label="{bids[0][1]}" ];')
+		fdot.append(f'{apc.all[bids[1][0]].name} -> {end_if}[label="{bids[1][1]}" ];')
+		
 
 class Condition(str, Base, Local):
 	# Matches a condition such as 'a > b'
@@ -162,7 +204,7 @@ class Block(List, Base, Local):
 		base_classes = self.__class__.__bases__
 		assert not str in base_classes, base_classes
 		cfdot =  []
-		attr=self.parent.attr
+		#attr=self.parent.attr
 		#bids=[]
 		for cid,c in enumerate(self):
 			
