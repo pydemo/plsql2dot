@@ -219,7 +219,7 @@ identifier = re.compile(r"[a-zA-Z_][a-zA-Z0-9_$]*")
 class Type(Keyword):
 	grammar = Enum(K("timestamp"), K("INTEGER"),("integer"), K("VARCHAR2"), K("DATE"))
 	
-class Parameter(List):
+class Parameter(List, Base, Local):
 	grammar = attr("direction", optional("in")), attr("name", identifier), attr("data_type", Type)
 language_keyword = Keyword("language")
 
@@ -228,19 +228,97 @@ class Language(str, Base, Local):
 class Security(str, String, Local):
 	grammar = Keyword("security"), Keyword("definer")
 # A list of parameters separated by commas
-class Parameters(List):
+class Parameters(List, Base, Local):
 	grammar = optional(csl(Parameter))
 class ProcOrFuncName(str):
 	grammar = word
 class FunctionOrProcedure(List, Base, Local):
 	grammar = "create or replace",["function", "procedure"],attr("name", ProcOrFuncName)  , "(", attr("params", Parameters), ")",Language, Security
 	def get_dot(self):
-		
 		return f'{self.name} [shape="septagon", style=bold, color="black", label="Procedure" ];'
-	
-class Code(List):
-	grammar = FunctionOrProcedure, Declarations, Block
+	def get_full_dot(self, parent, dfrom, lid, hdot, fdot, level, label=''):
 
+		self.init(parent, lid)
+		self.dfrom=dfrom
+		
+		self.level=level
+		#hdot.append(f'{self.get_dot()}')
+		cfrom=self.name
+		if 0:
+			dto, _ = self.get_name()
+			fdot.append(f'{self.dfrom} -> {dto}[label="{label} ({self.level}) " ];')
+
+
+		#self.show_children(cfrom, hdot, fdot)
+		self.get_dot_attr(hdot, fdot)
+	def get_dot_attr(self, hdot, fdot):
+		
+		self.attr['params'].get_full_dot(self, 'start', 3, hdot, fdot, 1, label='')
+		if 0:
+			if self.attr:
+			
+				print(self.gid)
+				out=[]
+				for k, v in self.attr.items():
+					out.append(f'<TR><TD>{k}</TD><TD>{repr(v)[:30]}</TD></TR>')
+					print(k,v, type(v))
+					#if type(v) in [str]:
+					#	e()
+				hdot.append(f'''
+			TableNode_{self.gid} [shape=none, margin=0, label=<
+				<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+					<TR><TD >attr</TD><TD>value</TD></TR>
+					{os.linesep.join(out)}
+				</TABLE>
+			>];''')			
+				cfrom, clabel = self.get_name()
+				fdot.append(f'start -> TableNode_{self.gid}[label="attr2" ];')
+class Code(List, Base, Local):
+	grammar = attr('proc',FunctionOrProcedure), Declarations, Block
+
+	def get_full_dot(self, parent, dfrom, lid, hdot, fdot, level, label=''):
+
+		self.init(parent, lid)
+		self.dfrom=dfrom
+		
+		self.level=level
+		hdot.append(f'start [label="Start {self.attr["proc"].name}", shape=tripleoctagon];')
+		cfrom=self.name
+		#pp(self.attr['proc'].name)
+		#e()
+		#
+		if 0:
+			dto, _ = self.get_name()
+			fdot.append(f'start -> {dto}[label="{label} ({self.level}) " ];')
+
+
+		self.show_children('start', hdot, fdot)
+		self.get_dot_attr(hdot, fdot)
+
+	def get_dot_attr(self, hdot, fdot):
+		
+		self.attr['proc'].get_full_dot(self, 'start', 3, hdot, fdot, 0, label='')
+		if 0:
+			if self.attr:
+			
+				print(self.gid)
+				out=[]
+				for k, v in self.attr.items():
+					out.append(f'<TR><TD>{k}</TD><TD>{repr(v)[:30]}</TD></TR>')
+					print(k,v, type(v))
+					#if type(v) in [str]:
+					#	e()
+				hdot.append(f'''
+			TableNode_{self.gid} [shape=none, margin=0, label=<
+				<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+					<TR><TD >attr</TD><TD>value</TD></TR>
+					{os.linesep.join(out)}
+				</TABLE>
+			>];''')			
+				cfrom, clabel = self.get_name()
+				fdot.append(f'start -> TableNode_{self.gid}[label="attr2" ];')
+			
+		
 test_string = '''
 create or replace procedure sp_rs_refresh_pkgs_search (in p_processing_time timestamp, in p_cutoff_date timestamp)
 language plpgsql security definer
@@ -498,7 +576,7 @@ digraph G {
 	rankdir=TB;
 	//node [shape=box, style=rounded];
 	node [color=black];
-start [label="Start", shape=tripleoctagon];
+
 
 '''
 
@@ -522,10 +600,13 @@ cleaned_string = re.sub(pattern, '', input_string)
 
 class Parsed(Local):
 
-	def get_full_dot(self, parent, dfrom, hdot, fdot):
+	def _get_full_dot(self, parent, dfrom, hdot, fdot):
+		pp(parent)
+		
+		#e()
 		for cid,c in enumerate(parent):
 			c.get_full_dot(parent,'start', cid, hdot, fdot, level=1)
-
+		
 	
 		
 hdot=[]
@@ -534,7 +615,7 @@ apc.parsed=parsed
 if 1:
 	ped=Parsed()
 	
-	ped.get_full_dot(apc.parsed, 'start', hdot, fdot)
+	apc.parsed.get_full_dot(ped, 'start',  1, hdot, fdot, 0, label='')
 
 
 pp(apc.cntr.cnt)

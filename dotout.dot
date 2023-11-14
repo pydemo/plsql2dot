@@ -4,32 +4,15 @@ digraph G {
 	rankdir=TB;
 	//node [shape=box, style=rounded];
 	node [color=black];
-start [label="Start", shape=tripleoctagon];
+
 
 
 end [label="End", shape=circle];
-lFunctionOrProcedure_0_1 [shape="septagon", style=bold, color="black", label="Procedure" ];
-lLanguage_0_2 [shape="box",label="2 Language 1" ];
+start [label="Start sp_rs_refresh_pkgs_search", shape=tripleoctagon];
+lDeclarations_0_2 [shape="box", color="gray", label="DECLARE 1" ];
+lDeclarationExpression_0_3 [shape="box",label="2 DeclarationExpression 1" ];
 
-		TableNode_2 [shape=none, margin=0, label=<
-			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
-				<TR><TD>name</TD><TD>Symbol('plpgsql')</TD></TR>
-			</TABLE>
-		>];
-lSecurity_1_3 [shape="box",label="3 Security 1" ];
-
-		TableNode_1 [shape=none, margin=0, label=<
-			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
-				<TR><TD>name</TD><TD>'sp_rs_refresh_pkgs_search'</TD></TR>
-<TR><TD>params</TD><TD>Parameters([Parameter([], name</TD></TR>
-			</TABLE>
-		>];
-lDeclarations_1_4 [shape="box", color="gray", label="DECLARE 1" ];
-lDeclarationExpression_0_5 [shape="box",label="2 DeclarationExpression 1" ];
-
-		lDeclarationExpression_0_5 [shape=none, margin=0, label=<
+		lDeclarationExpression_0_3 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >Variable</TD><TD >Datatype</TD><TD >Default</TD></TR>
 				<TR><TD >v_cnt_search_pkgs</TD><TD >integer</TD><TD ></TD></TR>
@@ -37,20 +20,20 @@ lDeclarationExpression_0_5 [shape="box",label="2 DeclarationExpression 1" ];
 <TR><TD >v_location_name</TD><TD >varchar(100)</TD><TD >'sp_rs_refresh_pkgs_search'</TD></TR>
 			</TABLE>
 		>];
-lBlock_2_9 [shape="box", style=bold, color="black", label="Block 1" ];
-lStatementExpression_0_10 [shape="box",label="2 StatementExpression 1" ];
-lAssignment_0_11 [shape="box",label="3 Assignment 1" ];
+lBlock_1_7 [shape="box", style=bold, color="black", label="Block 1" ];
+lStatementExpression_0_8 [shape="box",label="3 StatementExpression 1" ];
+lAssignment_0_9 [shape="box",label="4 Assignment 1" ];
 
-		TableNode_11 [shape=none, margin=0, label=<
+		TableNode_9 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >attr</TD><TD>value</TD></TR>
 				<TR><TD>identifier</TD><TD>Attribute(name='name', thing=S</TD></TR>
 <TR><TD>value</TD><TD>"'Get count of unprocessed sea</TD></TR>
 			</TABLE>
 		>];
-lSelect_1_12 [shape="box",label="4 Select 1" ];
+lSelect_1_10 [shape="box",label="5 Select 1" ];
 
-		l5_StringVal_0_13 [shape=none, margin=0, label=<
+		l6_StringVal_0_11 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >StringVal</TD></TR>
 				<TR><TD >count(*) INTO v_cnt_search_pkgs from stage_pkgs_outbound</TD></TR>
@@ -59,30 +42,30 @@ lSelect_1_12 [shape="box",label="4 Select 1" ];
 <TR><TD >= &#39;Y&#39; AND dtc &gt; p_cutoff_date</TD></TR>
 			</TABLE>
 		>];
-lIfStatement_2_14 [shape="diamond", style=bold, color="black", label="IfStatement 1" ];
-lCondition_0_15 [shape="box",  color="black", label="Condition 1
+lIfStatement_2_12 [shape="diamond", style=bold, color="black", label="IfStatement 1" ];
+lCondition_0_13 [shape="box",  color="black", label="Condition 1
 v_cnt_search_pkgs> 0" ];
-lLineExpression_0_16 [shape="box",  color="black", label="LineExpression 1" ];
+lLineExpression_0_14 [shape="box",  color="black", label="LineExpression 1" ];
 
-		lComment_0_17 [shape=none, margin=0, label=<
+		lComment_0_15 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >Comment</TD></TR>
 				<TR><TD >This includes census,</TD></TR>
 <TR><TD >duplicates and unmanifested adjustments</TD></TR>
 			</TABLE>
 		>];
-lAssignment_1_18 [shape="box",label="9 Assignment 1" ];
+lAssignment_1_16 [shape="box",label="10 Assignment 1" ];
 
-		TableNode_18 [shape=none, margin=0, label=<
+		TableNode_16 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >attr</TD><TD>value</TD></TR>
 				<TR><TD>identifier</TD><TD>'v_status'</TD></TR>
 <TR><TD>value</TD><TD>"'BEGIN pkgs search summary';"</TD></TR>
 			</TABLE>
 		>];
-lInsertStatement_2_19 [shape="box", style=bold, color="yellow", label="InsertStatement 1" ];
+lInsertStatement_2_17 [shape="box", style=bold, color="yellow", label="InsertStatement 1" ];
 
-		TableNode_19 [shape=none, margin=0, label=<
+		TableNode_17 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >attr</TD><TD>value</TD></TR>
 				<TR><TD>table</TD><TD>'ppc_qlik_reports_log'</TD></TR>
@@ -90,35 +73,35 @@ lInsertStatement_2_19 [shape="box", style=bold, color="yellow", label="InsertSta
 <TR><TD>values</TD><TD>ValueList(['getdate()', "'MANI</TD></TR>
 			</TABLE>
 		>];
-lDropTableStatement_3_20 [shape="box",  color="red", label="DropTableStatement 1" ];
+lDropTableStatement_3_18 [shape="box",  color="red", label="DropTableStatement 1" ];
 
-		TableNode_20 [shape=none, margin=0, label=<
+		TableNode_18 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >attr</TD><TD>value</TD></TR>
 				<TR><TD>table</TD><TD>'package_search_temp'</TD></TR>
 			</TABLE>
 		>];
-lCreateTableStatement_4_21 [shape="box",  color="orange", label="CreateTableStatement 1" ];
+lCreateTableStatement_4_19 [shape="box",  color="orange", label="CreateTableStatement 1" ];
 
-		TableNode_21 [shape=none, margin=0, label=<
+		TableNode_19 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >attr</TD><TD>value</TD></TR>
 				<TR><TD>table</TD><TD>'package_search_temp'</TD></TR>
 <TR><TD>like_clause</TD><TD>LikeClause([])</TD></TR>
 			</TABLE>
 		>];
-lAssignment_5_22 [shape="box",label="13 Assignment 2" ];
+lAssignment_5_20 [shape="box",label="14 Assignment 2" ];
 
-		TableNode_22 [shape=none, margin=0, label=<
+		TableNode_20 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >attr</TD><TD>value</TD></TR>
 				<TR><TD>identifier</TD><TD>Attribute(name='name', thing=S</TD></TR>
 <TR><TD>value</TD><TD>"'Insert into package_search_t</TD></TR>
 			</TABLE>
 		>];
-lInsertSelectStatement_6_23 [shape="box", style=bold, color="lightgreen", label="InsertSelectStatement 1" ];
+lInsertSelectStatement_6_21 [shape="box", style=bold, color="lightgreen", label="InsertSelectStatement 1" ];
 
-		TableNode_23 [shape=none, margin=0, label=<
+		TableNode_21 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >attr</TD><TD>value</TD></TR>
 				<TR><TD>insert</TD><TD>'INSERT'</TD></TR>
@@ -128,10 +111,10 @@ lInsertSelectStatement_6_23 [shape="box", style=bold, color="lightgreen", label=
 <TR><TD>select</TD><TD>SelectStatement(['SELECT', 'FR</TD></TR>
 			</TABLE>
 		>];
-lCommitLiteral_7_24 [shape="septagon", style=bold, color="blue", label="Commit 1" ];
-lInsertSelectStatement_8_25 [shape="box", style=bold, color="lightgreen", label="InsertSelectStatement 2" ];
+lCommitLiteral_7_22 [shape="septagon", style=bold, color="blue", label="Commit 1" ];
+lInsertSelectStatement_8_23 [shape="box", style=bold, color="lightgreen", label="InsertSelectStatement 2" ];
 
-		TableNode_25 [shape=none, margin=0, label=<
+		TableNode_23 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >attr</TD><TD>value</TD></TR>
 				<TR><TD>insert</TD><TD>'INSERT'</TD></TR>
@@ -141,26 +124,26 @@ lInsertSelectStatement_8_25 [shape="box", style=bold, color="lightgreen", label=
 <TR><TD>select</TD><TD>SelectStatement(['SELECT', 'FR</TD></TR>
 			</TABLE>
 		>];
-lCommitLiteral_9_26 [shape="septagon", style=bold, color="blue", label="Commit 2" ];
+lCommitLiteral_9_24 [shape="septagon", style=bold, color="blue", label="Commit 2" ];
 
-		lComment_10_27 [shape=none, margin=0, label=<
+		lComment_10_25 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >Comment</TD></TR>
 				<TR><TD >Updating search processed status for packages</TD></TR>
 			</TABLE>
 		>];
-lAssignment_11_28 [shape="box",label="19 Assignment 2" ];
+lAssignment_11_26 [shape="box",label="20 Assignment 2" ];
 
-		TableNode_28 [shape=none, margin=0, label=<
+		TableNode_26 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >attr</TD><TD>value</TD></TR>
 				<TR><TD>identifier</TD><TD>'v_location_name'</TD></TR>
 <TR><TD>value</TD><TD>"'Update stage_pkgs_outbound f</TD></TR>
 			</TABLE>
 		>];
-lUpdateStatement_12_29 [shape="box", style=bold, color="lightpink", label="UpdateStatement 1" ];
+lUpdateStatement_12_27 [shape="box", style=bold, color="lightpink", label="UpdateStatement 1" ];
 
-		TableNode_29 [shape=none, margin=0, label=<
+		TableNode_27 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >attr</TD><TD>value</TD></TR>
 				<TR><TD>table</TD><TD>'stage_pkgs_outbound'</TD></TR>
@@ -168,18 +151,18 @@ lUpdateStatement_12_29 [shape="box", style=bold, color="lightpink", label="Updat
 <TR><TD>where</TD><TD>WhereClause(['WHERE', '[\'pkgs</TD></TR>
 			</TABLE>
 		>];
-lCommitLiteral_13_30 [shape="septagon", style=bold, color="blue", label="Commit 3" ];
+lCommitLiteral_13_28 [shape="septagon", style=bold, color="blue", label="Commit 3" ];
 
-		lComment_14_31 [shape=none, margin=0, label=<
+		lComment_14_29 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >Comment</TD></TR>
 				<TR><TD >Updating search processed status</TD></TR>
 <TR><TD >for packages with certain conditions</TD></TR>
 			</TABLE>
 		>];
-lUpdateStatement_15_32 [shape="box", style=bold, color="lightpink", label="UpdateStatement 2" ];
+lUpdateStatement_15_30 [shape="box", style=bold, color="lightpink", label="UpdateStatement 2" ];
 
-		TableNode_32 [shape=none, margin=0, label=<
+		TableNode_30 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >attr</TD><TD>value</TD></TR>
 				<TR><TD>table</TD><TD>'stage_pkgs_outbound'</TD></TR>
@@ -187,26 +170,26 @@ lUpdateStatement_15_32 [shape="box", style=bold, color="lightpink", label="Updat
 <TR><TD>where</TD><TD>WhereClause(['WHERE', '[\'pkgs</TD></TR>
 			</TABLE>
 		>];
-lCommitLiteral_16_33 [shape="septagon", style=bold, color="blue", label="Commit 4" ];
+lCommitLiteral_16_31 [shape="septagon", style=bold, color="blue", label="Commit 4" ];
 
-		lComment_17_34 [shape=none, margin=0, label=<
+		lComment_17_32 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >Comment</TD></TR>
 				<TR><TD >Inserting data into package_search_by_pic after processing</TD></TR>
 			</TABLE>
 		>];
-lAssignment_18_35 [shape="box",label="26 Assignment 3" ];
+lAssignment_18_33 [shape="box",label="27 Assignment 3" ];
 
-		TableNode_35 [shape=none, margin=0, label=<
+		TableNode_33 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >attr</TD><TD>value</TD></TR>
 				<TR><TD>identifier</TD><TD>'v_location_name'</TD></TR>
 <TR><TD>value</TD><TD>"'Loading pkgs into package_se</TD></TR>
 			</TABLE>
 		>];
-lInsertSelectStatement_19_36 [shape="box", style=bold, color="lightgreen", label="InsertSelectStatement 3" ];
+lInsertSelectStatement_19_34 [shape="box", style=bold, color="lightgreen", label="InsertSelectStatement 3" ];
 
-		TableNode_36 [shape=none, margin=0, label=<
+		TableNode_34 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >attr</TD><TD>value</TD></TR>
 				<TR><TD>insert</TD><TD>'INSERT'</TD></TR>
@@ -216,19 +199,19 @@ lInsertSelectStatement_19_36 [shape="box", style=bold, color="lightgreen", label
 <TR><TD>select</TD><TD>SelectStatement(['SELECT', 'FR</TD></TR>
 			</TABLE>
 		>];
-lCommitLiteral_20_37 [shape="septagon", style=bold, color="blue", label="Commit 5" ];
-lAssignment_21_38 [shape="box",label="29 Assignment 4" ];
+lCommitLiteral_20_35 [shape="septagon", style=bold, color="blue", label="Commit 5" ];
+lAssignment_21_36 [shape="box",label="30 Assignment 4" ];
 
-		TableNode_38 [shape=none, margin=0, label=<
+		TableNode_36 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >attr</TD><TD>value</TD></TR>
 				<TR><TD>identifier</TD><TD>'v_location_name'</TD></TR>
 <TR><TD>value</TD><TD>"'Loading pkgs into package_se</TD></TR>
 			</TABLE>
 		>];
-lInsertSelectStatement_22_39 [shape="box", style=bold, color="lightgreen", label="InsertSelectStatement 4" ];
+lInsertSelectStatement_22_37 [shape="box", style=bold, color="lightgreen", label="InsertSelectStatement 4" ];
 
-		TableNode_39 [shape=none, margin=0, label=<
+		TableNode_37 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >attr</TD><TD>value</TD></TR>
 				<TR><TD>insert</TD><TD>'INSERT'</TD></TR>
@@ -238,19 +221,19 @@ lInsertSelectStatement_22_39 [shape="box", style=bold, color="lightgreen", label
 <TR><TD>select</TD><TD>SelectStatement(['SELECT', 'FR</TD></TR>
 			</TABLE>
 		>];
-lCommitLiteral_23_40 [shape="septagon", style=bold, color="blue", label="Commit 6" ];
-lAssignment_24_41 [shape="box",label="32 Assignment 5" ];
+lCommitLiteral_23_38 [shape="septagon", style=bold, color="blue", label="Commit 6" ];
+lAssignment_24_39 [shape="box",label="33 Assignment 5" ];
 
-		TableNode_41 [shape=none, margin=0, label=<
+		TableNode_39 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >attr</TD><TD>value</TD></TR>
 				<TR><TD>identifier</TD><TD>'v_status'</TD></TR>
 <TR><TD>value</TD><TD>"'Loaded pic, efn tables with </TD></TR>
 			</TABLE>
 		>];
-lInsertStatement_25_42 [shape="box", style=bold, color="yellow", label="InsertStatement 2" ];
+lInsertStatement_25_40 [shape="box", style=bold, color="yellow", label="InsertStatement 2" ];
 
-		TableNode_42 [shape=none, margin=0, label=<
+		TableNode_40 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >attr</TD><TD>value</TD></TR>
 				<TR><TD>table</TD><TD>'ppc_qlik_reports_log'</TD></TR>
@@ -258,20 +241,20 @@ lInsertStatement_25_42 [shape="box", style=bold, color="yellow", label="InsertSt
 <TR><TD>values</TD><TD>ValueList(['getdate()', "'MANI</TD></TR>
 			</TABLE>
 		>];
-lCommitLiteral_26_43 [shape="septagon", style=bold, color="blue", label="Commit 7" ];
-lLineExpression_1_44 [shape="box",  color="black", label="LineExpression 2" ];
-lAssignment_0_45 [shape="box",label="8 Assignment 6" ];
+lCommitLiteral_26_41 [shape="septagon", style=bold, color="blue", label="Commit 7" ];
+lLineExpression_1_42 [shape="box",  color="black", label="LineExpression 2" ];
+lAssignment_0_43 [shape="box",label="9 Assignment 6" ];
 
-		TableNode_45 [shape=none, margin=0, label=<
+		TableNode_43 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >attr</TD><TD>value</TD></TR>
 				<TR><TD>identifier</TD><TD>'v_status'</TD></TR>
 <TR><TD>value</TD><TD>"'Manifested search pkgs not f</TD></TR>
 			</TABLE>
 		>];
-lInsertStatement_1_46 [shape="box", style=bold, color="yellow", label="InsertStatement 3" ];
+lInsertStatement_1_44 [shape="box", style=bold, color="yellow", label="InsertStatement 3" ];
 
-		TableNode_46 [shape=none, margin=0, label=<
+		TableNode_44 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >attr</TD><TD>value</TD></TR>
 				<TR><TD>table</TD><TD>'ppc_qlik_reports_log'</TD></TR>
@@ -279,111 +262,131 @@ lInsertStatement_1_46 [shape="box", style=bold, color="yellow", label="InsertSta
 <TR><TD>values</TD><TD>ValueList(['getdate()', "'MANI</TD></TR>
 			</TABLE>
 		>];
-lCommitLiteral_2_47 [shape="septagon", style=bold, color="blue", label="Commit 8" ];
-end_if_14 [shape="ellipse",  color="black", label="End If" ];
-lExceptionBlock_1_48 [shape="box",label="3 ExceptionBlock 1" ];
+lCommitLiteral_2_45 [shape="septagon", style=bold, color="blue", label="Commit 8" ];
+end_if_12 [shape="ellipse",  color="black", label="End If" ];
+lExceptionBlock_1_46 [shape="box",label="4 ExceptionBlock 1" ];
 
-		TableNode_48 [shape=none, margin=0, label=<
+		TableNode_46 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 				<TR><TD >attr</TD><TD>value</TD></TR>
 				<TR><TD>code</TD><TD>CodeBlock(["'SQLERRM=(%) SQLST</TD></TR>
 			</TABLE>
 		>];
 exception [label="Exception", color="red" shape=doublecircle];
-note [label="Exception handling", shape=none, fontsize=10, fontcolor=red];
+note [label="Exception handling", shape=none, fontsize=10, fontcolor=red];
+lParameters_3_48 [shape="box",label="0 Parameters 1" ];
+lParameter_0_49 [shape="box",label="1 Parameter 1" ];
+
+		TableNode_49 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>direction</TD><TD>None</TD></TR>
+<TR><TD>name</TD><TD>'p_processing_time'</TD></TR>
+<TR><TD>data_type</TD><TD>Type('timestamp')</TD></TR>
+			</TABLE>
+		>];
+lParameter_1_50 [shape="box",label="2 Parameter 2" ];
+
+		TableNode_50 [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >attr</TD><TD>value</TD></TR>
+				<TR><TD>direction</TD><TD>None</TD></TR>
+<TR><TD>name</TD><TD>'p_cutoff_date'</TD></TR>
+<TR><TD>data_type</TD><TD>Type('timestamp')</TD></TR>
+			</TABLE>
+		>];
 
 // LINKS
 
-start -> lFunctionOrProcedure_0_1[label=" (1) " ];
-lFunctionOrProcedure_0_1 -> lLanguage_0_2[label=" (2) " ];
-lLanguage_0_2 -> TableNode_2[label="attr2" ];
-lLanguage_0_2 -> lSecurity_1_3[label="String
- (3)" ];
-lFunctionOrProcedure_0_1 -> TableNode_1[label="attr2" ];
-start -> lDeclarations_1_4[label=" (1) " ];
-lDeclarations_1_4 -> lDeclarationExpression_0_5[label=" (2) " ];
-lDeclarations_1_4 -> lDeclarationExpression_0_5[label="DeclarationExpression (2)" ];
-start -> lBlock_2_9[label=" (1) " ];
-lBlock_2_9 -> lStatementExpression_0_10[label=" (2) " ];
-lStatementExpression_0_10 -> lAssignment_0_11[label=" (3) " ];
-lAssignment_0_11 -> TableNode_11[label="attr2" ];
-lAssignment_0_11 -> lSelect_1_12[label=" (4) " ];
-lSelect_1_12 -> l5_StringVal_0_13[label="StringVal (5)" ];
-lSelect_1_12 -> lIfStatement_2_14[label=" (5) " ];
-lIfStatement_2_14 -> lCondition_0_15[label=" (6) " ];
+start -> lDeclarations_0_2[label=" (1) " ];
+lDeclarations_0_2 -> lDeclarationExpression_0_3[label=" (2) " ];
+lDeclarations_0_2 -> lDeclarationExpression_0_3[label="DeclarationExpression (2)" ];
+lDeclarations_0_2 -> lBlock_1_7[label=" (2) " ];
+lBlock_1_7 -> lStatementExpression_0_8[label=" (3) " ];
+lStatementExpression_0_8 -> lAssignment_0_9[label=" (4) " ];
+lAssignment_0_9 -> TableNode_9[label="attr2" ];
+lAssignment_0_9 -> lSelect_1_10[label=" (5) " ];
+lSelect_1_10 -> l6_StringVal_0_11[label="StringVal (6)" ];
+lSelect_1_10 -> lIfStatement_2_12[label=" (6) " ];
+lIfStatement_2_12 -> lCondition_0_13[label=" (7) " ];
 
 		subgraph Cluster_O{
 		edge [color=blue, style=dashed];
 		node [color=lightblue, style=filled];
 		
-lCondition_0_15 -> lLineExpression_0_16[label="True (7) " ];
-lLineExpression_0_16 -> lComment_0_17[label="Comment (8)" ];
-lComment_0_17 -> lAssignment_1_18[label=" (9) " ];
-lAssignment_1_18 -> TableNode_18[label="attr2" ];
-lAssignment_1_18 -> lInsertStatement_2_19[label=" (10) " ];
-lInsertStatement_2_19 -> TableNode_19[label="attr2" ];
-lInsertStatement_2_19 -> lDropTableStatement_3_20[label=" (11) " ];
-lDropTableStatement_3_20 -> TableNode_20[label="attr2" ];
-lDropTableStatement_3_20 -> lCreateTableStatement_4_21[label=" (12) " ];
-lCreateTableStatement_4_21 -> TableNode_21[label="attr2" ];
-lCreateTableStatement_4_21 -> lAssignment_5_22[label=" (13) " ];
-lAssignment_5_22 -> TableNode_22[label="attr2" ];
-lAssignment_5_22 -> lInsertSelectStatement_6_23[label=" (14) " ];
-lInsertSelectStatement_6_23 -> TableNode_23[label="attr2" ];
-lInsertSelectStatement_6_23 -> lCommitLiteral_7_24[label="String
-COMMIT (15)" ];
-lCommitLiteral_7_24 -> lInsertSelectStatement_8_25[label=" (16) " ];
-lInsertSelectStatement_8_25 -> TableNode_25[label="attr2" ];
-lInsertSelectStatement_8_25 -> lCommitLiteral_9_26[label="String
-commit (17)" ];
-lCommitLiteral_9_26 -> lComment_10_27[label="Comment (18)" ];
-lComment_10_27 -> lAssignment_11_28[label=" (19) " ];
-lAssignment_11_28 -> TableNode_28[label="attr2" ];
-lAssignment_11_28 -> lUpdateStatement_12_29[label=" (20) " ];
-lUpdateStatement_12_29 -> TableNode_29[label="attr2" ];
-lUpdateStatement_12_29 -> lCommitLiteral_13_30[label="String
-commit (21)" ];
-lCommitLiteral_13_30 -> lComment_14_31[label="Comment (22)" ];
-lComment_14_31 -> lUpdateStatement_15_32[label=" (23) " ];
-lUpdateStatement_15_32 -> TableNode_32[label="attr2" ];
-lUpdateStatement_15_32 -> lCommitLiteral_16_33[label="String
-commit (24)" ];
-lCommitLiteral_16_33 -> lComment_17_34[label="Comment (25)" ];
-lComment_17_34 -> lAssignment_18_35[label=" (26) " ];
-lAssignment_18_35 -> TableNode_35[label="attr2" ];
-lAssignment_18_35 -> lInsertSelectStatement_19_36[label=" (27) " ];
-lInsertSelectStatement_19_36 -> TableNode_36[label="attr2" ];
-lInsertSelectStatement_19_36 -> lCommitLiteral_20_37[label="String
-commit (28)" ];
-lCommitLiteral_20_37 -> lAssignment_21_38[label=" (29) " ];
-lAssignment_21_38 -> TableNode_38[label="attr2" ];
-lAssignment_21_38 -> lInsertSelectStatement_22_39[label=" (30) " ];
-lInsertSelectStatement_22_39 -> TableNode_39[label="attr2" ];
-lInsertSelectStatement_22_39 -> lCommitLiteral_23_40[label="String
-commit (31)" ];
-lCommitLiteral_23_40 -> lAssignment_24_41[label=" (32) " ];
-lAssignment_24_41 -> TableNode_41[label="attr2" ];
-lAssignment_24_41 -> lInsertStatement_25_42[label=" (33) " ];
-lInsertStatement_25_42 -> TableNode_42[label="attr2" ];
-lInsertStatement_25_42 -> lCommitLiteral_26_43[label="String
-commit (34)" ];
-lCondition_0_15 -> lLineExpression_1_44[label="False (7) " ];
-lLineExpression_1_44 -> lAssignment_0_45[label=" (8) " ];
-lAssignment_0_45 -> TableNode_45[label="attr2" ];
-lAssignment_0_45 -> lInsertStatement_1_46[label=" (9) " ];
-lInsertStatement_1_46 -> TableNode_46[label="attr2" ];
-lInsertStatement_1_46 -> lCommitLiteral_2_47[label="String
-commit (10)" ];
-lCommitLiteral_26_43 -> end_if_14[label="True" ];
-lCommitLiteral_2_47 -> end_if_14[label="False" ];
+lCondition_0_13 -> lLineExpression_0_14[label="True (8) " ];
+lLineExpression_0_14 -> lComment_0_15[label="Comment (9)" ];
+lComment_0_15 -> lAssignment_1_16[label=" (10) " ];
+lAssignment_1_16 -> TableNode_16[label="attr2" ];
+lAssignment_1_16 -> lInsertStatement_2_17[label=" (11) " ];
+lInsertStatement_2_17 -> TableNode_17[label="attr2" ];
+lInsertStatement_2_17 -> lDropTableStatement_3_18[label=" (12) " ];
+lDropTableStatement_3_18 -> TableNode_18[label="attr2" ];
+lDropTableStatement_3_18 -> lCreateTableStatement_4_19[label=" (13) " ];
+lCreateTableStatement_4_19 -> TableNode_19[label="attr2" ];
+lCreateTableStatement_4_19 -> lAssignment_5_20[label=" (14) " ];
+lAssignment_5_20 -> TableNode_20[label="attr2" ];
+lAssignment_5_20 -> lInsertSelectStatement_6_21[label=" (15) " ];
+lInsertSelectStatement_6_21 -> TableNode_21[label="attr2" ];
+lInsertSelectStatement_6_21 -> lCommitLiteral_7_22[label="String
+COMMIT (16)" ];
+lCommitLiteral_7_22 -> lInsertSelectStatement_8_23[label=" (17) " ];
+lInsertSelectStatement_8_23 -> TableNode_23[label="attr2" ];
+lInsertSelectStatement_8_23 -> lCommitLiteral_9_24[label="String
+commit (18)" ];
+lCommitLiteral_9_24 -> lComment_10_25[label="Comment (19)" ];
+lComment_10_25 -> lAssignment_11_26[label=" (20) " ];
+lAssignment_11_26 -> TableNode_26[label="attr2" ];
+lAssignment_11_26 -> lUpdateStatement_12_27[label=" (21) " ];
+lUpdateStatement_12_27 -> TableNode_27[label="attr2" ];
+lUpdateStatement_12_27 -> lCommitLiteral_13_28[label="String
+commit (22)" ];
+lCommitLiteral_13_28 -> lComment_14_29[label="Comment (23)" ];
+lComment_14_29 -> lUpdateStatement_15_30[label=" (24) " ];
+lUpdateStatement_15_30 -> TableNode_30[label="attr2" ];
+lUpdateStatement_15_30 -> lCommitLiteral_16_31[label="String
+commit (25)" ];
+lCommitLiteral_16_31 -> lComment_17_32[label="Comment (26)" ];
+lComment_17_32 -> lAssignment_18_33[label=" (27) " ];
+lAssignment_18_33 -> TableNode_33[label="attr2" ];
+lAssignment_18_33 -> lInsertSelectStatement_19_34[label=" (28) " ];
+lInsertSelectStatement_19_34 -> TableNode_34[label="attr2" ];
+lInsertSelectStatement_19_34 -> lCommitLiteral_20_35[label="String
+commit (29)" ];
+lCommitLiteral_20_35 -> lAssignment_21_36[label=" (30) " ];
+lAssignment_21_36 -> TableNode_36[label="attr2" ];
+lAssignment_21_36 -> lInsertSelectStatement_22_37[label=" (31) " ];
+lInsertSelectStatement_22_37 -> TableNode_37[label="attr2" ];
+lInsertSelectStatement_22_37 -> lCommitLiteral_23_38[label="String
+commit (32)" ];
+lCommitLiteral_23_38 -> lAssignment_24_39[label=" (33) " ];
+lAssignment_24_39 -> TableNode_39[label="attr2" ];
+lAssignment_24_39 -> lInsertStatement_25_40[label=" (34) " ];
+lInsertStatement_25_40 -> TableNode_40[label="attr2" ];
+lInsertStatement_25_40 -> lCommitLiteral_26_41[label="String
+commit (35)" ];
+lCondition_0_13 -> lLineExpression_1_42[label="False (8) " ];
+lLineExpression_1_42 -> lAssignment_0_43[label=" (9) " ];
+lAssignment_0_43 -> TableNode_43[label="attr2" ];
+lAssignment_0_43 -> lInsertStatement_1_44[label=" (10) " ];
+lInsertStatement_1_44 -> TableNode_44[label="attr2" ];
+lInsertStatement_1_44 -> lCommitLiteral_2_45[label="String
+commit (11)" ];
+lCommitLiteral_26_41 -> end_if_12[label="True" ];
+lCommitLiteral_2_45 -> end_if_12[label="False" ];
 
 		}
-end_if_14 -> end;
-lStatementExpression_0_10 -> lExceptionBlock_1_48[label=" (3) " ];
-lExceptionBlock_1_48 -> TableNode_48[label="attr2" ];
-lExceptionBlock_1_48 -> exception[label="Abnormal exit"  style=dashed ];
+end_if_12 -> end;
+lStatementExpression_0_8 -> lExceptionBlock_1_46[label=" (4) " ];
+lExceptionBlock_1_46 -> TableNode_46[label="attr2" ];
+lExceptionBlock_1_46 -> exception[label="Abnormal exit"  style=dashed ];
 exception -> end[label=""];
-note -> lExceptionBlock_1_48 [ weight=1000]
+note -> lExceptionBlock_1_46 [ weight=1000]
+start -> lParameters_3_48[label=" (0) " ];
+lParameters_3_48 -> lParameter_0_49[label=" (1) " ];
+lParameter_0_49 -> TableNode_49[label="attr2" ];
+lParameter_0_49 -> lParameter_1_50[label=" (2) " ];
+lParameter_1_50 -> TableNode_50[label="attr2" ];
 
 
 
