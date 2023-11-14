@@ -1,4 +1,4 @@
-import re, os, sys
+import re, os, sys, math
 from pypeg2 import *
 from pprint import pprint as pp
 import include.config.init_config as init_config  
@@ -16,10 +16,11 @@ from include import ex
 from include import insert 
 from include import drop 
 from include import create_temp_table as ctt 
-from include.base import  Base, BaseBase
-from include.base import  String, StringVal, StringTable
+from include.base import  clean_for_html_display, split_equally_by_words, Base, BaseBase
+from include.base import  Comment, String, StringVal, StringTable
 e=  sys.exit
-
+class Start(object):
+	name='start'
 class Local(object):
 	def set_fname(self): self.fname=__name__
 class BooleanLiteral(Keyword):
@@ -43,24 +44,7 @@ class StringLiteral(str):
 	quoted_string = re.compile(r'"[^"]*"')
 	grammar = quoted_string
 
-class Comment(str, StringTable, Local):
-	# Matches the rest of the line after a comment
-	rest_of_line = re.compile(r'.*?(?=\n|$)')
-	grammar = '--', rest_of_line
-	def _get_dot(self):
-		return f'{self.name} [shape="box",  color="gray", label="{self.level} {self.label}\n{self.tname} {self.gid} {self.lid}\n {str(self)}\n {apc.cntr.get(self)}" ];'
 
-	def __get_dot(self):
-
-		return f'''
-		{self.name} [shape=none, margin=0, label=<
-			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >Comment</TD></TR>
-				<TR><TD >{str(self)}</TD></TR>
-			</TABLE>
-		>];'''
-			
-			
 		
 class Assignment(str, Base, Local):
 	# Matches an assignment operation
@@ -292,7 +276,7 @@ class Code(List, Base, Local):
 			fdot.append(f'start -> {dto}[label="{label} ({self.level}) " ];')
 
 
-		self.show_children('start', hdot, fdot)
+		self.show_children(Start(), hdot, fdot)
 		self.get_dot_attr(hdot, fdot)
 
 	def get_dot_attr(self, hdot, fdot):

@@ -153,7 +153,7 @@ class StringTable(BaseBase):
 			
 		hdot.append( f'''
 		{self.name} [shape=none, margin=0, label=<
-			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+			<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightyellow">
 				<TR><TD >{self.tname}</TD></TR>
 				{os.linesep.join(out)}
 			</TABLE>
@@ -164,6 +164,50 @@ class StringTable(BaseBase):
 			label= str(val).replace('"',"'")
 			if 1:
 				fdot.append(f'{self.dfrom} -> {dto}[label="{self.tname} ({level})" ];')
+
+class Comment(str, StringTable, Local):
+	# Matches the rest of the line after a comment
+	rest_of_line = re.compile(r'.*?(?=\n|$)')
+	grammar = '--', rest_of_line
+	def _get_dot(self):
+		return f'{self.name} [shape="box",  color="gray", label="{self.level} {self.label}\n{self.tname} {self.gid} {self.lid}\n {str(self)}\n {apc.cntr.get(self)}" ];'
+
+	def get_full_dot(self, parent, dfrom, lid, hdot, fdot, level):
+		self.level=level
+		self.init(parent, lid)
+		self.dfrom=dfrom
+		#gid =apc.get_gid()
+		val=self
+		print('A'*40, type(val))
+		pp(val)
+		out=[]
+		val=clean_for_html_display(val)
+		limit=60
+		
+		if len(val)>0:
+			for line in split_equally_by_words(val,math.ceil(len(val)/limit)):
+				out.append(f'<TR><TD >{line}</TD></TR>')
+		else:
+			out.append(f'<TR><TD >{val}</TD></TR>')
+			
+		hdot.append( f'''
+		{self.name} [shape=none, margin=0, label=<
+			<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="whitesmoke">
+				{os.linesep.join(out)}
+			</TABLE>
+		>];''')
+		if 0:
+			assert lid<len(parent), f'comment: {lid} > {len(parent)}'
+			
+			dto, label = parent[lid+1].get_name()
+			label= str(val).replace('"',"'")
+			if 1:
+				fdot.append(f'{self.dfrom} -> {dto}[label="({level})" ];')
+		if lid==len(parent):
+			dto, label = self.get_name()
+			label= str(val).replace('"',"'")
+			if 1:
+				fdot.append(f'{self.dfrom} -> {dto}[label="({level})" ];')
 				
 class String(BaseBase):
 	def get_full_dot(self, parent, dfrom, lid, hdot, fdot, level):
@@ -229,12 +273,13 @@ class Base(BaseBase):
 			fdot.append(f'{self.dfrom} -> {dto}[label="{label} ({self.level}) " ];')
 
 
-		self.show_children(cfrom, hdot, fdot)
+		self.show_children(self, hdot, fdot)
 		self.show_attr(hdot, fdot)
 
-	def show_children(self, cfrom, hdot, fdot):
+	def show_children(self, parent, hdot, fdot):
 		base_classes = self.__class__.__bases__
 		print('Base: ',base_classes, str in base_classes)
+		cfrom=parent
 		if str in base_classes:
 			print('STR in BASE', type(self), self)
 			#self.get_str_dot(self.name, hdot, fdot)
@@ -247,11 +292,25 @@ class Base(BaseBase):
 				if type(c) in [str]:
 					
 					c = StringVal(c, self.level+1)
-					c.get_full_dot(self, cfrom, cid, hdot, fdot, self.level+cid+1)
+					c.get_full_dot(self, cfrom.name, cid, hdot, fdot, self.level+cid+1)
 					
 				else:
-					c.get_full_dot(self, cfrom, cid, hdot, fdot, self.level+cid+1)
-				cfrom = c.name
+					comm=None
+					if type(cfrom) in [Comment]:
+						comm=cfrom
+						print(111, cid, comm.lid, type(c), parent)
+						
+						#e()
+						if comm.lid == 0:
+							cfrom=parent
+						else:
+							cfrom=parent[comm.lid-1]
+							
+					c.get_full_dot(self, cfrom.name, cid, hdot, fdot, self.level+cid+1)
+					if comm:
+						fdot.append(f'{comm.name} -> {c.name}[label="comm ({self.level}) " style=dashed color="lightblue"];')
+						comm=None
+				cfrom = c
 
 	def show_attr(self, hdot, fdot):
 		print('SHOW ATTR')
