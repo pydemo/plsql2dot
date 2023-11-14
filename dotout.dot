@@ -260,7 +260,7 @@ lInsertStatement_1_44 [shape="box", style=bold, color="yellow", label="InsertSta
 		>];
 lCommitLiteral_2_45 [shape="septagon", style=bold, color="blue", label="Commit 8" ];
 end_if_12 [shape="ellipse",  color="black", label="End If" ];
-lExceptionBlock_1_46 [shape="box",label="4 ExceptionBlock 1" ];
+lExceptionBlock_1_46 [shape="box",label="3 ExceptionBlock 1" ];
 
 		TableNode_46 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
@@ -271,24 +271,12 @@ lExceptionBlock_1_46 [shape="box",label="4 ExceptionBlock 1" ];
 exception [label="Exception", color="red" shape=doublecircle];
 note [label="Exception handling", shape=none, fontsize=10, fontcolor=red];
 lParameters_3_48 [shape="box",label="1 Parameters 1" ];
-lParameter_0_49 [shape="box",label="2 Parameter 1" ];
 
-		TableNode_49 [shape=none, margin=0, label=<
+		lParameters_3_48 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
-				<TR><TD>direction</TD><TD>None</TD></TR>
-<TR><TD>name</TD><TD>'p_processing_time'</TD></TR>
-<TR><TD>data_type</TD><TD>Type('timestamp')</TD></TR>
-			</TABLE>
-		>];
-lParameter_1_50 [shape="box",label="3 Parameter 2" ];
-
-		TableNode_50 [shape=none, margin=0, label=<
-			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
-				<TR><TD>direction</TD><TD>None</TD></TR>
-<TR><TD>name</TD><TD>'p_cutoff_date'</TD></TR>
-<TR><TD>data_type</TD><TD>Type('timestamp')</TD></TR>
+				<TR><TD >Direction</TD><TD >Name</TD><TD >DataType</TD></TR>
+				<TR><TD >None</TD><TD >p_processing_time</TD><TD >timestamp</TD></TR>
+<TR><TD >None</TD><TD >p_cutoff_date</TD><TD >timestamp</TD></TR>
 			</TABLE>
 		>];
 
@@ -296,8 +284,12 @@ lParameter_1_50 [shape="box",label="3 Parameter 2" ];
 
 start -> lDeclarations_0_2[label=" (1) " ];
 lDeclarations_0_2 -> lDeclarationExpression_0_3[label=" (2) " ];
-lDeclarations_0_2 -> lDeclarationExpression_0_3[label="DeclarationExpression (2)" ];
 lDeclarations_0_2 -> lBlock_1_7[label=" (2) " ];
+
+		subgraph Cluster_lBlock_1_7{
+		edge [color=blue, style=dashed];
+		node [color=lightblue, style=filled];
+		
 lBlock_1_7 -> lStatementExpression_0_8[label=" (3) " ];
 lStatementExpression_0_8 -> lAssignment_0_9[label=" (4) " ];
 lAssignment_0_9 -> TableNode_9[label="attr2" ];
@@ -309,12 +301,10 @@ lIfStatement_2_12 -> lCondition_0_13[label=" (7) " ];
 		subgraph Cluster_O{
 		edge [color=blue, style=dashed];
 		node [color=lightblue, style=filled];
+		
 lCondition_0_13 -> lLineExpression_0_14[label="True (8) " ];
-		
-
 lLineExpression_0_14 -> lAssignment_1_16[label=" (10) " ];
-lAssignment_1_16 -> TableNode_16[label="attr2" ];
-
+lAssignment_1_16 -> TableNode_16[label="attr2" ];
 lComment_0_15 -> lAssignment_1_16[label="comm (8) " style=dashed color="lightblue"];
 lAssignment_1_16 -> lInsertStatement_2_17[label=" (11) " ];
 lInsertStatement_2_17 -> TableNode_17[label="attr2" ];
@@ -364,34 +354,25 @@ lInsertStatement_25_40 -> TableNode_40[label="attr2" ];
 lInsertStatement_25_40 -> lCommitLiteral_26_41[label="String
 commit (35)" ];
 lCondition_0_13 -> lLineExpression_1_42[label="False (8) " ];
-		subgraph Cluster_OO{
-		edge [color=blue, style=dashed];
-		node [color=lightblue, style=filled];
-		
 lLineExpression_1_42 -> lAssignment_0_43[label=" (9) " ];
 lAssignment_0_43 -> TableNode_43[label="attr2" ];
 lAssignment_0_43 -> lInsertStatement_1_44[label=" (10) " ];
 lInsertStatement_1_44 -> TableNode_44[label="attr2" ];
 lInsertStatement_1_44 -> lCommitLiteral_2_45[label="String
-commit (11)" ];
-lCommitLiteral_2_45 -> end_if_12[label="False" ];
-
-}
+commit (11)" ];
 lCommitLiteral_26_41 -> end_if_12[label="True" ];
-
+lCommitLiteral_2_45 -> end_if_12[label="False" ];
 
 		}
 end_if_12 -> end;
-lStatementExpression_0_8 -> lExceptionBlock_1_46[label=" (4) " ];
+lBlock_1_7 -> lExceptionBlock_1_46[label=" (3) " ];
 lExceptionBlock_1_46 -> TableNode_46[label="attr2" ];
 lExceptionBlock_1_46 -> exception[label="Abnormal exit"  style=dashed ];
 exception -> end[label=""];
 note -> lExceptionBlock_1_46 [ weight=1000]
-start -> lParameters_3_48[label=" (1) " ];
-lParameters_3_48 -> lParameter_0_49[label=" (2) " ];
-lParameter_0_49 -> TableNode_49[label="attr2" ];
-lParameter_0_49 -> lParameter_1_50[label=" (3) " ];
-lParameter_1_50 -> TableNode_50[label="attr2" ];
+
+		}
+start -> lParameters_3_48[label=" (1) " ];
 
 
 

@@ -150,6 +150,47 @@ class Block(List, Base, Local):
 	def get_dot(self):
 		
 		return f'{self.name} [shape="box", style=bold, color="black", label="{self.label} {apc.cntr.get(self)}" ];'
+		
+
+	def init(self, parent, lid):
+		Base.init(self,parent, lid)
+		#assert type(parent) in [apc.parsed]
+		
+	def show_attr(self, hdot, fdot):
+		pass
+	def show_children(self, cfrom, hdot, fdot):
+		base_classes = self.__class__.__bases__
+		assert not str in base_classes, base_classes
+		cfdot =  []
+		attr=self.parent.attr
+		#bids=[]
+		for cid,c in enumerate(self):
+			
+			c.get_full_dot(self, self.name, cid, hdot, cfdot, self.level+1)
+			cfrom = c
+			#bids.append([apc.gid, ck])
+
+		
+		self.get_subgraph(cfdot, fdot)
+		#end_if= f'end_if_{self.parent.gid}'
+		#fdot.append(f'{end_if} -> end;')
+
+	def get_subgraph(self, cfdot, fdot):
+		fdot.append(f'''
+		subgraph Cluster_{self.name}{{
+		edge [color=blue, style=dashed];
+		node [color=lightblue, style=filled];
+		''')
+		fdot +=cfdot
+		fdot.append('''
+		}''')
+		#pp(cfdot)
+		#e()
+		
+
+		
+		
+		
 class Identifier(str):
 	grammar = re.compile(r'[a-zA-Z_]\w*')
 
@@ -187,7 +228,7 @@ class DeclarationExpression(List,Base, Local):
 				{os.linesep.join(out)}
 			</TABLE>
 		>];''')
-		if 1:
+		if 0:
 			fdot.append(f'{self.dfrom} -> {self.name}[label="{self.tname} ({self.level})" ];')
 
 
@@ -205,6 +246,11 @@ class Type(Keyword):
 	
 class Parameter(List, Base, Local):
 	grammar = attr("direction", optional("in")), attr("name", identifier), attr("data_type", Type)
+	def get_dot(self):
+		
+		return f'<TR><TD >{self.attr["direction"]}</TD><TD >{self.attr.get("name")}</TD><TD >{self.attr.get("data_type")}</TD></TR>'
+
+	
 language_keyword = Keyword("language")
 
 class Language(str, Base, Local):
@@ -219,17 +265,18 @@ class Parameters(List, Base, Local):
 		out=[]
 		for cid,c in enumerate(self):
 			c.init(self, cid)
+			c.level=self.level+1
 			#pp(c.attr)
 			#e()
 			out.append(c.get_dot())
 		hdot.append( f'''
 		{self.name} [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >Variable</TD><TD >Datatype</TD><TD >Default</TD></TR>
+				<TR><TD >Direction</TD><TD >Name</TD><TD >DataType</TD></TR>
 				{os.linesep.join(out)}
 			</TABLE>
 		>];''')
-		if 1:
+		if 0:
 			fdot.append(f'{self.dfrom} -> {self.name}[label="{self.tname} ({self.level})" ];')
 
 	
