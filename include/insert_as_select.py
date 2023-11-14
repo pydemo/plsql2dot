@@ -93,7 +93,7 @@ class SelectStatement(List):
 
 # Class for the full insert-select statement
 class InsertSelectStatement(List, Base, Local):
-	grammar = ci_keyword("insert"), ci_keyword("into"), attr('table', Identifier), attr('columns', ColumnList), \
+	grammar = attr('insert', ci_keyword("insert")), attr('into', ci_keyword("into")), attr('table', Identifier), attr('columns', ColumnList), \
 			  attr('select', SelectStatement),';'
 	def get_dot(self):
 

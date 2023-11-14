@@ -118,9 +118,10 @@ class Condition(str, Base, Local):
 		#e()
 	def get_end_if_dot(self,bids,hdot, fdot ):
 		end_if= f'end_if_{self.parent.gid}'
-		hdot.append(f'{end_if} [shape="circle",  color="black", label="End If" ];')
+		hdot.append(f'{end_if} [shape="ellipse",  color="black", label="End If" ];')
 		fdot.append(f'{apc.all[bids[0][0]].name} -> {end_if}[label="{bids[0][1]}" ];')
 		fdot.append(f'{apc.all[bids[1][0]].name} -> {end_if}[label="{bids[1][1]}" ];')
+		fdot.append(f'{end_if} -> end;')
 		
 class LineExpression(List, Base, Local):
 	# Defines the different expressions that can be on a single line
@@ -153,27 +154,47 @@ class Block(List, Base, Local):
 		
 		return f'{self.name} [shape="box", style=bold, color="black", label="{self.label} {apc.cntr.get(self)}" ];'
 class Identifier(str):
-    grammar = re.compile(r'[a-zA-Z_]\w*')
+	grammar = re.compile(r'[a-zA-Z_]\w*')
 
 # Define the grammar for a datatype
 class Datatype(str):
-    grammar = re.compile(r'integer|varchar\(\d+\)')
+	grammar = re.compile(r'integer|varchar\(\d+\)')
 
 # Define the grammar for an optional default value assignment
 class DefaultValue(str):
-    grammar = ':=', re.compile(r"'.*?'|\w+")
+	grammar = ':=', re.compile(r"'.*?'|\w+")
 
 # Define the grammar for a single variable declaration
 class VariableDeclaration(List, Base, Local):
-    grammar = attr('name', Identifier), attr('datatype', Datatype), optional(attr('default', DefaultValue)), ';'
+	grammar = attr('name', Identifier), attr('datatype', Datatype), optional(attr('default', DefaultValue)), ';'
+	def get_dot(self):
+		
+		return f'<TR><TD >{self.attr["name"]}</TD><TD >{self.attr["datatype"]}</TD><TD >{self.attr.get("default","")}</TD></TR>'
 
 
-#class VariableDeclaration_nodefault(List):
-#	grammar = word,  data_type_pattern, ";"
 class DeclarationExpression(List,Base, Local):
 	# Defines the different expressions that can be on a single line
 	grammar = maybe_some([VariableDeclaration])
-	
+
+	def show_children(self, cfrom, hdot, fdot):
+		out=[]
+		for cid,c in enumerate(self):
+			c.init(self, cid)
+			#pp(c.attr)
+			#e()
+			out.append(c.get_dot())
+		hdot.append( f'''
+		{self.name} [shape=none, margin=0, label=<
+			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD >Variable</TD><TD >Datatype</TD><TD >Default</TD></TR>
+				{os.linesep.join(out)}
+			</TABLE>
+		>];''')
+		if 1:
+			fdot.append(f'{self.dfrom} -> {self.name}[label="{self.tname} ({self.level})" ];')
+
+
+
 class Declarations(List, Base, Local):
 	grammar = 'as', Literal('$$'),"declare", DeclarationExpression
 	def get_dot(self):
@@ -461,8 +482,8 @@ if 0:
 
 header='''
 digraph G {
-    rankdir=TB;
-    //node [shape=box, style=rounded];
+	rankdir=TB;
+	//node [shape=box, style=rounded];
 	node [color=black];
 start [label="Start", shape=tripleoctagon];
 
@@ -509,7 +530,7 @@ pp(apc.cntr.cnt)
 #e(0)
 dot=f'''
 {header}
-end [label="End", shape=ellipse];
+end [label="End", shape=circle];
 {os.linesep.join(hdot)}
 
 // LINKS
