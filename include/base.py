@@ -120,7 +120,7 @@ class StringVal(BaseBase, Local):
 		hdot.append( f'''
 		{self.name} [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >StringVal</TD></TR>
+				
 				{os.linesep.join(out)}
 			</TABLE>
 		>];''')
@@ -253,7 +253,7 @@ class Base(BaseBase):
 			hdot.append(f'''
 		TableNode_{self.gid} [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
+				
 				{os.linesep.join(out)}
 			</TABLE>
 		>];''')			

@@ -37,11 +37,13 @@ class Value(str):
 # Class for the list of values to be inserted
 class ValueList(List):
 	grammar = '(', csl(Value), ')'
-
+	def __repr__(self):
+		return ','.join(self)
 # Class for the list of columns in the insert statement
 class ColumnList(List):
 	grammar = '(', csl(Identifier), ')'
-
+	def __repr__(self):
+		return ','.join(self)
 # Class for the insert statement itself
 class InsertStatement(List, Base, Local):
 	grammar = 'insert into', attr('table', Identifier), attr('columns', ColumnList), \

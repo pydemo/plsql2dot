@@ -46,7 +46,8 @@ class Value(str):
 # Class for the list of columns in the insert statement
 class ColumnList(List):
 	grammar = '(', csl(Identifier), ')'
-
+	def __repr__(self):
+		return ','.join(self)
 # Class to handle case-insensitive keywords for insert and select
 class InsertKword(str):
 	grammar = ci_keyword("insert"), ci_keyword("into")
@@ -90,7 +91,8 @@ class JoinClause(List):
 class SelectStatement(List):
 	grammar = SelectKword, attr('expressions', SelectExpressionList), FromKword, attr('table', name()), optional(attr('alias', name())),\
 	optional(attr('join',maybe_some(JoinClause))), optional(attr('where',maybe_some(where.WhereClause)))
-
+	def __repr__(self):
+		return ' '.join(self)
 # Class for the full insert-select statement
 class InsertSelectStatement(List, Base, Local):
 	grammar = attr('insert', ci_keyword("insert")), attr('into', ci_keyword("into")), attr('table', Identifier), attr('columns', ColumnList), \

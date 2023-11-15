@@ -77,7 +77,8 @@ class Condition(str, String, Local):
 
 class WhereClause(List, Base, Local):
 	grammar = WHERE, csl(Condition, separator=AND) , optional(';')
-
+	def __repr__(self):
+		return ' '.join(self)
 # Your test string
 test_string = '''
 WHERE pkgs.pkgs_search_processed = 'N' 

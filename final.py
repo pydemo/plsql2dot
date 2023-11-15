@@ -146,15 +146,15 @@ class Condition(str, Base, Local):
 		bids=[]
 		for cid,ck in enumerate(attr):
 			c=attr[ck]
-			print (self.name, type(c), f'>{c}<')
+			#print (self.name, type(c), f'>{c}<')
 
-			print (self.name, type(c))
+			#print (self.name, type(c))
 			if not type(c) in [LineExpression]:
 				print(type(c))
 				pp(attr.keys())
 				pp(self.attr)
 				e()
-			c.get_full_dot(self, self.name, cid, hdot, cfdot, self.level+1, label=ck)
+			c.get_full_dot(self, self.name, cid, hdot, cfdot, self.level+1, label=ck) #True/False
 			cfrom = c.name
 			bids.append([apc.gid, ck])
 
@@ -373,7 +373,7 @@ class FunctionOrProcedure(List, Base, Local):
 				hdot.append(f'''
 			TableNode_{self.gid} [shape=none, margin=0, label=<
 				<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-					<TR><TD >attr</TD><TD>value</TD></TR>
+					
 					{os.linesep.join(out)}
 				</TABLE>
 			>];''')			
@@ -417,7 +417,7 @@ class Code(List, Base, Local):
 				hdot.append(f'''
 			TableNode_{self.gid} [shape=none, margin=0, label=<
 				<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-					<TR><TD >attr</TD><TD>value</TD></TR>
+					
 					{os.linesep.join(out)}
 				</TABLE>
 			>];''')			

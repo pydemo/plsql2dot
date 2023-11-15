@@ -31,7 +31,8 @@ class Assignment(str, String, Local):
 # Define the structure for the SET clause with one or more assignments
 class SetClause(List, Base,Local):
 	grammar = 'SET', csl(Assignment)
-
+	def __repr__(self):
+		return ','.join(self)
 # Define the structure for the UPDATE statement
 class UpdateStatement(List, Base, Local):
 	grammar = 'UPDATE', attr('table',identifier), attr('set', SetClause), attr('where',where.WhereClause), optional(";")

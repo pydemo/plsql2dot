@@ -26,7 +26,7 @@ lAssignment_0_9 [shape="box",label="4 Assignment 1" ];
 
 		TableNode_9 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
+				
 				<TR><TD>identifier</TD><TD>Attribute(name='name', thing=S</TD></TR>
 <TR><TD>value</TD><TD>"'Get count of unprocessed sea</TD></TR>
 			</TABLE>
@@ -35,7 +35,7 @@ lSelect_1_10 [shape="box",label="5 Select 1" ];
 
 		l6_StringVal_0_11 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >StringVal</TD></TR>
+				
 				<TR><TD >count(*) INTO v_cnt_search_pkgs from stage_pkgs_outbound</TD></TR>
 <TR><TD >WHERE pkgs_search_processed = &#39;N&#39; AND</TD></TR>
 <TR><TD >ready_to_process = &#39;Y&#39; AND payment_rec_arrived</TD></TR>
@@ -57,7 +57,7 @@ lAssignment_1_16 [shape="box",label="10 Assignment 1" ];
 
 		TableNode_16 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
+				
 				<TR><TD>identifier</TD><TD>'v_status'</TD></TR>
 <TR><TD>value</TD><TD>"'BEGIN pkgs search summary';"</TD></TR>
 			</TABLE>
@@ -66,17 +66,17 @@ lInsertStatement_2_17 [shape="box", style=bold, color="yellow", label="InsertSta
 
 		TableNode_17 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
+				
 				<TR><TD>table</TD><TD>'ppc_qlik_reports_log'</TD></TR>
-<TR><TD>columns</TD><TD>ColumnList(['log_date', 'repor</TD></TR>
-<TR><TD>values</TD><TD>ValueList(['getdate()', "'MANI</TD></TR>
+<TR><TD>columns</TD><TD>log_date,report_name,module_na</TD></TR>
+<TR><TD>values</TD><TD>getdate(),'MANIFEST_SEARCH_REP</TD></TR>
 			</TABLE>
 		>];
 lDropTableStatement_3_18 [shape="box",  color="red", label="DropTableStatement 1" ];
 
 		TableNode_18 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
+				
 				<TR><TD>table</TD><TD>'package_search_temp'</TD></TR>
 			</TABLE>
 		>];
@@ -84,7 +84,7 @@ lCreateTableStatement_4_19 [shape="box",  color="orange", label="CreateTableStat
 
 		TableNode_19 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
+				
 				<TR><TD>table</TD><TD>'package_search_temp'</TD></TR>
 <TR><TD>like_clause</TD><TD>LikeClause([])</TD></TR>
 			</TABLE>
@@ -93,7 +93,7 @@ lAssignment_5_20 [shape="box",label="14 Assignment 2" ];
 
 		TableNode_20 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
+				
 				<TR><TD>identifier</TD><TD>Attribute(name='name', thing=S</TD></TR>
 <TR><TD>value</TD><TD>"'Insert into package_search_t</TD></TR>
 			</TABLE>
@@ -102,12 +102,12 @@ lInsertSelectStatement_6_21 [shape="box", style=bold, color="lightgreen", label=
 
 		TableNode_21 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
+				
 				<TR><TD>insert</TD><TD>'INSERT'</TD></TR>
 <TR><TD>into</TD><TD>'INTO'</TD></TR>
 <TR><TD>table</TD><TD>'package_search_temp'</TD></TR>
-<TR><TD>columns</TD><TD>ColumnList(['mid', 'manifest_d</TD></TR>
-<TR><TD>select</TD><TD>SelectStatement(['SELECT', 'FR</TD></TR>
+<TR><TD>columns</TD><TD>mid,manifest_date,file_name,pi</TD></TR>
+<TR><TD>select</TD><TD>SELECT FROM</TD></TR>
 			</TABLE>
 		>];
 lCommitLiteral_7_22 [shape="septagon", style=bold, color="blue", label="Commit 1" ];
@@ -115,12 +115,12 @@ lInsertSelectStatement_8_23 [shape="box", style=bold, color="lightgreen", label=
 
 		TableNode_23 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
+				
 				<TR><TD>insert</TD><TD>'INSERT'</TD></TR>
 <TR><TD>into</TD><TD>'INTO'</TD></TR>
 <TR><TD>table</TD><TD>'package_search_temp'</TD></TR>
-<TR><TD>columns</TD><TD>ColumnList(['mid', 'crid', 'ma</TD></TR>
-<TR><TD>select</TD><TD>SelectStatement(['SELECT', 'FR</TD></TR>
+<TR><TD>columns</TD><TD>mid,crid,manifest_date,file_na</TD></TR>
+<TR><TD>select</TD><TD>SELECT FROM</TD></TR>
 			</TABLE>
 		>];
 lCommitLiteral_9_24 [shape="septagon", style=bold, color="blue", label="Commit 2" ];
@@ -134,7 +134,7 @@ lAssignment_11_26 [shape="box",label="20 Assignment 2" ];
 
 		TableNode_26 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
+				
 				<TR><TD>identifier</TD><TD>'v_location_name'</TD></TR>
 <TR><TD>value</TD><TD>"'Update stage_pkgs_outbound f</TD></TR>
 			</TABLE>
@@ -143,10 +143,10 @@ lUpdateStatement_12_27 [shape="box", style=bold, color="lightpink", label="Updat
 
 		TableNode_27 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
+				
 				<TR><TD>table</TD><TD>'stage_pkgs_outbound'</TD></TR>
-<TR><TD>set</TD><TD>SetClause(['[\'pkgs_search_pro</TD></TR>
-<TR><TD>where</TD><TD>WhereClause(['WHERE', '[\'pkgs</TD></TR>
+<TR><TD>set</TD><TD>['pkgs_search_processed', "'Y'</TD></TR>
+<TR><TD>where</TD><TD>WHERE ['pkgs_search_processed'</TD></TR>
 			</TABLE>
 		>];
 lCommitLiteral_13_28 [shape="septagon", style=bold, color="blue", label="Commit 3" ];
@@ -161,10 +161,10 @@ lUpdateStatement_15_30 [shape="box", style=bold, color="lightpink", label="Updat
 
 		TableNode_30 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
+				
 				<TR><TD>table</TD><TD>'stage_pkgs_outbound'</TD></TR>
-<TR><TD>set</TD><TD>SetClause(['[\'pkgs_search_pro</TD></TR>
-<TR><TD>where</TD><TD>WhereClause(['WHERE', '[\'pkgs</TD></TR>
+<TR><TD>set</TD><TD>['pkgs_search_processed', "'Y'</TD></TR>
+<TR><TD>where</TD><TD>WHERE ['pkgs_search_processed'</TD></TR>
 			</TABLE>
 		>];
 lCommitLiteral_16_31 [shape="septagon", style=bold, color="blue", label="Commit 4" ];
@@ -178,7 +178,7 @@ lAssignment_18_33 [shape="box",label="27 Assignment 3" ];
 
 		TableNode_33 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
+				
 				<TR><TD>identifier</TD><TD>'v_location_name'</TD></TR>
 <TR><TD>value</TD><TD>"'Loading pkgs into package_se</TD></TR>
 			</TABLE>
@@ -187,12 +187,12 @@ lInsertSelectStatement_19_34 [shape="box", style=bold, color="lightgreen", label
 
 		TableNode_34 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
+				
 				<TR><TD>insert</TD><TD>'INSERT'</TD></TR>
 <TR><TD>into</TD><TD>'INTO'</TD></TR>
 <TR><TD>table</TD><TD>'package_search_by_pic'</TD></TR>
-<TR><TD>columns</TD><TD>ColumnList(['mid', 'crid', 'ma</TD></TR>
-<TR><TD>select</TD><TD>SelectStatement(['SELECT', 'FR</TD></TR>
+<TR><TD>columns</TD><TD>mid,crid,manifest_date,file_na</TD></TR>
+<TR><TD>select</TD><TD>SELECT FROM</TD></TR>
 			</TABLE>
 		>];
 lCommitLiteral_20_35 [shape="septagon", style=bold, color="blue", label="Commit 5" ];
@@ -200,7 +200,7 @@ lAssignment_21_36 [shape="box",label="30 Assignment 4" ];
 
 		TableNode_36 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
+				
 				<TR><TD>identifier</TD><TD>'v_location_name'</TD></TR>
 <TR><TD>value</TD><TD>"'Loading pkgs into package_se</TD></TR>
 			</TABLE>
@@ -209,12 +209,12 @@ lInsertSelectStatement_22_37 [shape="box", style=bold, color="lightgreen", label
 
 		TableNode_37 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
+				
 				<TR><TD>insert</TD><TD>'INSERT'</TD></TR>
 <TR><TD>into</TD><TD>'INTO'</TD></TR>
 <TR><TD>table</TD><TD>'package_search_by_efn'</TD></TR>
-<TR><TD>columns</TD><TD>ColumnList(['mid', 'crid', 'ma</TD></TR>
-<TR><TD>select</TD><TD>SelectStatement(['SELECT', 'FR</TD></TR>
+<TR><TD>columns</TD><TD>mid,crid,manifest_date,file_na</TD></TR>
+<TR><TD>select</TD><TD>SELECT FROM</TD></TR>
 			</TABLE>
 		>];
 lCommitLiteral_23_38 [shape="septagon", style=bold, color="blue", label="Commit 6" ];
@@ -222,7 +222,7 @@ lAssignment_24_39 [shape="box",label="33 Assignment 5" ];
 
 		TableNode_39 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
+				
 				<TR><TD>identifier</TD><TD>'v_status'</TD></TR>
 <TR><TD>value</TD><TD>"'Loaded pic, efn tables with </TD></TR>
 			</TABLE>
@@ -231,10 +231,10 @@ lInsertStatement_25_40 [shape="box", style=bold, color="yellow", label="InsertSt
 
 		TableNode_40 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
+				
 				<TR><TD>table</TD><TD>'ppc_qlik_reports_log'</TD></TR>
-<TR><TD>columns</TD><TD>ColumnList(['log_date', 'repor</TD></TR>
-<TR><TD>values</TD><TD>ValueList(['getdate()', "'MANI</TD></TR>
+<TR><TD>columns</TD><TD>log_date,report_name,module_na</TD></TR>
+<TR><TD>values</TD><TD>getdate(),'MANIFEST_SEARCH_REP</TD></TR>
 			</TABLE>
 		>];
 lCommitLiteral_26_41 [shape="septagon", style=bold, color="blue", label="Commit 7" ];
@@ -243,7 +243,7 @@ lAssignment_0_43 [shape="box",label="9 Assignment 6" ];
 
 		TableNode_43 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
+				
 				<TR><TD>identifier</TD><TD>'v_status'</TD></TR>
 <TR><TD>value</TD><TD>"'Manifested search pkgs not f</TD></TR>
 			</TABLE>
@@ -252,10 +252,10 @@ lInsertStatement_1_44 [shape="box", style=bold, color="yellow", label="InsertSta
 
 		TableNode_44 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
+				
 				<TR><TD>table</TD><TD>'ppc_qlik_reports_log'</TD></TR>
-<TR><TD>columns</TD><TD>ColumnList(['log_date', 'repor</TD></TR>
-<TR><TD>values</TD><TD>ValueList(['getdate()', "'MANI</TD></TR>
+<TR><TD>columns</TD><TD>log_date,report_name,module_na</TD></TR>
+<TR><TD>values</TD><TD>getdate(),'MANIFEST_SEARCH_REP</TD></TR>
 			</TABLE>
 		>];
 lCommitLiteral_2_45 [shape="septagon", style=bold, color="blue", label="Commit 8" ];
@@ -264,7 +264,7 @@ lExceptionBlock_1_46 [shape="box",label="3 ExceptionBlock 1" ];
 
 		TableNode_46 [shape=none, margin=0, label=<
 			<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-				<TR><TD >attr</TD><TD>value</TD></TR>
+				
 				<TR><TD>cond</TD><TD>'others'</TD></TR>
 <TR><TD>msg</TD><TD>[info 'SQLERRM=(%) SQLSTATE=(%</TD></TR>
 			</TABLE>
